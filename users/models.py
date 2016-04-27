@@ -78,49 +78,72 @@ class User(AbstractBaseUser):
         return self.is_admin  
 
 
-class StudentGoals(models.Model):
-	
-	student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_student') 
-	goal = models.CharField(max_length=250)
-	goal_target_date = models.DateTimeField(max_length=50, null=True, blank=True)
-	goal_complete = models.BooleanField(default=False)
-	goal_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
-	goal_notes = models.TextField(null=True, blank=True)
-	goal_created = models.DateTimeField(auto_now_add=True)
-	goal_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_created_user')
-	goal_updated = models.DateTimeField(auto_now=True)
-	goal_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_updated_user')
+class StudentGoal(models.Model):
+    
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_student') 
+    goal = models.CharField(max_length=250)
+    goal_target_date = models.DateTimeField(max_length=50, null=True, blank=True)
+    goal_complete = models.BooleanField(default=False)
+    goal_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
+    goal_notes = models.TextField(null=True, blank=True)
+    goal_created = models.DateTimeField(auto_now_add=True)
+    goal_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_created_user')
+    goal_updated = models.DateTimeField(auto_now=True)
+    goal_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_updated_user', null=True, blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.goal)
 
 class StudentPracticeLog(models.Model):
 
-	student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_student')
-	practice_item = models.CharField(max_length=50)
-	practice_time = models.CharField(max_length=50, null=True, blank=True)
-	practice_speed = models.CharField(max_length=50, null=True, blank=True)
-	top_speed = models.CharField(max_length=50, null=True, blank=True)
-	log_item_created = models.DateTimeField(auto_now_add=True)
-	log_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_created_user')
-	log_item_updated = models.DateTimeField(auto_now=True)
-	log_item_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_updated_user')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_student')
+    practice_item = models.CharField(max_length=50)
+    practice_time = models.CharField(max_length=50, null=True, blank=True)
+    practice_speed = models.CharField(max_length=50, null=True, blank=True)
+    log_notes = models.TextField(null=True, blank=True)
+    log_item_created = models.DateTimeField(auto_now_add=True)
+    log_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_created_user')
+    log_item_updated = models.DateTimeField(auto_now=True)
+    log_item_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_updated_user', null=True, blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.practice_item)
 
-class StudentObjectives(models.Model):
+class StudentObjective(models.Model):
 
-	student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_student')
-	objective = models.CharField(max_length=250)
-	objective_complete = models.BooleanField(default=False)
-	objective_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
-	objective_notes = models.TextField(null=True, blank=True)
-	objective_created = models.DateTimeField(auto_now_add=True)
-	objective_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_created_user')
-	objective_updated = models.DateTimeField(auto_now=True)
-	objective_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_updated_user')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_student')
+    objective = models.CharField(max_length=250)
+    objective_complete = models.BooleanField(default=False)
+    objective_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
+    objective_notes = models.TextField(null=True, blank=True)
+    objective_created = models.DateTimeField(auto_now_add=True)
+    objective_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_created_user')
+    objective_updated = models.DateTimeField(auto_now=True)
+    objective_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_updated_user', null=True, blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.objective)
+
+class StudentWishList(models.Model):
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='wishlist_student')
+    wish_item = models.CharField(max_length=250)
+    wish_item_complete = models.BooleanField(default=False)
+    wish_item_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
+    wish_item_notes = models.TextField(null=True, blank=True)
+    wish_item_created = models.DateTimeField(auto_now_add=True)
+    wish_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='wish_item_created_user')
+    wish_item_updated = models.DateTimeField(auto_now_add=True)
+    wish_item_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='wish_item_updated_user', null=True, blank=True)
+
+    def __unicode__(self):
+        return smart_unicode(self.wish_item)
+
+class StudentMaterial(models.Model):
+
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='materials_student')
+    material = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
+    material_notes = models.TextField(null=True, blank=True)
+    material_added = models.DateTimeField(auto_now_add=True)
+    material_added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='material_added_user')
 

@@ -10,8 +10,8 @@ from django.utils import timezone
 from rest_framework import permissions, status, views, viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from users.models import User
-from users.serializers import UserSerializer
+from users.models import User, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList
+from users.serializers import UserSerializer, StudentGoalSerializer, StudentPracticeLogSerializer, StudentObjectiveSerializer, StudentWishListSerializer
 # from authentication.permissions import IsAccountOwner
 # from eventlog.models import log
 
@@ -58,6 +58,29 @@ class UserViewSet(viewsets.ModelViewSet):
     #             serializer.save(user=self.request.user, user_pic=user_pic, **self.request.data)
     #         else:
     #             serializer.save(user=self.request.user, **self.request.data)
+
+class StudentGoalsViewSet(viewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = StudentGoal.objects.all()
+    serializer_class = StudentGoalSerializer
+
+
+class StudentPracticeLogViewSet(viewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = StudentPracticeLog.objects.all()
+    serializer_class = StudentPracticeLogSerializer
+
+
+class StudentObjectiveViewSet(viewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = StudentObjective.objects.all()
+    serializer_class = StudentObjectiveSerializer
+
+
+class StudentWishListViewSet(viewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = StudentWishList.objects.all()
+    serializer_class = StudentWishListSerializer
 
 
 class LoginView(views.APIView):
