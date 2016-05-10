@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html ng-app="hga">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hirsch Guitar Academy</title>
+
+	<link rel='stylesheet' href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}"/>
+
+	<link rel="stylesheet" href="{% static "bower_components/font-awesome/css/font-awesome.min.css" %}">
+	<link rel="stylesheet" href="{% static "bower_components/animate.css/animate.css" %}">
+
+	<link rel="stylesheet" href="{% static "css/main.css" %}">
+</head>
+<body>
+
+	<!-- <div class="container" ui-view></div> -->
+	    <!-- Application content -->
+    <div id="wrap" ui-view autoscroll="false"></div>
+
+    <!-- Page Loader -->
+    <div id="pageloader" page-loader></div>
+
+<script>
+	var staticUrl = '/static/build/development/';
+	console.log(staticUrl);
+	var mediaUrl  = '/static/build/development/media/uploads/';
+	console.log(mediaUrl);
+
+	function static_path(path) {
+		return staticUrl + path;
+	}
+
+	function media_path(path) {
+		return mediaUrl + path;
+	}
+</script>
+	{% include 'javascripts.html' %}
+</body>
+</html>

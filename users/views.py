@@ -5,11 +5,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.utils import timezone
-# from io import BytesIO
+from io import BytesIO
 # from ipware.ip import get_ip
 from rest_framework import permissions, status, views, viewsets
-from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+# from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from users.models import User, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList
 from users.serializers import UserSerializer, StudentGoalSerializer, StudentPracticeLogSerializer, StudentObjectiveSerializer, StudentWishListSerializer
 # from authentication.permissions import IsAccountOwner
@@ -20,6 +22,8 @@ class UserViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    # permission_classes = (IsAuthenticated, )
+    # authentication_classes = (JSONWebTokenAuthentication, )
 
     # def get_permissions(self):
     #     if self.request.method in permissions.SAFE_METHODS:
@@ -51,18 +55,28 @@ class UserViewSet(viewsets.ModelViewSet):
     #             'message': 'Account could not be created with received data.'
     #         }, status=status.HTTP_400_BAD_REQUEST)
 
-    # def perform_update(self, serializer):
-    #     if serializer.is_valid():
-    #         if 'file' in self.request.data:
-    #             user_pic = self.request.data['file']
-    #             serializer.save(user=self.request.user, user_pic=user_pic, **self.request.data)
-    #         else:
-    #             serializer.save(user=self.request.user, **self.request.data)
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            # if 'file' in self.request.data:
+            #     user_pic = self.request.data['file']
+            #     serializer.save(user=self.request.user, user_pic=user_pic, **self.request.data)
+            # else:
+            serializer.save(user_updated_by=self.request.user, **self.request.data)
 
 class StudentGoalsViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
     queryset = StudentGoal.objects.all()
     serializer_class = StudentGoalSerializer
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            studentId = self.request.data.pop('student')
+            student = User.objects.get(id=studentId)
+            serializer.save(student=student, goal_created_by=self.request.user, **self.request.data)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save(goal_updated_by=self.request.user, **self.request.data)
 
 
 class StudentPracticeLogViewSet(viewsets.ModelViewSet):
@@ -70,11 +84,32 @@ class StudentPracticeLogViewSet(viewsets.ModelViewSet):
     queryset = StudentPracticeLog.objects.all()
     serializer_class = StudentPracticeLogSerializer
 
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            studentId = self.request.data.pop('student')
+            student = User.objects.get(id=studentId)
+            serializer.save(student=student, practice_item_created_by=self.request.user, **self.request.data)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            studentId = self.request.data.pop('student')
+            serializer.save(practice_item_updated_by=self.request.user, **self.request.data)
+
 
 class StudentObjectiveViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
     queryset = StudentObjective.objects.all()
     serializer_class = StudentObjectiveSerializer
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            studentId = self.request.data.pop('student')
+            student = User.objects.get(id=studentId)
+            serializer.save(student=student, objective_created_by=self.request.user, **self.request.data)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save(objective_updated_by=self.request.user, **self.request.data)
 
 
 class StudentWishListViewSet(viewsets.ModelViewSet):
@@ -82,14 +117,22 @@ class StudentWishListViewSet(viewsets.ModelViewSet):
     queryset = StudentWishList.objects.all()
     serializer_class = StudentWishListSerializer
 
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            studentId = self.request.data.pop('student')
+            student = User.objects.get(id=studentId)
+            serializer.save(student=student, wish_item_created_by=self.request.user, **self.request.data)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save(wish_item_updated_by=self.request.user, **self.request.data)
+
 
 class LoginView(views.APIView):
-
+    # authentication_classes = (JSONWebTokenAuthentication, )
     def post(self, request, format=None):
-        data = json.loads(request.body)
-
-        username = data.get('username', None)
-        password = data.get('password', None)
+        username = request.data['username']
+        password = request.data['password']
 
         user = authenticate(username=username, password=password)
         if user is not None:

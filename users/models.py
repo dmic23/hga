@@ -35,20 +35,29 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
-
+    USER_RANK = ( 
+        ('WHITE', 'White'),
+        ('RED', 'Red'),
+        ('YELLOW', 'Yellow'),
+        ('GREEN', 'Green'),
+        ('BLUE', 'Blue'),
+        ('PURPLE', 'Purple'),
+        ('BROWN', 'Brown'),
+        ('BLACK', 'Black'),
+    )
     username = models.CharField(max_length=50, unique=True, null=True, blank=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    user_pic = models.FileField(upload_to=get_upload_file_name, null=True, blank=True, default='images/blank_user.png')
+    user_pic = models.FileField(upload_to=get_upload_file_name, null=True, blank=True, default='blank_user.png')
     user_created = models.DateTimeField(auto_now_add=True)
     user_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='created_user', null=True, blank=True, unique=False)
     user_updated = models.DateTimeField(auto_now=True)
     user_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='updated_user', null=True, blank=True, unique=False)
     location = models.CharField(max_length=50, null=True, blank=True)
-    play_level = models.CharField(max_length=50, null=True, blank=True)
+    play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True)
 
     objects = UserManager()
 
@@ -80,7 +89,7 @@ class User(AbstractBaseUser):
 
 class StudentGoal(models.Model):
     
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='goal_student') 
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_goal') 
     goal = models.CharField(max_length=250)
     goal_target_date = models.DateTimeField(max_length=50, null=True, blank=True)
     goal_complete = models.BooleanField(default=False)
@@ -95,23 +104,30 @@ class StudentGoal(models.Model):
         return smart_unicode(self.goal)
 
 class StudentPracticeLog(models.Model):
-
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_student')
+    PRACTICE_CATEGORIES = ( 
+        ('LEAD_TECHNIQUE', 'Lead Technique'),
+        ('RHYTHM_TECHNIQUE', 'Rhythm Technique'),
+        ('THEORY', 'Theory'),
+        ('REPERTOIRE', 'Repertoire'),
+        ('APPLIED_THEORY', 'Applied Theory'),
+    )
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_log')
+    practice_category = models.CharField(max_length=20, choices=PRACTICE_CATEGORIES, null=True, blank=True)
     practice_item = models.CharField(max_length=50)
     practice_time = models.CharField(max_length=50, null=True, blank=True)
     practice_speed = models.CharField(max_length=50, null=True, blank=True)
-    log_notes = models.TextField(null=True, blank=True)
-    log_item_created = models.DateTimeField(auto_now_add=True)
-    log_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_created_user')
-    log_item_updated = models.DateTimeField(auto_now=True)
-    log_item_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_updated_user', null=True, blank=True)
+    practice_notes = models.TextField(null=True, blank=True)
+    practice_item_created = models.DateTimeField(auto_now_add=True)
+    practice_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_created_user')
+    practice_item_updated = models.DateTimeField(auto_now=True)
+    practice_item_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_updated_user', null=True, blank=True)
 
     def __unicode__(self):
         return smart_unicode(self.practice_item)
 
 class StudentObjective(models.Model):
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_student')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_objective')
     objective = models.CharField(max_length=250)
     objective_complete = models.BooleanField(default=False)
     objective_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
@@ -126,7 +142,7 @@ class StudentObjective(models.Model):
 
 class StudentWishList(models.Model):
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='wishlist_student')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_wishlist')
     wish_item = models.CharField(max_length=250)
     wish_item_complete = models.BooleanField(default=False)
     wish_item_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
@@ -141,7 +157,7 @@ class StudentWishList(models.Model):
 
 class StudentMaterial(models.Model):
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='materials_student')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_material')
     material = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
     material_notes = models.TextField(null=True, blank=True)
     material_added = models.DateTimeField(auto_now_add=True)

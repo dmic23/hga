@@ -1,0 +1,34 @@
+
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" ui-sref="app.dashboard">Hirsch Guitar Academy</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a ui-sref="app.dashboard({userId:vm.currentUser.id})">Dashboard</a></li>
+				<li><a href="#forum">Forum</a></li>
+			</ul>
+			<span class="navbar-right" uib-dropdown on-toggle="toggled(open)">
+				<a href="#" id="simple-dropdown" uib-dropdown-toggle>
+					<img ng-src="{{path.media}}{{vm.currentUser.user_pic}}" alt="{{vm.currentUser.first_name}} {{vm.currentUser.last_name}} profile" class="img-circle wh-30 margin-10"><p class="navbar-text pull-right"> {{vm.currentUser.first_name}} {{vm.currentUser.last_name}} <span class="caret"></span></p>
+				</a>
+				<ul class="dropdown-menu" uib-dropdown-menu aria-labelledby="simple-dropdown">
+					<li><a ui-sref="app.profile({userId:vm.currentUser.id})">Profile</a></li>
+					<li><a href="javascript:void(0)" ng-click="vm.logout()">Log Out</a></li>
+				</ul>
+			</span>
+		</div><!--/.nav-collapse -->
+	</div>
+</nav>
+<div class="content-container" ui-view-container>
+
+	<section ui-view></section>
+
+</div>

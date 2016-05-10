@@ -1,0 +1,67 @@
+<div class="row">
+	<h3 class="">Student Goals</h3>	
+	<button type="button" class="btn btn-primary" ng-click="showNewGoal = !showNewGoal"><span class="glyphicon glyphicon-plus"></span></button>
+</div>
+
+<div class="row" ng-show="showNewGoal">
+	<form class="form-inline" name="newGoalForm" ng-submit="addGoal(userId, newGoal);" novalidate>
+		<div class="form-group">
+			<label class="sr-only" for="goal">Goal</label>
+			<input type="text" class="form-control" name="goal" placeholder="New Goal" ng-model="newGoal.goal" required>
+			<span class="text-danger" ng-show="newGoalForm.student_goal.$error.required">Required!</span>
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="goal_target_date">Target Date</label>
+			<div class="input-group">
+				<input name="goal_target_date" type="text" class="form-control" uib-datepicker-popup="MMM d, y" datepicker-append-to-body="true" ng-model="newGoal.goal_target_date" is-open="newGoalpopup.opened" placeholder="{{newGoal.goal_target_date | date:'MMM d, y'}}" />
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ng-click="newGoalOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
+				</span>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="sr-only" for="goal_notes">Goal Notes</label>
+			<textarea class="form-control" rows="1" placeholder="New Goal Notes" name="goal_notes" ng-model="newGoal.goal_notes"></textarea>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-success btn-sm">Add Goal</button>
+		</div>
+	</form>
+</div>
+
+<div class="table-responsive">
+
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Goal</th>
+				<th>Target Date</th>
+				<th>Goal Complete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="goal in goals" name="studentGoalForm" ng-form novalidate>
+				<td class="width-30" ng-if="!edit"><span>{{goal.goal}}</span></td>
+				<td class="width-30" ng-if="edit"><input name="student_goal" class="form-control" type="text" value="{{goal.goal}}" ng-model="goal.goal" required><span class="text-danger" ng-show="studentGoalForm.student_goal.$error.required">Required!</span></td>
+				<td class="width-30" ng-if="!edit" ng-model="goal.goal_target_date">{{goal.goal_target_date | date:"MMM d, y"}}</td>
+				<td class="input-group" ng-if="edit" ><input name="goal_target_date" type="text" class="form-control" uib-datepicker-popup="MMM d, y" datepicker-append-to-body="true" ng-model="goal.goal_target_date" is-open="popup.opened" placeholder="{{goal.goal_target_date | date:'MMM d, y'}}" />
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default" ng-click="open()"><i class="glyphicon glyphicon-calendar"></i></button>
+					</span>
+				</td>
+				<td class="width-10">
+					<button type="submit" name="goal_complete" class="btn btn-link" ng-click="goal.goal_complete = !goal.goal_complete; updateGoal({'id':goal.id, 'goal_complete':goal.goal_complete});" ng-model="goal.goal_complete">
+						<span ng-class="goal.goal_complete ? ' glyphicon glyphicon-ok text-success' : 'glyphicon glyphicon-unchecked'" aria-hidden="true"></span>
+					</button>
+				</td>
+				<td class="width-30">
+					<div class="btn-group btn-group-sm" role="group" aria-label="...">
+						<button type="submit" class="btn btn-link" ng-show="studentGoalForm.$dirty" ng-click="updateGoal(goal);"><i class="glyphicon glyphicon-floppy-disk"/></button>
+						<button type="button" class="btn btn-link" ng-click="edit = !edit" ng-hide="studentGoalForm.$dirty"><i class="glyphicon glyphicon-pencil text-warning"/></button>
+						<button type="button" class="btn btn-link" ng-click="deleteGoal(goal);"><i class="glyphicon glyphicon-trash text-danger"/></button>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,19 @@
+<div class="row">
+	<h1 class="col-md-6 col-md-offset-3">Login</h1>
+</div>
+
+<div class="row">
+	<form class="col-md-3 col-md-offset-3" name="loginForm" ng-submit="vm.login(vm.username, vm.password);" novalidate>
+		<div class="form-group">
+			<label for="username">Username</label>
+			<input type="text" class="form-control" name="username" type="text" placeholder="enter your username" ng-model="vm.username" required>
+			<span class="text-danger" ng-show="loginForm.username.$invalid&&loginForm.username.$touched">Required</span>
+		</div>
+		<div class="form-group">
+			<label for="exampleInputPassword1">Password</label>
+			<input type="password" class="form-control" name="password" placeholder="enter your password" ng-model="vm.password" required>
+			<span class="" ng-show="loginForm.password.$invalid&&loginForm.password.$touched">Required</span>
+		</div>
+		<button type="submit" class="btn btn-default" value="Login" ng-disabled='loginForm.$invalid'>Submit</button>
+	</form>
+</div>

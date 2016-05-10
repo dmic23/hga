@@ -1,0 +1,89 @@
+
+.margin-10 {
+	margin: 10px;
+}
+
+.width-5 {
+	width: 5%;
+}
+
+.width-10 {
+	width: 10%;
+}
+
+.width-15 {
+	width: 15%;
+}
+
+.width-20 {
+	width: 20%;
+}
+
+.width-30 {
+	width: 30%;
+}
+
+.width-40 {
+	width: 40%;
+}
+
+.width-50 {
+	width: 50%;
+}
+
+.width-60 {
+	width: 60%;
+}
+
+.height-20 {
+	height: 20px;
+}
+
+.wh-30 {
+	width: 30px;
+	height: 30px; 
+}
+
+.wh-100 {
+	width: 100px;
+	height: 100px; 
+}
+.content-container {
+	padding-top: 50px;
+}
+
+.bg-white {
+	background-color: white;
+}
+
+.bg-red {
+	background-color: red;
+}
+
+.bg-yellow {
+	background-color: yellow;
+}
+
+.bg-green {
+	background-color: green;
+}
+
+.bg-blue {
+	background-color: blue;
+}
+
+.bg-purple {
+	background-color: purple;
+}
+
+.bg-brown {
+	background-color: brown;
+}
+
+.bg-black {
+	background-color: black;
+}
+
+.border {
+	border: 1px solid #000;
+}
