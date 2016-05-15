@@ -26,6 +26,10 @@
             createStudentWishList: createStudentWishList,
             updateStudentWishList: updateStudentWishList,
             deleteStudentWishList: deleteStudentWishList,
+            createStudentMaterial: createStudentMaterial,
+            updateStudentMaterial: updateStudentMaterial,
+            deleteStudentMaterial: deleteStudentMaterial,
+
         };
 
         return Users;
@@ -126,6 +130,24 @@
 
         function deleteStudentWishList(wishListId){
             return $http.delete('api/v1/student-wish-list/'+wishListId+'/')
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError); 
+        }
+
+        function createStudentMaterial(material){
+            return $http.post('api/v1/student-materials/', material)
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function updateStudentMaterial(materialId, material){
+            return $http.put('api/v1/student-materials/'+materialId+'/', material)
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError); 
+        }
+
+        function deleteStudentMaterial(materialId){
+            return $http.delete('api/v1/student-materials/'+materialId+'/')
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }

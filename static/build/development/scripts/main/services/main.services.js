@@ -5,16 +5,18 @@
         .module('main.services')
         .factory('Main', Main);
 
-    Main.$inject = ['$rootScope', '$http', '$q', '$state'];
+    Main.$inject = ['$http', '$q', '$state'];
 
-    function Main($rootScope, $http, $q, $state) {
+    function Main($http, $q, $state) {
         var vm = this;
 
         var Main = {
             login: login,
             logout: logout,
             setAuthAcct: setAuthAcct,
+            getAuthAcct: getAuthAcct,
             isAuthAcct: isAuthAcct,
+            isStaffAcct: isStaffAcct,
         };
 
         return Main;
@@ -44,11 +46,20 @@
 
         function setAuthAcct(acct) {
             console.log(acct);
-            localStorage.setItem('authAcct', JSON.stringify(acct.id));
+            localStorage.setItem('authAcct', JSON.stringify({'id':acct.id, 'is_staff':acct.is_admin,}));
+        }
+
+        function getAuthAcct(){
+            return JSON.parse(localStorage.getItem('authAcct'));
         }
 
         function isAuthAcct(){
             return (localStorage.getItem('authAcct')) ? true : false;
+        }
+
+        function isStaffAcct(){
+            var acct = JSON.parse(localStorage.getItem('authAcct'));
+            return acct.is_staff;
         }
 
         function logout() {

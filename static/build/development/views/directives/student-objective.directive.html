@@ -1,56 +1,47 @@
-<div class="row">
-	<h3 class="">Student Objectives</h3>	
-	<button type="button" class="btn btn-primary" ng-click="showNewObjective = !showNewObjective"><span class="glyphicon glyphicon-plus"></span></button>
-</div>
 
-<div class="row" ng-show="showNewObjective">
-	<form class="form-inline" name="newObjectiveForm" ng-submit="addObjective(userId, newObjective);" novalidate>
-		<div class="form-group">
-			<label class="sr-only" for="objective">Objective</label>
-			<input type="text" class="form-control" name="objective" placeholder="New Objective" ng-model="newObjective.objective" required>
-			<!-- <span class="text-danger" ng-show="newObjectiveForm.objective.$error.required">Required!</span> -->
-		</div>
-		<div class="form-group">
-			<label class="sr-only" for="objective_notes">Objective Notes</label>
-			<textarea class="form-control" rows="1" placeholder="New Objective Notes" name="objective_notes" ng-model="newObjective.objective_notes"></textarea>
-		</div>
-		<div class="form-group">
-			<button type="submit" class="btn btn-success btn-sm">Add Objective</button>
-		</div>
-	</form>
-</div>
+<div class="card">
 
-<div class="table-responsive">
+    <div class="header row">
+        <h4 class="title col-md-6">Student Objectives</h4>
+        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})" ng-if="authAcct.is_staff"><i class="ti-plus"/> Add Objective</button>
+        <p class="category col-md-7">Here is a subtitle for objectives</p>
+    </div>
 
-	<table class="table table-hover">
-		<thead>
-			<tr>
-				<th>Objective</th>
-				<th>Objective Notes</th>
-				<th>Objective Complete</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="objective in objectives" name="studentObjectiveForm" ng-form novalidate>
-				<td class="width-30" ng-if="!edit"><span>{{objective.objective}}</span></td>
-				<td class="width-30" ng-if="edit"><input name="student_objective" class="form-control" type="text" value="{{objective.objective}}" ng-model="objective.objective" required><!-- <span class="text-danger" ng-show="studentObjectiveForm.objective.$error.required">Required!</span> --></td>
-				<td class="width-30" ng-if="!edit">{{objective.objective_notes}}</td>
-				<td class="width-30" ng-if="edit">
-					<textarea class="form-control" name="objective_notes" rows="1" ng-model="objective.objective_notes" value="{{objective.objective_notes}}"></textarea>
-				</td>
-				<td class="width-10">
-					<button type="submit" name="objective_complete" class="btn btn-link" ng-click="objective.objective_complete = !objective.objective_complete; updateObjective({'id':objective.id, 'objective_complete':objective.objective_complete});" ng-model="objective.objective_complete">
-						<span ng-class="objective.objective_complete ? ' glyphicon glyphicon-ok text-success' : 'glyphicon glyphicon-unchecked'" aria-hidden="true"></span>
-					</button>
-				</td>
-				<td class="width-30">
-					<div class="btn-group btn-group-sm" role="group" aria-label="...">
-						<button type="submit" class="btn btn-link" ng-show="studentObjectiveForm.$dirty" ng-click="updateObjective(objective);"><i class="glyphicon glyphicon-floppy-disk"/></button>
-						<button type="button" class="btn btn-link" ng-click="edit = !edit" ng-hide="studentObjectiveForm.$dirty"><i class="glyphicon glyphicon-pencil text-warning"/></button>
-						<button type="button" class="btn btn-link" ng-click="deleteObjective(objective)"><i class="glyphicon glyphicon-trash text-danger"/></button>
-					</div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+    <div class="content table-responsive table-full-width">
+
+        <table class="table table-hover">
+            <thead>
+                <th>Objective</th>
+            	<th>Objective Notes</th>
+            	<th>Complete</th>
+            </thead>
+            <tbody>
+				<tr ng-repeat="objective in filteredObjectives = (objectives | filter: objective_complete == 'false' | orderBy: 'objective_created' | limitTo : 3)" name="studentObjectiveForm"  ng-form novalidate>
+					<td class="width-30">
+						{{objective.objective | limitTo: 35}}<span ng-if="objective.objective.length > 35">...</span>
+					</td>
+					<td class="width-30">
+						{{objective.objective_notes | limitTo: 55}}<span ng-if="objective.objective_notes.length > 55">...</span>
+					</td>
+					<td class="width-20" ng-if="authAcct.is_staff">
+						<button type="submit" name="objective_complete" class="btn btn-default btn-link" ng-click="objective.objective_complete = !objective.objective_complete; updateObjective({'id':objective.id, 'objective_complete':objective.objective_complete});" ng-model="objective.objective_complete">
+							<i ng-class="objective.objective_complete ? 'ti-check text-success' : 'ti-layout-sidebar-none text-info'" aria-hidden="true"></i>
+						</button>
+					</td>
+					<td class="width-20" ng-if="!authAcct.is_staff">
+						<i ng-class="objective.objective_complete ? 'ti-check text-success' : 'ti-layout-sidebar-none text-info'" aria-hidden="true"></i>
+					</td>
+					<td class="width-20" ng-if="authAcct.is_staff">
+						<button type="button" class="btn btn-warning btn-link" ng-click="open(objective)"><i class="ti-pencil"/></button>
+						<button type="button" class="btn btn-danger btn-link" ng-click="deleteGoal(objective);"><i class="ti-trash"/></button>
+					</td>
+				</tr>
+				<tr ng-if="filteredObjectives.length < 1">
+					<td>No objectives. Add one!</td>
+				</tr>
+            </tbody>
+        </table>
+
+    </div>
+    
 </div>

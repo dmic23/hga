@@ -5,9 +5,9 @@
         .module('main.directives')
         .directive('studentGoal', studentGoal);
 
-    studentGoal.$inject = ['$sce', 'Users'];
+    studentGoal.$inject = ['$sce', 'Users','$uibModal'];
 
-    function studentGoal($sce, Users) {
+    function studentGoal($sce, Users, $uibModal) {
 
         var directive = {
             restrict: 'EA',
@@ -16,22 +16,67 @@
                 goals: '=',
             },
             link: function(scope, elem, attrs){
-                
-                scope.newGoal = {};
+                console.log(scope);
 
-                scope.open = function() {
-                    scope.popup.opened = true;
-                };
-                scope.popup = {
-                    opened: false
-                };
+                scope.open = function(goal){
 
-                scope.newGoalOpen = function() {
-                    scope.newGoalpopup.opened = true;
-                };
-                scope.newGoalpopup = {
-                    opened: false
-                };
+                    var modalInstance = $uibModal.open({
+                        templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-goal.modal.html')),
+                        controller: function($scope, $uibModalInstance, $timeout){
+                            var vm = this;
+                            console.log(goal);
+                            if(goal.id){
+                                vm.modalTitle = "Update Goal";
+                                vm.studentGoal = goal;    
+                            } else {
+                                vm.modalTitle = "New Goal";
+                                vm.studentGoal = {};                                 
+                            }
+                            
+                            console.log(scope);
+
+                            vm.openDate = function($event){
+                                console.log("open date1")
+                                $event.preventDefault();
+                                $event.stopPropagation();
+                                $timeout(function () {
+                                    console.log("open date2")
+                                    vm.showPicker.opened = !vm.showPicker.opened;
+                                });
+                            };
+
+                            vm.showPicker = {
+                                opened: false,
+                            };
+
+                            vm.closeModal = function (){
+                                console.log('clse modal');
+                                $uibModalInstance.dismiss('cancel');
+                            };
+
+                            vm.submitGoal = function(studentGoal){
+
+                                if(goal.id){
+                                    console.log(studentGoal);
+                                    scope.updateGoal(studentGoal);  
+                                } else {
+                                    console.log(studentGoal);
+                                    var userId = scope.userId;
+                                    console.log(userId);
+                                    scope.addGoal(userId, studentGoal); 
+                                }
+                                $uibModalInstance.close();
+                            }
+
+                            console.log(scope);
+                            console.log($scope);
+    
+                        },
+                        controllerAs: 'vm',
+                        size: 'lg',
+
+                    });
+                }
 
                 console.log(scope);
                 console.log(attrs);
@@ -69,8 +114,8 @@
                         .then(function(response){
                             console.log(response);
                             scope.goals.push(response);
-                            scope.newGoal = {};
-                            scope.showNewGoal = false;
+                            // scope.newGoal = {};
+                            // scope.showNewGoal = false;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });

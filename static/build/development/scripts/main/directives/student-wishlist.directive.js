@@ -5,9 +5,9 @@
         .module('main.directives')
         .directive('studentWishList', studentWishList);
 
-    studentWishList.$inject = ['$sce', 'Users'];
+    studentWishList.$inject = ['$sce', 'Users', '$uibModal'];
 
-    function studentWishList($sce, Users) {
+    function studentWishList($sce, Users, $uibModal) {
 
         var directive = {
             restrict: 'EA',
@@ -17,9 +17,52 @@
             },
             link: function(scope, elem, attrs){
                 
-                scope.newWishList = {};
+                scope.open = function(wishItem){
 
-                scope.updateWishList = function(updWishList){
+                    var modalInstance = $uibModal.open({
+                        templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-wishlist.modal.html')),
+                        controller: function($scope, $uibModalInstance, $timeout){
+                            var vm = this;
+                            console.log(wishItem);
+                            if(wishItem.id){
+                                vm.modalTitle = "Update Wish";
+                                vm.newWishItem = wishItem;    
+                            } else {
+                                vm.modalTitle = "New Wish";
+                                vm.newWishItem = {};                                 
+                            }
+                            
+                            console.log(scope);
+
+                            vm.closeModal = function (){
+                                console.log('clse modal');
+                                $uibModalInstance.dismiss('cancel');
+                            };
+
+                            vm.submitWishItem = function(newWishItem){
+
+                                if(wishItem.id){
+                                    console.log(newWishItem);
+                                    scope.updateWishItem(newWishItem);  
+                                } else {
+                                    console.log(newWishItem);
+                                    var userId = scope.userId;
+                                    console.log(userId);
+                                    scope.addWishItem(userId, newWishItem); 
+                                }
+                                $uibModalInstance.close();
+                            }
+
+                            console.log(scope);
+                            console.log($scope);
+    
+                        },
+                        controllerAs: 'vm',
+                        size: 'lg',
+                    });
+                }
+
+                scope.updateWishItem = function(updWishList){
                     console.log(updWishList);
                     var wishListId = updWishList.id;
                     console.log(wishListId);
@@ -42,7 +85,7 @@
                         });
                 }
 
-                scope.addWishList = function(userId, wishList){
+                scope.addWishItem = function(userId, wishList){
                     console.log(userId);
                     console.log(wishList);
                     wishList['student'] = userId;
@@ -58,7 +101,7 @@
                         });
                 } 
 
-                scope.deleteWishList = function(wishList){
+                scope.deleteWishItem = function(wishList){
                     var wishListId = wishList.id;
                     Users.deleteStudentWishList(wishListId)
                         .then(function(response){

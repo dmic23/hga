@@ -11,7 +11,13 @@
 
         $urlRouterProvider.otherwise(function ($injector) {
             var $state = $injector.get('$state');
+            // if(Main.isAuthAcct()){
+            //     vm.authUser = localStorage.getItem('authAcct');
+            //     console.log(vm.authUser);
             $state.go('app.dashboard');
+            // } else {
+                // $state.go('login');
+            // }
         });
 
         $stateProvider

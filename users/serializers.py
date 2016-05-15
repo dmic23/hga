@@ -19,12 +19,16 @@ class StudentGoalSerializer(serializers.ModelSerializer):
 
 
 class StudentPracticeLogSerializer(serializers.ModelSerializer):
-    practice_category_display = serializers.CharField(source='get_practice_category_display', required=False)
+    practice_category_display = serializers.SerializerMethodField(source='practice_category', required=False)
+    practice_date = serializers.DateTimeField(format=None, input_formats=None, required=False)
+
 
     class Meta:
         model = StudentPracticeLog
-        fields = ('id', 'student', 'practice_category', 'practice_category_display', 'practice_item', 'practice_time', 'practice_speed', 'practice_notes', 'practice_item_created',)
+        fields = ('id', 'student', 'practice_category', 'practice_category_display', 'practice_item', 'practice_time', 'practice_speed', 'practice_notes', 'practice_date', 'practice_item_created',)
 
+    def get_practice_category_display(self,obj):
+        return obj.get_practice_category_display();
 
 class StudentObjectiveSerializer(serializers.ModelSerializer):
     objective = serializers.CharField(required=False)
@@ -44,10 +48,11 @@ class StudentWishListSerializer(serializers.ModelSerializer):
         fields = ('id', 'student', 'wish_item', 'wish_item_complete', 'wish_item_complete_date', 'wish_item_notes', 'wish_item_created',)
 
 class StudentMaterialSerializer(serializers.ModelSerializer):
+    material_added_by = serializers.CharField(required=False)
 
     class Meta:
         model = StudentMaterial
-        fields = ('id', 'student', 'material', 'material_notes', 'material_added', 'material_added_by',)
+        fields = ('id', 'student', 'file', 'material_name', 'material_notes', 'material_added', 'material_added_by',)
 
 class UserSerializer(serializers.ModelSerializer):
     play_level_display = serializers.CharField(source='get_play_level_display', required=False)
@@ -59,8 +64,9 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('id', 'user_created', 'user_updated', 'is_active', 'is_admin', 'username', 'first_name', 'last_name', 'user_pic',
+        fields = ('id', 'user_created', 'user_updated', 'is_active', 'is_admin', 'is_staff', 'username', 'first_name', 'last_name', 'user_pic',
                 'location', 'play_level', 'play_level_display', 'email', 'student_goal', 'student_log', 'student_objective', 'student_wishlist', 'student_material',)
+        read_only_fields = ('id', 'user_created', 'is_active', 'is_admin', 'is_staff',)
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)

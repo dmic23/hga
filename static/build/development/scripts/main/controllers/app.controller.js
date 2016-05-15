@@ -14,11 +14,11 @@
 
         function activate(){
             if(Main.isAuthAcct()){
-                var id = localStorage.getItem('authAcct');
-                Users.getUser(id).then(function(response){
+                var authAcct = Main.getAuthAcct();
+                console.log(authAcct.id);
+                Users.getUser(authAcct.id).then(function(response){
                     console.log(response);
                     vm.currentUser = response;
-                    $scope.currentUser = response;
                 });
             } else {
                 console.log("Could not get account");

@@ -11,10 +11,22 @@
         var vm = this;
         console.log($stateParams);
         activate();
-
         function activate(){
-            vm.dashId = $stateParams.userId; 
-            getUser(vm.dashId);
+            if(Main.isAuthAcct()){
+                vm.authAcct = Main.getAuthAcct();
+                console.log(vm.authAcct);
+                if($stateParams.userId && vm.authAcct.is_staff){
+                    vm.dashId = $stateParams.userId;                   
+                } else {
+                    vm.dashId = vm.authAcct.id;
+                    console.log(vm.dashId);
+                    $state.transitionTo('app.dashboard', {userId: vm.dashId}, { notify: false });
+                }
+                getUser(vm.dashId);
+            } else {
+                $state.go('login');
+            }
+
         }
 
         function getUser(id){

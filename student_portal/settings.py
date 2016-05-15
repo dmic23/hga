@@ -120,7 +120,6 @@ USE_TZ = True
 
 SITE_ID = 1
 
-
 AUTH_USER_MODEL = 'users.User'
 
 # Static files (CSS, JavaScript, Images)

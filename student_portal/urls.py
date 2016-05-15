@@ -5,7 +5,7 @@ from django.contrib import admin
 from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from student_portal.views import IndexView
-from users.views import LoginView, LogoutView, UserViewSet, StudentGoalsViewSet, StudentPracticeLogViewSet, StudentObjectiveViewSet, StudentWishListViewSet
+from users.views import LoginView, LogoutView, UserViewSet, StudentGoalsViewSet, StudentPracticeLogViewSet, StudentObjectiveViewSet, StudentWishListViewSet, StudentMaterialsViewSet
 
 router = routers.SimpleRouter()
 router.register(r'users', UserViewSet)
@@ -13,6 +13,7 @@ router.register(r'student-goals', StudentGoalsViewSet)
 router.register(r'student-practice-logs', StudentPracticeLogViewSet)
 router.register(r'student-objectives', StudentObjectiveViewSet)
 router.register(r'student-wish-list', StudentWishListViewSet)
+router.register(r'student-materials', StudentMaterialsViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

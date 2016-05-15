@@ -50,6 +50,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user_pic = models.FileField(upload_to=get_upload_file_name, null=True, blank=True, default='blank_user.png')
     user_created = models.DateTimeField(auto_now_add=True)
@@ -117,6 +118,7 @@ class StudentPracticeLog(models.Model):
     practice_time = models.CharField(max_length=50, null=True, blank=True)
     practice_speed = models.CharField(max_length=50, null=True, blank=True)
     practice_notes = models.TextField(null=True, blank=True)
+    practice_date = models.DateTimeField(max_length=50, null=True, blank=True)
     practice_item_created = models.DateTimeField(auto_now_add=True)
     practice_item_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='log_created_user')
     practice_item_updated = models.DateTimeField(auto_now=True)
@@ -158,7 +160,8 @@ class StudentWishList(models.Model):
 class StudentMaterial(models.Model):
 
     student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_material')
-    material = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
+    file = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
+    material_name = models.CharField(max_length=50, null=True, blank=True)
     material_notes = models.TextField(null=True, blank=True)
     material_added = models.DateTimeField(auto_now_add=True)
     material_added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='material_added_user')

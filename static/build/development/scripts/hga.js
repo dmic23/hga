@@ -5,6 +5,7 @@
         .module('hga', [
             'ngAnimate',
             'ngStorage',
+            'ngFileUpload',
             'ui.router',
             'ui.bootstrap',
             'hga.config',
@@ -43,7 +44,7 @@
             var requireLogin = toState.data.requireLogin;
             var auth = Main.isAuthAcct();
 
-            if (toState.data.requireLogin && !auth) {
+            if(requireLogin && !auth){
                 event.preventDefault();
                 $state.go('login');
                 return $rootScope;

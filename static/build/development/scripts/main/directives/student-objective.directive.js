@@ -5,19 +5,65 @@
         .module('main.directives')
         .directive('studentObjective', studentObjective);
 
-    studentObjective.$inject = ['$sce', 'Users'];
+    studentObjective.$inject = ['$sce', 'Users', '$uibModal'];
 
-    function studentObjective($sce, Users) {
+    function studentObjective($sce, Users, $uibModal) {
 
         var directive = {
             restrict: 'EA',
             scope: {
                 userId: '=',
+                authAcct: '=',
                 objectives: '=',
             },
             link: function(scope, elem, attrs){
                 
-                scope.newObjective = {};
+                console.log(scope);
+
+                scope.open = function(objective){
+
+                    var modalInstance = $uibModal.open({
+                        templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-objective.modal.html')),
+                        controller: function($scope, $uibModalInstance, $timeout){
+                            var vm = this;
+                            console.log(objective);
+                            if(objective.id){
+                                vm.modalTitle = "Update Objective";
+                                vm.studentObjective = objective;    
+                            } else {
+                                vm.modalTitle = "New Objective";
+                                vm.studentObjective = {};                                 
+                            }
+                            
+                            console.log(scope);
+
+                            vm.closeModal = function (){
+                                console.log('clse modal');
+                                $uibModalInstance.dismiss('cancel');
+                            };
+
+                            vm.submitObjective = function(studentObjective){
+
+                                if(objective.id){
+                                    console.log(studentObjective);
+                                    scope.updateObjective(studentObjective);  
+                                } else {
+                                    console.log(studentObjective);
+                                    var userId = scope.userId;
+                                    console.log(userId);
+                                    scope.addObjective(userId, studentObjective); 
+                                }
+                                $uibModalInstance.close();
+                            }
+
+                            console.log(scope);
+                            console.log($scope);
+    
+                        },
+                        controllerAs: 'vm',
+                        size: 'lg',
+                    });
+                }
                 
                 scope.updateObjective = function(updObjective){
                     console.log(updObjective);
@@ -51,8 +97,8 @@
                         .then(function(response){
                             console.log(response);
                             scope.objectives.push(response);
-                            scope.newObjective = {};
-                            scope.showNewObjective = false;
+                            // scope.newObjective = {};
+                            // scope.showNewObjective = false;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });

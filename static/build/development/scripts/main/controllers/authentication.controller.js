@@ -14,7 +14,9 @@
 
         function activate(){
             if(Main.isAuthAcct()){
-                $state.go('app.dashboard');
+                vm.authUser = Main.getAuthAcct();
+                console.log(vm.authUser);
+                $state.go('app.dashboard', {'userId': vm.authUser.id});
             }
 
         }

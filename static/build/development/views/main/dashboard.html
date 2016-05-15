@@ -1,14 +1,18 @@
+
+
 <div class="row">
-	<h2 class="col-md-6 col-md-offset-4">Student Dashboard</h2>
-	<p class="col-md-3">{{vm.user.first_name}} {{vm.user.last_name}}</p>
+	<div class="col-md-12 text-center">
+		<h2 class="title">Student Dashboard</h2>
+		<p class="category">{{vm.user.first_name}} {{vm.user.last_name}}</p>
+	</div>
 </div>
 
 <div class="row">
 	<div class="col-md-6">
-		<student-goal user-id="vm.user.id" goals="vm.user.student_goal"></student-goal>
+		<student-goal user-id="vm.user.id" goals="vm.user.student_goal" ctrl="vm.DashBoardController"></student-goal>
 	</div>
 	<div class="col-md-6">
-		<student-objective user-id="vm.user.id" objectives="vm.user.student_objective"></student-objective>
+		<student-objective user-id="vm.user.id" objectives="vm.user.student_objective" auth-acct="vm.authAcct"></student-objective>
 	</div>
 </div>
 
@@ -23,6 +27,6 @@
 		<student-wish-list user-id="vm.user.id" wish-lists="vm.user.student_wishlist"></student-wish-list>
 	</div>
 	<div class="col-md-6">
-		<student-materials user-id="vm.user.id" materials="vm.user.student_materials"></student-materials>
+		<student-materials user-id="vm.user.id" materials="vm.user.student_material" path="path.media"></student-materials>
 	</div>
 </div>

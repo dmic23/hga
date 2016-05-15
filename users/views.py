@@ -9,11 +9,12 @@ from io import BytesIO
 # from ipware.ip import get_ip
 from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 # from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from users.models import User, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList
-from users.serializers import UserSerializer, StudentGoalSerializer, StudentPracticeLogSerializer, StudentObjectiveSerializer, StudentWishListSerializer
+from users.models import User, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList, StudentMaterial
+from users.serializers import UserSerializer, StudentGoalSerializer, StudentPracticeLogSerializer, StudentObjectiveSerializer, StudentWishListSerializer, StudentMaterialSerializer
 # from authentication.permissions import IsAccountOwner
 # from eventlog.models import log
 
@@ -126,6 +127,25 @@ class StudentWishListViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         if serializer.is_valid():
             serializer.save(wish_item_updated_by=self.request.user, **self.request.data)
+
+
+class StudentMaterialsViewSet(viewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = StudentMaterial.objects.all()
+    serializer_class = StudentMaterialSerializer
+    parser_classes = (JSONParser,)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            print "SELF-REQ-DATA === %s" %self.request.data
+            studentId = self.request.data.pop('student')
+            print "STUDENT ID-- %s" %studentId
+            student = User.objects.get(id=studentId)
+            serializer.save(student=student, material_added_by=self.request.user, **self.request.data)
+
+    def perform_update(self, serializer):
+        if serializer.is_valid():
+            serializer.save(material_added_by=self.request.user, **self.request.data)
 
 
 class LoginView(views.APIView):
