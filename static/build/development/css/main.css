@@ -3,6 +3,14 @@
 	margin: 10px;
 }
 
+.margin-tb-10 {
+	margin: 10px 0;
+}
+
+.margin-tb-20 {
+	margin: 20px 0;
+}
+
 .padding-10 {
 	padding: 10px;
 }
@@ -57,35 +65,35 @@
 }
 
 .bg-white {
-	background-color: white;
+	background-color: rgba(255, 255, 255, 0.8);
 }
 
 .bg-red {
-	background-color: red;
+	background-color: rgba(255,0,0,0.8);
 }
 
 .bg-yellow {
-	background-color: yellow;
+	background-color: rgba(255,255,0,0.8);
 }
 
 .bg-green {
-	background-color: green;
+	background-color: rgba(4, 92, 4, 0.8);
 }
 
 .bg-blue {
-	background-color: blue;
+	background-color: rgba(0,0,255,0.8);
 }
 
 .bg-purple {
-	background-color: purple;
+	background-color: rgba(60, 17, 84, 0.8);
 }
 
 .bg-brown {
-	background-color: brown;
+	background-color: rgba(102, 52, 20, 0.8);
 }
 
 .bg-black {
-	background-color: black;
+	background-color: rgba(0, 0, 0, 0.8);
 }
 
 .border {

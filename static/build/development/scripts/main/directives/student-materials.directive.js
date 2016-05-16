@@ -65,6 +65,8 @@
 
                 scope.updateMaterial = function(updMaterial){
                     console.log(updMaterial);
+                    var omittedMat = _.omit(updMaterial, 'material_added_by', 'student');
+                    console.log(omittedMat);
                     var materialId = updMaterial.id;
                     console.log(materialId);
                     // if(updMaterial.wish_item){
@@ -73,16 +75,28 @@
                     //         wish_item: updWishList.wish_item,
                     //         wish_item_complete: updWishList.wish_item_complete,
                     //         wish_item_notes: updWishList.wish_item_notes,
-                    //     };
+                    //     }; var index = scope.practiceLogs.indexOf(practiceLog);
                     // } else {
-                    var material = updMaterial;
+                    var newMaterial = omittedMat;
                     // }
-                    console.log(wishList);
-                    Users.updateStudentMaterial(materialId, material)
-                        .then(function(response){
-                            console.log(response);
-                        }).catch(function(errorMsg){
-                            console.log(errorMsg);
+                    console.log(omittedMat);
+                    Upload.upload({
+                        url: 'api/v1/student-materials/'+materialId+'/',
+                        data: newMaterial,
+                        method: 'PUT',
+                    })
+                        .then(function (resp) {
+                            console.log(resp.data);
+                            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                            var index = scope.materials.indexOf(updMaterial);
+                            console.log(index);
+                            scope.materials[index] = resp.data;
+                            console.log(scope.materials);
+                        }, function (resp) {
+                            console.log('Error status: ' + resp.status);
+                        }, function (evt) {
+                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                         });
                 }
 
@@ -101,18 +115,19 @@
                     //         console.log(errorMsg);
                     //     });
 
-    
                     Upload.upload({
                         url: 'api/v1/student-materials/',
                         data: material,
                     })
                         .then(function (resp) {
+                            console.log(resp.data);
                             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                            scope.materials.push(resp.data);
                         }, function (resp) {
                             console.log('Error status: ' + resp.status);
                         }, function (evt) {
-                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                         });
 
                 } 

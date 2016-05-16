@@ -9,7 +9,7 @@ from io import BytesIO
 # from ipware.ip import get_ip
 from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import api_view
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser, FileUploadParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 # from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -133,19 +133,63 @@ class StudentMaterialsViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
     queryset = StudentMaterial.objects.all()
     serializer_class = StudentMaterialSerializer
-    parser_classes = (JSONParser,)
+    # parser_classes = (MultiPartParser, FormParser,)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
             print "SELF-REQ-DATA === %s" %self.request.data
-            studentId = self.request.data.pop('student')
+            if 'file' in self.request.data:
+                temp_file = self.request.data.pop('file')
+
+            file_dict = {}
+            for i in self.request.data:
+                print "I == %s" %i
+                if i != 'file': 
+                    print "I in not === %s" %i
+                    item = self.request.data[i]
+                    print "ITEM == %s" %item
+                    file_dict[i] = item
+                    print "FILE DICT === %s" %file_dict
+                print "FILE no file === %s" %file_dict
+            # temp_file = self.request.data.pop('file')
+            for f in temp_file:
+                print "F === %s" %f
+                file_dict['file'] = f
+            print "FILE DICT All=== %s" %file_dict
+            studentId = file_dict.pop('student')
             print "STUDENT ID-- %s" %studentId
             student = User.objects.get(id=studentId)
-            serializer.save(student=student, material_added_by=self.request.user, **self.request.data)
+            serializer.save(material_added_by=self.request.user, **file_dict)
 
     def perform_update(self, serializer):
         if serializer.is_valid():
-            serializer.save(material_added_by=self.request.user, **self.request.data)
+            print "SELF-REQ-DATA === %s" %self.request.data
+            if 'file' in self.request.data:
+                print "FILE !"
+                temp_file = self.request.data.pop('file')
+            # studentId = self.request.data.pop('student')
+            # material_added_by = self.request.data.pop('material_added_by')
+            # exclude = ('file','student','material_added_by') 
+            print "SELF-REQ-DATA 2 === %s" %self.request.data
+            file_dict = {}
+            for i in self.request.data:
+                print "I == %s" %i
+                # if i.decode('unicode-escape') in exclude: 
+                print "I in not === %s" %i
+                item = self.request.data[i]
+                print "ITEM == %s" %item
+                file_dict[i] = item
+                print "FILE DICT === %s" %file_dict
+                print "FILE no file === %s" %file_dict
+            # temp_file = self.request.data.pop('file')
+            for f in temp_file:
+                print "F === %s" %f
+                file_dict['file'] = f
+            print "FILE DICT All=== %s" %file_dict
+            # studentId = file_dict.pop('student')
+            # print "STUDENT ID-- %s" %studentId
+            # student = User.objects.get(id=studentId)
+            serializer.save(**file_dict)
 
 
 class LoginView(views.APIView):

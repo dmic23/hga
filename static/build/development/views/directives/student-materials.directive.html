@@ -17,7 +17,7 @@
             	<th></th>
             </thead>
             <tbody>
-				<tr ng-repeat="material in filteredMaterials = (materials | filter: orderBy: 'material_added' | limitTo : 3)">
+				<tr ng-repeat="material in materials | orderBy: '-material_added' | limitTo : 3">
 					<td class="width-20">{{material.material_added | date:"MMM d, y"}}</td>
 					<td class="width-30">
 						<a href="{{path}}{{material.file}}" target="_blank">{{material.material_name | limitTo: 15}}<span ng-if="material.material.length > 15">...</span></a>
@@ -30,7 +30,7 @@
 						<button type="button" class="btn btn-danger btn-link" ng-click="deleteMaterial(material);"><i class="ti-trash"/></button>
 					</td>
 				</tr>
-				<tr class="" ng-if="filteredMaterials.length < 1">
+				<tr class="" ng-if="materials.length < 1">
 					<td class="">No Materials. Add one!</td>
 				</tr>
             </tbody>

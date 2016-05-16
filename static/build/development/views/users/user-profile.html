@@ -1,11 +1,11 @@
-<div class="row">
+<!-- <div class="row">
 	<div class="col-md-12 text-center">
 		<img ng-src="{{path.media}}{{vm.user.user_pic}}" alt="{{vm.user.first_name}} {{vm.user.last_name}} profile" class="img-circle wh-100">
 	</div>
 	<div class="col-md-12 text-center">
 		<h3>{{vm.user.first_name}} {{vm.user.last_name}}</h3>
 		<p>{{vm.user.location}}</p>
-		<p>Student Since: {{vm.user.user_created | date:'MMM d, y'}}</p>
+		<p>Student Since: <small>{{vm.user.user_created | date:'MMM d, y'}}</small></p>
 		<p>Play Level:</p>
 		<div class="center-block width-10 height-20 border" ng-class="vm.playLevelColor[vm.user.play_level]"></div>
 	</div>
@@ -41,4 +41,173 @@
         </div>
 		<button type="submit" class="btn btn-success">Update Profile</button>
 	</form>
+</div> -->
+
+
+
+<div class="row">
+    <div class="col-lg-4 col-md-5">
+        <div class="card card-user">
+            <div class="image" ng-class="vm.playLevelColor[vm.user.play_level]">
+                <!-- <img src="assets/img/background.jpg" alt="..."/> -->
+            </div>
+            <div class="content">
+				<div class="author">
+				<img class="avatar border-white" ng-src="{{path.media}}{{vm.user.user_pic}}" alt="{{vm.user.first_name}} {{vm.user.last_name}} profile"/>
+				<h4 class="title">{{vm.user.first_name}} {{vm.user.last_name}}</h4>
+				</div>
+				<p class="description text-center">Student Since: <small>{{vm.user.user_created | date:'MMM d, y'}}</small>
+				</p>
+				<p>Play Level:</p>
+				<div class="center-block width-10 height-20 border-input" ng-class="vm.playLevelColor[vm.user.play_level]"></div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-1">
+                        <h5>12<br /><small>Files</small></h5>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>2GB<br /><small>Used</small></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>24,6$<br /><small>Spent</small></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Team Members</h4>
+            </div>
+            <div class="content">
+                <ul class="list-unstyled team-members">
+                            <li>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="avatar">
+                                            <img src="assets/img/faces/face-0.jpg" alt="Circle Image" class="img-circle img-no-padding img-responsive">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        DJ Khaled
+                                        <br />
+                                        <span class="text-muted"><small>Offline</small></span>
+                                    </div>
+
+                                    <div class="col-xs-3 text-right">
+                                        <btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-envelope"></i></btn>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="avatar">
+                                            <img src="assets/img/faces/face-1.jpg" alt="Circle Image" class="img-circle img-no-padding img-responsive">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        Creative Tim
+                                        <br />
+                                        <span class="text-success"><small>Available</small></span>
+                                    </div>
+
+                                    <div class="col-xs-3 text-right">
+                                        <btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-envelope"></i></btn>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <div class="avatar">
+                                            <img src="assets/img/faces/face-3.jpg" alt="Circle Image" class="img-circle img-no-padding img-responsive">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        Flume
+                                        <br />
+                                        <span class="text-danger"><small>Busy</small></span>
+                                    </div>
+
+                                    <div class="col-xs-3 text-right">
+                                        <btn class="btn btn-sm btn-success btn-icon"><i class="fa fa-envelope"></i></btn>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-7">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Profile</h4>
+            </div>
+            <div class="content">
+                <form name="userProfileForm" ng-submit="vm.updateProfile(vm.user)" novalidate>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" name="first_name" class="form-control border-input" placeholder="First Name" value="{{vm.user.first_name}}" ng-model="vm.user.first_name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" name="last_name" class="form-control border-input" placeholder="Last Name" value="{{vm.user.last_name}}" ng-model="vm.user.last_name">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" class="form-control border-input" placeholder="Location" value="{{vm.user.location}}" ng-model="vm.user.location">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" class="form-control border-input" placeholder="Userame" value="{{vm.user.username}}" ng-model="vm.user.username">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Email</label>
+                                <input type="email" class="form-control border-input" placeholder="@email" ng-model="vm.user.email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" class="form-control border-input" name="password" ng-model="vm.user.password">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>New Password Confirm</label>
+                                <input type="password" class="form-control border-input" name="confirm_password" ng-model="vm.user.confirm_password" ui-validate=" '$value==vm.user.password' " ui-validate-watch=" 'vm.user.password' ">
+            					<span class="text-red" ng-show='userProfileForm.confirm_password.$error.validator'>Passwords don't match!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info btn-fill btn-wd">Update Profile</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 </div>

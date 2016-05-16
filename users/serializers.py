@@ -48,7 +48,10 @@ class StudentWishListSerializer(serializers.ModelSerializer):
         fields = ('id', 'student', 'wish_item', 'wish_item_complete', 'wish_item_complete_date', 'wish_item_notes', 'wish_item_created',)
 
 class StudentMaterialSerializer(serializers.ModelSerializer):
+    student = serializers.CharField(required=False)
+    material_added = serializers.DateTimeField(format=None, input_formats=None, required=False)
     material_added_by = serializers.CharField(required=False)
+    file = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = StudentMaterial

@@ -19,7 +19,7 @@
 				<th>Practice Notes</th>
             </thead>
             <tbody>
-				<tr ng-repeat="log in practiceLogs | orderBy: 'practice_date' | limitTo : 3" name="studentPracticeForm" ng-form novalidate>
+				<tr ng-repeat="log in practiceLogs | orderBy: '-practice_date' | limitTo : 3" name="studentPracticeForm" ng-form novalidate>
 					<td class="width-10">{{log.practice_date | date:'MMM d, y'}}</td>
 					<td class="width-15">{{log.practice_category_display}}</td>
 					<td class="width-15">{{log.practice_item | limitTo: 35}}<span ng-if="log.practice_item.length > 35">...</span></td>
