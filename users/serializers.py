@@ -12,6 +12,7 @@ class StudentGoalSerializer(serializers.ModelSerializer):
     goal = serializers.CharField(required=False)
     student = serializers.CharField(required=False)
     goal_target_date = serializers.DateTimeField(format=None, input_formats=None, required=False)
+    goal_complete_date = serializers.DateTimeField(format=None, input_formats=None, required=False)
 
     class Meta:
         model = StudentGoal
@@ -33,6 +34,8 @@ class StudentPracticeLogSerializer(serializers.ModelSerializer):
 class StudentObjectiveSerializer(serializers.ModelSerializer):
     objective = serializers.CharField(required=False)
     student = serializers.CharField(required=False)
+    objective_complete_date = serializers.DateTimeField(format=None, input_formats=None, required=False)
+
 
     class Meta:
         model = StudentObjective
@@ -59,6 +62,7 @@ class StudentMaterialSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     play_level_display = serializers.CharField(source='get_play_level_display', required=False)
+    user_pic = serializers.CharField(required=False, allow_blank=True)
     student_goal = StudentGoalSerializer(many=True, required=False)
     student_log = StudentPracticeLogSerializer(many=True, required=False)
     student_objective = StudentObjectiveSerializer(many=True, required=False)
@@ -76,6 +80,10 @@ class UserSerializer(serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
+        instance.location = validated_data.get('location', instance.location)
+        instance.play_level = validated_data.get('play_level', instance.play_level)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.user_pic = validated_data.get('user_pic', instance.user_pic)
         instance.save()
         password = validated_data.get('password', None)
         confirm_password = validated_data.get('confirm_password', None)

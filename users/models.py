@@ -27,7 +27,7 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, password, **kwargs):
-        user = self.create_user(password=password)
+        user = self.create_user(username=username, password=password)
         user.username = username
         user.is_admin = True
         user.save()
@@ -57,8 +57,8 @@ class User(AbstractBaseUser):
     user_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='created_user', null=True, blank=True, unique=False)
     user_updated = models.DateTimeField(auto_now=True)
     user_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='updated_user', null=True, blank=True, unique=False)
-    location = models.CharField(max_length=50, null=True, blank=True)
-    play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True)
+    location = models.CharField(max_length=50, null=True, blank=True, default='Ruston')
+    play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True, default='WHITE')
 
     objects = UserManager()
 

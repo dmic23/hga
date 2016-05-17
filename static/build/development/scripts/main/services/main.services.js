@@ -28,7 +28,8 @@
         }
 
         function generalCallbackError(response){
-            return $q.reject('Error '+response.status+'');
+            console.log(response);
+            return $q.reject(response);
         }
 
         function login(username, password) {

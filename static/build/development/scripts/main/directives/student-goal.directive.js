@@ -12,11 +12,16 @@
         var directive = {
             restrict: 'EA',
             scope: {
+                tempType: '=',
                 userId: '=',
                 goals: '=',
             },
             link: function(scope, elem, attrs){
                 console.log(scope);
+
+                scope.sortType     = ['goal_complete', 'goal_target_date']; 
+                scope.sortReverse  = false;
+                scope.searchItem   = '';   
 
                 scope.open = function(goal){
 
@@ -86,7 +91,7 @@
                     var goalId = updGoal.id;
                     console.log(goalId);
                     if(updGoal.goal){
-                        var goal = {
+                        var tempGoal = {
                             id: updGoal.id, 
                             goal: updGoal.goal,
                             goal_target_date: updGoal.goal_target_date,
@@ -94,15 +99,31 @@
                             goal_notes: updGoal.goal_notes,
                         };
                     } else {
-                        var goal = updGoal;
+                        var tempGoal = updGoal;
+                        var curDate = scope.getDate();
+                        tempGoal['goal_complete_date'] = curDate.now;
+
                     }
-                    console.log(goal);
-                    Users.updateStudentGoal(goalId, goal)
+                    console.log(tempGoal);
+                    Users.updateStudentGoal(goalId, tempGoal)
                         .then(function(response){
-                            console.log(response);
+                            var index = scope.goals.indexOf(updGoal);
+                            scope.goals[index] = response;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
+                }
+
+                scope.getDate = function(){
+                        var today = new Date(); 
+                        var dd = today.getDate(); 
+                        var mm = today.getMonth()+1; 
+                        var yyyy = today.getFullYear(); 
+                        var hh = today.getHours(); 
+                        var m = today.getMinutes(); 
+                        var secs = today.getSeconds(); 
+                        var now = yyyy+"-"+mm+"-"+dd+"T"+hh+":"+m+":"+secs;
+                        return {today:today, dd:dd, mm:mm, yyyy:yyyy, hh:hh, m:m, secs:secs, now:now};
                 }
 
                 scope.addGoal = function(userId, goal){
@@ -114,8 +135,6 @@
                         .then(function(response){
                             console.log(response);
                             scope.goals.push(response);
-                            // scope.newGoal = {};
-                            // scope.showNewGoal = false;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
@@ -132,7 +151,10 @@
                         });
                 }              
             },
-            templateUrl: $sce.trustAsResourceUrl(static_path('views/directives/student-goal.directive.html')),
+            templateUrl: function(elem,attrs) {
+                return $sce.trustAsResourceUrl(static_path('views/directives/student-goal-'+attrs.tempType+'.directive.html'));
+            }
+
         }
         return directive;
     }

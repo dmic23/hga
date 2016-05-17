@@ -5,9 +5,9 @@
         .module('main.controllers')
         .controller('AuthenticationController', AuthenticationController);
 
-    AuthenticationController.$inject = ['$scope', '$state', 'Main'];
+    AuthenticationController.$inject = ['$scope', '$sce', '$state', 'Main'];
 
-    function AuthenticationController($scope, $state, Main){
+    function AuthenticationController($scope, $sce, $state, Main){
         var vm = this;
 
         activate();
@@ -35,7 +35,18 @@
 
         function loginError(errMsg){
             console.log(errMsg);
+            vm.loginError = errMsg.data.message;
         }
+
+        var mediaPath = media_path('');
+        console.log('media path', mediaPath);
+        var staticPath = static_path('');
+        console.log('static path', staticPath);
+
+        $scope.path = { 
+            static_files: $sce.trustAsResourceUrl(staticPath),
+            media: $sce.trustAsResourceUrl(mediaPath),
+        };
 
     }
 })();

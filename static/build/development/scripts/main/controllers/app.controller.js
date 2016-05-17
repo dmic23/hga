@@ -40,5 +40,16 @@
             media: $sce.trustAsResourceUrl(mediaPath),
         };
 
+        $scope.playLevelColor = {
+            'WHITE': 'bg-white',
+            'RED': 'bg-red',
+            'YELLOW': 'bg-yellow',
+            'GREEN': 'bg-green',
+            'BLUE': 'bg-blue',
+            'PURPLE': 'bg-purple',
+            'BROWN': 'bg-brown',
+            'BLACK': 'bg-black',
+        }
+
     }
 })();

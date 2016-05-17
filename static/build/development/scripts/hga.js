@@ -8,6 +8,7 @@
             'ngFileUpload',
             'ui.router',
             'ui.bootstrap',
+            'datatables',
             'hga.config',
             'hga.routes',
             'main',

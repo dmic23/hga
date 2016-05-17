@@ -11,13 +11,7 @@
 
         $urlRouterProvider.otherwise(function ($injector) {
             var $state = $injector.get('$state');
-            // if(Main.isAuthAcct()){
-            //     vm.authUser = localStorage.getItem('authAcct');
-            //     console.log(vm.authUser);
             $state.go('app.dashboard');
-            // } else {
-                // $state.go('login');
-            // }
         });
 
         $stateProvider
@@ -41,11 +35,65 @@
                     requireLogin: true
                 },
             })
+            .state('app.leaderboard', {
+                url: '/leaderboard/:userId',
+                controller: 'LeaderBoardController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/main/leaderboard.html',
+                data: {
+                    requireLogin: true
+                },
+            })
             .state('app.profile', {
                 url: '/profile/:userId',
                 controller: 'UserProfileController',
                 controllerAs: 'vm',     
                 templateUrl: 'static/build/development/views/users/user-profile.html',
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.student-goal', {
+                url: '/student-goals/:userId',
+                controller: 'StudentGoalController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/users/student-goal.html',
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.student-objective', {
+                url: '/student-objectives/:userId',
+                controller: 'StudentObjectiveController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/users/student-objective.html',
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.student-practice', {
+                url: '/student-practice/:userId',
+                controller: 'StudentPracticeController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/users/student-practice.html',
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.student-wishlist', {
+                url: '/student-wishlist/:userId',
+                controller: 'StudentWishListController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/users/student-wishlist.html',
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.student-materials', {
+                url: '/student-materials/:userId',
+                controller: 'StudentMaterialsController',
+                controllerAs: 'vm',     
+                templateUrl: 'static/build/development/views/users/student-materials.html',
                 data: {
                     requireLogin: true
                 },
@@ -62,7 +110,7 @@
             // //dashboard
             // .state('app.dashboard', {
             //     url: '/dashboard',
-            //     controller: 'DashboardController',
+            //     controller: 'StudentGoalController',
             //     controllerAs: 'vm',
             //     templateUrl: static_path('views/dashboard.html'),
             //     resolve: {

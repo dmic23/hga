@@ -58,11 +58,26 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         if serializer.is_valid():
-            # if 'file' in self.request.data:
-            #     user_pic = self.request.data['file']
-            #     serializer.save(user=self.request.user, user_pic=user_pic, **self.request.data)
-            # else:
-            serializer.save(user_updated_by=self.request.user, **self.request.data)
+            print "SRD == %s" %self.request.data
+            if 'user_pic' in self.request.data:
+                temp_file = self.request.data.pop('user_pic')
+
+            file_dict = {}
+            for i in self.request.data:
+                print "I == %s" %i
+                if i != 'user_pic': 
+                    print "I in not === %s" %i
+                    item = self.request.data[i]
+                    print "ITEM == %s" %item
+                    file_dict[i] = item
+                    print "FILE DICT === %s" %file_dict
+                print "FILE no file === %s" %file_dict
+            for f in temp_file:
+                print "F === %s" %f
+                file_dict['user_pic'] = f
+            print "FILE DICT All=== %s" %file_dict
+
+            serializer.save(user_updated_by=self.request.user, **file_dict)
 
 class StudentGoalsViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
@@ -159,7 +174,7 @@ class StudentMaterialsViewSet(viewsets.ModelViewSet):
             studentId = file_dict.pop('student')
             print "STUDENT ID-- %s" %studentId
             student = User.objects.get(id=studentId)
-            serializer.save(material_added_by=self.request.user, **file_dict)
+            serializer.save(student=student, material_added_by=self.request.user, **file_dict)
 
     def perform_update(self, serializer):
         if serializer.is_valid():

@@ -12,12 +12,17 @@
         var directive = {
             restrict: 'EA',
             scope: {
+                tempType: '=',
                 userId: '=',
                 materials: '=',
                 path: '=',
             },
             link: function(scope, elem, attrs){
-                
+
+                scope.sortType     = ['-material_added']; 
+                scope.sortReverse  = false;
+                scope.searchItem   = '';
+
                 scope.open = function(material){
 
                     var modalInstance = $uibModal.open({
@@ -36,7 +41,6 @@
                             console.log(scope);
 
                             vm.closeModal = function (){
-                                console.log('clse modal');
                                 $uibModalInstance.dismiss('cancel');
                             };
 
@@ -69,35 +73,26 @@
                     console.log(omittedMat);
                     var materialId = updMaterial.id;
                     console.log(materialId);
-                    // if(updMaterial.wish_item){
-                    //     var wishList = {
-                    //         id: updWishList.id, 
-                    //         wish_item: updWishList.wish_item,
-                    //         wish_item_complete: updWishList.wish_item_complete,
-                    //         wish_item_notes: updWishList.wish_item_notes,
-                    //     }; var index = scope.practiceLogs.indexOf(practiceLog);
-                    // } else {
                     var newMaterial = omittedMat;
-                    // }
                     console.log(omittedMat);
                     Upload.upload({
                         url: 'api/v1/student-materials/'+materialId+'/',
                         data: newMaterial,
                         method: 'PUT',
                     })
-                        .then(function (resp) {
-                            console.log(resp.data);
-                            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-                            var index = scope.materials.indexOf(updMaterial);
-                            console.log(index);
-                            scope.materials[index] = resp.data;
-                            console.log(scope.materials);
-                        }, function (resp) {
-                            console.log('Error status: ' + resp.status);
-                        }, function (evt) {
-                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                        });
+                    .then(function (resp) {
+                        console.log(resp.data);
+                        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                        var index = scope.materials.indexOf(updMaterial);
+                        console.log(index);
+                        scope.materials[index] = resp.data;
+                        console.log(scope.materials);
+                    }, function (resp) {
+                        console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    });
                 }
 
                 scope.addMaterial = function(userId, material){
@@ -105,30 +100,21 @@
                     console.log(material);
                     material['student'] = userId;
                     console.log(material);
-                    // Users.createStudentMaterial(material)
-                    //     .then(function(response){
-                    //         console.log(response);
-                    //         scope.materials.push(response);
-                    //         // scope.newWishList = {};
-                    //         // scope.showNewWishList = false;
-                    //     }).catch(function(errorMsg){
-                    //         console.log(errorMsg);
-                    //     });
 
                     Upload.upload({
                         url: 'api/v1/student-materials/',
                         data: material,
                     })
-                        .then(function (resp) {
-                            console.log(resp.data);
-                            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-                            scope.materials.push(resp.data);
-                        }, function (resp) {
-                            console.log('Error status: ' + resp.status);
-                        }, function (evt) {
-                            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                                console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-                        });
+                    .then(function (resp) {
+                        console.log(resp.data);
+                        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+                        scope.materials.push(resp.data);
+                    }, function (resp) {
+                        console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                    });
 
                 } 
 
@@ -143,7 +129,9 @@
                         });
                 } 
             },
-            templateUrl: $sce.trustAsResourceUrl(static_path('views/directives/student-materials.directive.html')),
+            templateUrl: function(elem,attrs) {
+                return $sce.trustAsResourceUrl(static_path('views/directives/student-materials-'+attrs.tempType+'.directive.html'));
+            }
         }
         return directive;
     }

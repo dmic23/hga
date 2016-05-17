@@ -12,11 +12,16 @@
         var directive = {
             restrict: 'EA',
             scope: {
+                tempType: '=',
                 userId: '=',
                 wishLists: '=',
             },
             link: function(scope, elem, attrs){
-                
+
+                scope.sortType     = ['wish_item_complete', 'wish_item_created']; 
+                scope.sortReverse  = false;
+                scope.searchItem   = '';
+
                 scope.open = function(wishItem){
 
                     var modalInstance = $uibModal.open({
@@ -67,22 +72,37 @@
                     var wishListId = updWishList.id;
                     console.log(wishListId);
                     if(updWishList.wish_item){
-                        var wishList = {
+                        var tempWishList = {
                             id: updWishList.id, 
                             wish_item: updWishList.wish_item,
                             wish_item_complete: updWishList.wish_item_complete,
                             wish_item_notes: updWishList.wish_item_notes,
                         };
                     } else {
-                        var wishList = updWishList;
+                        var tempWishList = updWishList;
+                        var curDate = scope.getDate();
+                        tempWishList['objective_complete_date'] = curDate.now;
                     }
-                    console.log(wishList);
-                    Users.updateStudentWishList(wishListId, wishList)
+                    console.log(tempWishList);
+                    Users.updateStudentWishList(wishListId, tempWishList)
                         .then(function(response){
-                            console.log(response);
+                            var index = scope.wishLists.indexOf(updWishList);
+                            scope.wishLists[index] = response;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
+                }
+
+                scope.getDate = function(){
+                    var today = new Date(); 
+                    var dd = today.getDate(); 
+                    var mm = today.getMonth()+1; 
+                    var yyyy = today.getFullYear(); 
+                    var hh = today.getHours(); 
+                    var m = today.getMinutes(); 
+                    var secs = today.getSeconds(); 
+                    var now = yyyy+"-"+mm+"-"+dd+"T"+hh+":"+m+":"+secs;
+                    return {today:today, dd:dd, mm:mm, yyyy:yyyy, hh:hh, m:m, secs:secs, now:now};
                 }
 
                 scope.addWishItem = function(userId, wishList){
@@ -94,8 +114,6 @@
                         .then(function(response){
                             console.log(response);
                             scope.wishLists.push(response);
-                            scope.newWishList = {};
-                            scope.showNewWishList = false;
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
@@ -112,7 +130,9 @@
                         });
                 } 
             },
-            templateUrl: $sce.trustAsResourceUrl(static_path('views/directives/student-wishlist.directive.html')),
+            templateUrl: function(elem,attrs) {
+                return $sce.trustAsResourceUrl(static_path('views/directives/student-wishlist-'+attrs.tempType+'.directive.html'));
+            }
         }
         return directive;
     }

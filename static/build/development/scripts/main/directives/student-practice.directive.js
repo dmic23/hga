@@ -5,19 +5,24 @@
         .module('main.directives')
         .directive('studentPracticeLog', studentPracticeLog);
 
-    studentPracticeLog.$inject = ['$sce', 'Users', '$uibModal'];
+    studentPracticeLog.$inject = ['$sce', 'Users', '$uibModal', '$timeout'];
 
-    function studentPracticeLog($sce, Users, $uibModal) {
+    function studentPracticeLog($sce, Users, $uibModal, $timeout) {
 
         var directive = {
             restrict: 'EA',
             scope: {
+                tempType: '=',
                 userId: '=',
                 practiceLogs: '=',
             },
             link: function(scope, elem, attrs){
                 
                 console.log(scope);
+
+                scope.sortType     = ['practice_item_created']; 
+                scope.sortReverse  = false;
+                scope.searchItem   = ''; 
 
                 scope.open = function(practiceLog){
 
@@ -88,6 +93,7 @@
                             console.log(scope.pracLog);
                             scope.pracLog['practice_category_display'] = response.practice_category_display;
                             console.log(scope.pracLog);
+                            scope.getStats();
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
@@ -102,12 +108,11 @@
                         .then(function(response){
                             console.log(response);
                             scope.practiceLogs.push(response);
-                            // scope.newPracticeLog = {};
-                            // scope.showNewPracticeLog = false;
+                            scope.getStats();
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
-                } 
+                }; 
 
                 scope.deletePracticeLog = function(practiceLog){
                     var practiceLogId = practiceLog.id;
@@ -115,12 +120,49 @@
                         .then(function(response){
                             var index = scope.practiceLogs.indexOf(practiceLog);
                             scope.practiceLogs.splice(index, 1);
+                            scope.getStats();
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
-                } 
+                }; 
+
+                scope.getStats = function(){
+                    $timeout(function(){
+                        console.log(scope.practiceLogs);
+                        var times = [];
+                        var speeds = [];
+                        scope.maxSpeed = 0;
+                        angular.forEach(scope.practiceLogs, function(v,k){
+                            console.log('val', v);
+                            console.log('key', k);
+                            if(v.practice_time){
+                                var time = parseInt(v.practice_time);
+                                console.log(time);
+                                times.push(time);
+                            }
+                            if(v.practice_speed){
+                                var speed = parseInt(v.practice_speed);
+                                console.log(speed);
+                                if(speed > scope.maxSpeed){
+                                    scope.maxSpeed = speed;
+                                }
+                                speeds.push(speed);
+                            }
+                        });
+                        console.log(times);
+                        console.log(speeds);
+                        scope.sumTimes = times.reduce(function(a, b) { return a + b; });
+                        console.log(scope.sumTimes);
+                        scope.sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
+                        console.log(scope.Speeds);                    
+                    }, 1000);                    
+                };
+                scope.getStats();
+
             },
-            templateUrl: $sce.trustAsResourceUrl(static_path('views/directives/student-practice.directive.html')),
+            templateUrl: function(elem,attrs) {
+                return $sce.trustAsResourceUrl(static_path('views/directives/student-practice-'+attrs.tempType+'.directive.html'));
+            }
         }
         return directive;
     }

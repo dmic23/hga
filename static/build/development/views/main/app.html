@@ -4,7 +4,7 @@
 	<div class="sidebar-wrapper">
         <div class="logo">
             <a ui-sref="app.dashboard({userId:vm.currentUser.id})" class="simple-text">
-                Hirsch Guitar Academy
+                <img class="side-logo" ng-src="{{path.static_files}}images/hga_logo.png" alt="Hirsch Guitar Academy logo"/>
             </a>
         </div>
 
@@ -22,32 +22,32 @@
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a href="table.html">
+                <a ui-sref="app.student-objective({'userId':vm.currentUser.id})">
                     <i class="ti-view-list-alt"></i>
                     <p>Objectives</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a href="typography.html">
-                    <i class="ti-text"></i>
+                <a ui-sref="app.student-goal({'userId':vm.currentUser.id})">
+                    <i class="ti-medall"></i>
                     <p>Goals</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a href="icons.html">
+                <a ui-sref="app.student-practice({'userId':vm.currentUser.id})">
                     <i class="ti-pencil-alt2"></i>
                     <p>Practice Log</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a href="maps.html">
+                <a ui-sref="app.student-wishlist({'userId':vm.currentUser.id})">
                     <i class="ti-map"></i>
                     <p>Wish List</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a href="notifications.html">
-                    <i class="ti-bell"></i>
+                <a ui-sref="app.student-materials({'userId':vm.currentUser.id})">
+                    <i class="ti-files"></i>
                     <p>Materials</p>
                 </a>
             </li>
