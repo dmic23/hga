@@ -1,5 +1,11 @@
 
-<div class="row">
+<div class="row" ng-if="vm.authAcct.is_staff">
+    <div class="col-md-3">
+        <p>Back to <a ui-sref="app.dashboard({userId:vm.respUser.id})">Dashboard</a></p>
+    </div>
+</div>
+
+<div class="row animated fadeIn">
     <div class="col-lg-4 col-md-5">
         <div class="card card-user">
             <div class="image" ng-class="vm.playLevelColor[vm.respUser.play_level]">
@@ -64,7 +70,7 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Profile Picture</label>
-                                <div class="button form-control border-input text-info" ngf-select="" ng-model="vm.user.user_pic" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 300, height: 300}"><i class="ti-file"/> Select</div>
+                                <div class="button form-control border-input text-info img-select" ngf-select="" ng-model="vm.user.user_pic" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 300, height: 300}"><i class="ti-file"/> <span ng-if="vm.user.user_pic.$ngfName">{{vm.user.user_pic.$ngfName}}</span><span ng-if="!vm.user.user_pic.$ngfName"> Click to select</span></div>
                             </div>
                         </div>
                         <div class="col-md-3">

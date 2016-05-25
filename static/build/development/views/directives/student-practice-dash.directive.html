@@ -1,5 +1,5 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6"><a class="" ui-sref="app.student-practice({'userId':userId})">Student Practice Log</a></h4>
@@ -19,7 +19,7 @@
 				<th>Practice Notes</th>
             </thead>
             <tbody>
-				<tr ng-repeat="log in practiceLogs | orderBy: '-practice_date' | limitTo : 3" name="studentPracticeForm" ng-form novalidate>
+				<tr class="" ng-repeat="log in practiceLogs | orderBy: '-practice_date' | limitTo : 3" name="studentPracticeForm" ng-form novalidate>
 					<td class="width-10">{{log.practice_date | date:'MMM d, y'}}</td>
 					<td class="width-15">{{log.practice_category_display}}</td>
 					<td class="width-15">{{log.practice_item | limitTo: 35}}<span ng-if="log.practice_item.length > 35">...</span></td>

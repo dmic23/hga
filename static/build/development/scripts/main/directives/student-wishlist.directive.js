@@ -28,7 +28,6 @@
                         templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-wishlist.modal.html')),
                         controller: function($scope, $uibModalInstance, $timeout){
                             var vm = this;
-                            console.log(wishItem);
                             if(wishItem.id){
                                 vm.modalTitle = "Update Wish";
                                 vm.newWishItem = wishItem;    
@@ -37,30 +36,20 @@
                                 vm.newWishItem = {};                                 
                             }
                             
-                            console.log(scope);
-
                             vm.closeModal = function (){
-                                console.log('clse modal');
                                 $uibModalInstance.dismiss('cancel');
                             };
 
                             vm.submitWishItem = function(newWishItem){
 
                                 if(wishItem.id){
-                                    console.log(newWishItem);
                                     scope.updateWishItem(newWishItem);  
                                 } else {
-                                    console.log(newWishItem);
                                     var userId = scope.userId;
-                                    console.log(userId);
                                     scope.addWishItem(userId, newWishItem); 
                                 }
                                 $uibModalInstance.close();
                             }
-
-                            console.log(scope);
-                            console.log($scope);
-    
                         },
                         controllerAs: 'vm',
                         size: 'lg',
@@ -68,9 +57,7 @@
                 }
 
                 scope.updateWishItem = function(updWishList){
-                    console.log(updWishList);
                     var wishListId = updWishList.id;
-                    console.log(wishListId);
                     if(updWishList.wish_item){
                         var tempWishList = {
                             id: updWishList.id, 
@@ -83,7 +70,6 @@
                         var curDate = scope.getDate();
                         tempWishList['objective_complete_date'] = curDate.now;
                     }
-                    console.log(tempWishList);
                     Users.updateStudentWishList(wishListId, tempWishList)
                         .then(function(response){
                             var index = scope.wishLists.indexOf(updWishList);
@@ -106,13 +92,9 @@
                 }
 
                 scope.addWishItem = function(userId, wishList){
-                    console.log(userId);
-                    console.log(wishList);
                     wishList['student'] = userId;
-                    console.log(wishList);
                     Users.createStudentWishList(wishList)
                         .then(function(response){
-                            console.log(response);
                             scope.wishLists.push(response);
                         }).catch(function(errorMsg){
                             console.log(errorMsg);

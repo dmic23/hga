@@ -5,9 +5,9 @@
         .module('main.directives')
         .directive('studentGoal', studentGoal);
 
-    studentGoal.$inject = ['$sce', 'Users','$uibModal'];
+    studentGoal.$inject = ['$sce', 'Users', 'Main', '$uibModal', '$timeout'];
 
-    function studentGoal($sce, Users, $uibModal) {
+    function studentGoal($sce, Users, Main, $uibModal, $timeout) {
 
         var directive = {
             restrict: 'EA',
@@ -17,7 +17,6 @@
                 goals: '=',
             },
             link: function(scope, elem, attrs){
-                console.log(scope);
 
                 scope.sortType     = ['goal_complete', 'goal_target_date']; 
                 scope.sortReverse  = false;
@@ -29,7 +28,6 @@
                         templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-goal.modal.html')),
                         controller: function($scope, $uibModalInstance, $timeout){
                             var vm = this;
-                            console.log(goal);
                             if(goal.id){
                                 vm.modalTitle = "Update Goal";
                                 vm.studentGoal = goal;    
@@ -38,14 +36,10 @@
                                 vm.studentGoal = {};                                 
                             }
                             
-                            console.log(scope);
-
                             vm.openDate = function($event){
-                                console.log("open date1")
                                 $event.preventDefault();
                                 $event.stopPropagation();
                                 $timeout(function () {
-                                    console.log("open date2")
                                     vm.showPicker.opened = !vm.showPicker.opened;
                                 });
                             };
@@ -55,41 +49,29 @@
                             };
 
                             vm.closeModal = function (){
-                                console.log('clse modal');
                                 $uibModalInstance.dismiss('cancel');
                             };
 
                             vm.submitGoal = function(studentGoal){
 
                                 if(goal.id){
-                                    console.log(studentGoal);
                                     scope.updateGoal(studentGoal);  
                                 } else {
-                                    console.log(studentGoal);
                                     var userId = scope.userId;
-                                    console.log(userId);
                                     scope.addGoal(userId, studentGoal); 
                                 }
                                 $uibModalInstance.close();
-                            }
+                            };
 
-                            console.log(scope);
-                            console.log($scope);
-    
                         },
                         controllerAs: 'vm',
                         size: 'lg',
 
                     });
-                }
-
-                console.log(scope);
-                console.log(attrs);
+                };
 
                 scope.updateGoal = function(updGoal){
-                    console.log(updGoal);
                     var goalId = updGoal.id;
-                    console.log(goalId);
                     if(updGoal.goal){
                         var tempGoal = {
                             id: updGoal.id, 
@@ -104,7 +86,6 @@
                         tempGoal['goal_complete_date'] = curDate.now;
 
                     }
-                    console.log(tempGoal);
                     Users.updateStudentGoal(goalId, tempGoal)
                         .then(function(response){
                             var index = scope.goals.indexOf(updGoal);
@@ -112,7 +93,7 @@
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
-                }
+                };
 
                 scope.getDate = function(){
                         var today = new Date(); 
@@ -127,13 +108,9 @@
                 }
 
                 scope.addGoal = function(userId, goal){
-                    console.log(userId);
-                    console.log(goal);
                     goal['student'] = userId;
-                    console.log(goal);
                     Users.createStudentGoal(goal)
                         .then(function(response){
-                            console.log(response);
                             scope.goals.push(response);
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
@@ -149,7 +126,84 @@
                         }).catch(function(errorMsg){
                             console.log(errorMsg);
                         });
-                }              
+                }
+
+                scope.checkGoals = function(){
+                    scope.$watch('goals', function(newVal) {
+                        if(newVal){ 
+                            var today = new Date();
+                            var tomorrow = new Date();
+                            tomorrow.setDate(tomorrow.getDate()+7);
+                            var authAcctNot = Main.getAuthAcct();
+                            if(authAcctNot.notification.goal){
+                                var needNot = false;
+                                if(authAcctNot.notification.goal_time>tomorrow){
+                                    var needNot = true;
+                                }
+                            }
+                            if(needNot || !authAcctNot.notification.goal){
+                                var minDate;
+                                angular.forEach(newVal, function(v,k){
+                                    if(v.goal_target_date&&!v.goal_complete){
+                                        if(!minDate){
+                                            minDate = v.goal_target_date;
+                                        } else if(v.goal_target_date < minDate){
+                                            minDate = v.goal_target_date;
+                                        }
+                                    }
+                                });
+                                if(minDate){
+                                    var warn = new Date();
+                                    warn.setDate(warn.getDate()+7)
+                                    var md = new Date(minDate);
+                                    if(today > md){
+                                        $.notify({
+                                            icon: "ti-medall",
+                                            message: "You have Goals that are past the Target Date!"
+
+                                        },{
+                                            type: 'danger',
+                                            timer: 1000,
+                                            placement: {
+                                                from: 'top',
+                                                align: 'right',
+                                            },
+                                            template: '<div class="alert alert-{0} alert-with-icon" data-notify="container">'+
+                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>'+
+                                            '<span data-notify="icon"></span>'+
+                                            '<span data-notify="message">{2}</span>'+
+                                            '</div>'
+                                        });
+                                    } else if(warn > md){
+
+                                        $.notify({
+                                            icon: "ti-medall",
+                                            message: "You have Goals that are approaching Target Date!"
+
+                                        },{
+                                            type: 'warning',
+                                            timer: 1000,
+                                            placement: {
+                                                from: 'top',
+                                                align: 'right',
+                                            },
+                                            template: '<div class="alert alert-{0} alert-with-icon" data-notify="container">'+
+                                            '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>'+
+                                            '<span data-notify="icon"></span>'+
+                                            '<span data-notify="message">{2}</span>'+
+                                            '</div>'
+                                        });                                    
+                                    }
+                                    authAcctNot['notification'] = {'goal': true, 'goal_time': today};
+                                    localStorage.setItem('authAcct', JSON.stringify(authAcctNot));
+                                }
+                                
+                            }
+
+                        }
+                    }, true);
+                } 
+                scope.checkGoals();             
             },
             templateUrl: function(elem,attrs) {
                 return $sce.trustAsResourceUrl(static_path('views/directives/student-goal-'+attrs.tempType+'.directive.html'));

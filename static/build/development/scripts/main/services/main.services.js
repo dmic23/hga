@@ -13,6 +13,7 @@
         var Main = {
             login: login,
             logout: logout,
+            register: register,
             setAuthAcct: setAuthAcct,
             getAuthAcct: getAuthAcct,
             isAuthAcct: isAuthAcct,
@@ -22,13 +23,10 @@
         return Main;
 
         function generalCallbackSuccess(response){
-            console.log(response)
-            console.log(response.data)
             return response.data;
         }
 
         function generalCallbackError(response){
-            console.log(response);
             return $q.reject(response);
         }
 
@@ -40,14 +38,18 @@
         }
 
         function loginSuccess(response) {
-            console.log(response);
             Main.setAuthAcct(response.data);
             return response.data
         }
 
+        function register(newUser){
+            return $http.post('api/v1/users/', newUser)
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackSuccess);
+        }
+
         function setAuthAcct(acct) {
-            console.log(acct);
-            localStorage.setItem('authAcct', JSON.stringify({'id':acct.id, 'is_staff':acct.is_admin,}));
+            localStorage.setItem('authAcct', JSON.stringify({'id':acct.id, 'is_staff':acct.is_admin, 'notification':''}));
         }
 
         function getAuthAcct(){

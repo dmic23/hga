@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.conf import settings
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
 from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.encoding import smart_unicode
 from time import time
-from student_portal import settings
 
 def get_upload_file_name(instance, filename):
 
@@ -18,9 +18,9 @@ class UserManager(BaseUserManager):
             raise ValueError('Users must have a valid username.')
 
         user = self.model(
-            username=kwargs.get('username'),
+            username=username,
             first_name=kwargs.get('first_name'), last_name=kwargs.get('last_name'),
-            )
+            email=kwargs.get('email'))
         user.set_password(password)
         user.save()
 
@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
         ('BLACK', 'Black'),
     )
     username = models.CharField(max_length=50, unique=True, null=True, blank=True)
-    email = models.EmailField(unique=True, null=True, blank=True)
+    email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50, null=True, blank=True)
     is_admin = models.BooleanField(default=False)

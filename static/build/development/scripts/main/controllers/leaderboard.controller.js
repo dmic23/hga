@@ -9,17 +9,16 @@
 
     function LeaderBoardController($scope, $state, $stateParams, Main, Users){
         var vm = this;
-        console.log($stateParams);
+
         activate();
+
         function activate(){
             if(Main.isAuthAcct()){
                 vm.authAcct = Main.getAuthAcct();
-                console.log(vm.authAcct);
                 if($stateParams.userId && vm.authAcct.is_staff){
                     vm.dashId = $stateParams.userId;                   
                 } else {
                     vm.dashId = vm.authAcct.id;
-                    console.log(vm.dashId);
                     $state.transitionTo('app.leaderboard', {userId: vm.dashId}, { notify: false });
                 }
                 getUser(vm.dashId);
@@ -39,7 +38,6 @@
         }
 
         function getUserSuccess(response){
-            console.log(response);
             vm.user = response;
         }
 
@@ -48,12 +46,9 @@
         }
 
         function getAllSuccess(response){
-            console.log(response);
             vm.allUsers = response;
             vm.leaderBoard = [];
             angular.forEach(vm.allUsers, function(v,k){
-                console.log(v);
-                console.log(k);
                 if(v.student_log.length){
                     var sums = vm.getSum(v.student_log);
                 } else {
@@ -66,8 +61,8 @@
                         last_practice: 'no practice',
                     };
                 }
-                console.log(sums);
                 var tempUser = {
+                    id: v.id,
                     first_name: v.first_name,
                     last_name: v.last_name,
                     play_level: v.play_level,
@@ -82,30 +77,24 @@
                     objectives_complete: v.student_objective.length,
                     wishes_complete: v.student_wishlist.length,
                 }
-                console.log(tempUser);
                 vm.leaderBoard.push(tempUser);
             });
         }
 
         vm.getSum = function(studentLog){
-            console.log(studentLog);
             var times = [];
             var speeds = [];
             var maxSpeed = 0;
             var lastPrac = '';
             angular.forEach(studentLog, function(v,k){
-                console.log('val', v);
-                console.log('key', k);
                 if(v.practice_time){
                     var time = parseInt(v.practice_time);
-                    console.log(time);
                     times.push(time);
                 } else {
                     times.push(0);
                 }
                 if(v.practice_speed){
                     var speed = parseInt(v.practice_speed);
-                    console.log(speed);
                     if(speed > maxSpeed){
                         maxSpeed = speed;
                     }
@@ -120,12 +109,8 @@
                     }
                 }
             });
-            console.log(times);
-            console.log(speeds);
             var sumTimes = times.reduce(function(a, b) { return a + b; });
-            console.log(sumTimes);
             var sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
-            console.log(sumSpeeds);
             return {
                 max_speed: maxSpeed,
                 speed_total: sumSpeeds,

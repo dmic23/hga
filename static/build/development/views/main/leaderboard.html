@@ -1,12 +1,12 @@
 
 <div class="row">
 	<div class="col-md-12 text-center">
-		<h2 class="title margin-tb-10">Student Leaderboard</h2>
-		<p class="category margin-tb-20">for <a ui-sref="app.profile({userId:vm.user.id})">{{vm.user.first_name}} {{vm.user.last_name}}</a></p>
+		<h2 class="title margin-tb-10 animated fadeIn">Student Leaderboard</h2>
+		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})" class="">{{vm.user.first_name}} {{vm.user.last_name}}</a></p>
 	</div>
 </div>
 
-<div class="row">
+<div class="row animated fadeIn">
 	<div class="col-md-12">
 
 		<div class="card">
@@ -66,8 +66,12 @@
 		            <tbody>
 						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: sortType:sortReverse | filter:searchItem">
 							<td class="width-5">{{$index + 1}}</td>
-							<td class="width-10">{{leader.first_name}} {{leader.last_name}}</td>
-							<td class="width-10"><div class="center-block col-md-12 height-20 border padding-10" ng-class="playLevelColor[leader.play_level]"></div></td>
+							<td class="width-10">
+								<a ng-if="vm.authAcct.is_staff" ui-sref="app.dashboard({userId:leader.id})">{{leader.first_name}} {{leader.last_name}}</a>
+								<span ng-if="!vm.authAcct.is_staff">{{leader.first_name}} {{leader.last_name}}</span>
+							</td>
+							<td class="width-10"><div class="center-block col-md-12 height-20 border padding-10" ng-class="playLevelColor[leader.play_level]"></div>
+							</td>
 							<td class="width-10">{{leader.practice_speed_high | number:0}} <span> npm</span></td>
 							<td class="width-10">{{leader.practice_speed_avg | number:0}} <span> npm</span></td>
 							<td class="width-15">{{leader.practice_count}}

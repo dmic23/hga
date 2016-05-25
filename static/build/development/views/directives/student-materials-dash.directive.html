@@ -1,5 +1,5 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6"><a class="" ui-sref="app.student-materials({'userId':userId})">Materials</a></h4>
@@ -17,7 +17,7 @@
             	<th></th>
             </thead>
             <tbody>
-				<tr ng-repeat="material in materials | orderBy: '-material_added' | limitTo : 3">
+				<tr class="" ng-repeat="material in materials | orderBy: '-material_added' | limitTo : 3">
 					<td class="width-20">{{material.material_added | date:"MMM d, y"}}</td>
 					<td class="width-30">
 						<a href="{{path}}{{material.file}}" target="_blank">{{material.material_name | limitTo: 15}}<span ng-if="material.material.length > 15">...</span></a>

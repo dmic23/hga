@@ -1,5 +1,5 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6"><a class="" ui-sref="app.student-goal({'userId':userId})">Student Goals</a></h4>
@@ -16,7 +16,7 @@
             	<th>Complete</th>
             </thead>
             <tbody>
-				<tr ng-repeat="goal in filteredGoals = (goals | filter: goal_complete == 'false' | orderBy: 'goal_target_date' | limitTo : 3)" name="studentGoalForm" ng-form novalidate>
+				<tr class="" ng-repeat="goal in filteredGoals = (goals | filter: goal_complete == 'false' | orderBy: 'goal_target_date' | limitTo : 3)" name="studentGoalForm" ng-form novalidate>
 					<td class="width-30">
 						{{goal.goal | limitTo: 35}}<span ng-if="goal.goal.length > 35">...</span>
 					</td>

@@ -1,6 +1,30 @@
 
+ul {
+    list-style-type: none;
+}
+
+.margin-5 {
+	margin: 5px;
+}
+
+.margin-top-5 {
+	margin-top: 5px
+}
+
+.margin-lr-5 {
+	margin: 0 5px;
+}
+
 .margin-10 {
 	margin: 10px;
+}
+
+.margin-top-10 {
+	margin-top: 10px
+}
+
+.margin-bottom-10 {
+	margin-bottom: 10px
 }
 
 .margin-tb-10 {
@@ -17,6 +41,10 @@
 
 .padding-top-20 {
 	padding-top: 20px;
+}
+
+.padding-left-25 {
+	padding-left: 25px;
 }
 
 .width-5 {
@@ -100,8 +128,28 @@
 	background-color: rgba(0, 0, 0, 0.8);
 }
 
+.text-white {
+	color: #FFF;
+}
+
 .border {
 	border: 1px solid #CCC5B9;
+}
+
+.border-bottom {
+	border-bottom: 1px solid #CCC5B9;
+}
+
+.border-top {
+	border-top: 1px solid #CCC5B9;
+}
+
+.border-r-10 {
+	border-radius: 10px;
+}
+
+.border-r-5 {
+	border-radius: 5px;
 }
 
 .uib-datepicker-popup.dropdown-menu {
@@ -119,6 +167,16 @@
 	text-decoration: none;
 }
 
+li .btn-long {
+    white-space: normal !important;
+    word-wrap: break-word; 
+    word-break: normal;
+}
+
+.img-select:hover {
+	cursor: pointer;
+}
+
 .main-bg-color {
 	background-color: #f4f3ef;
 	background-image: linear-gradient(to bottom, transparent 0%, rgba(112, 112, 112, 0) 60%, rgba(186, 186, 186, 0.15) 100%);
@@ -130,4 +188,25 @@
 	height: auto;
 	max-width: 220px;
 }
+
+/*.fade {
+  transition: 1s linear all;
+  -webkit-transition: 1s linear all;
+}
+
+.fade.ng-enter {
+  opacity: 0;
+}
+
+.fade.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+
+.fade.ng-leave {
+  opacity: 1;
+}
+
+.fade.ng-leave.ng-leave-active {
+  opacity: 0;
+}*/
 

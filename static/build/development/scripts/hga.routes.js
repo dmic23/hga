@@ -15,13 +15,12 @@
         });
 
         $stateProvider
-
             .state('app', {
                 abstract: true,
                 url: '/app',
                 controller: 'AppController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/main/app.html',
+                templateUrl: static_path('views/main/app.html'),
                 data: {
                     requireLogin: true
                 },
@@ -30,7 +29,7 @@
                 url: '/dashboard/:userId',
                 controller: 'DashBoardController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/main/dashboard.html',
+                templateUrl: static_path('views/main/dashboard.html'),
                 data: {
                     requireLogin: true
                 },
@@ -39,7 +38,7 @@
                 url: '/leaderboard/:userId',
                 controller: 'LeaderBoardController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/main/leaderboard.html',
+                templateUrl: static_path('views/main/leaderboard.html'),
                 data: {
                     requireLogin: true
                 },
@@ -48,7 +47,7 @@
                 url: '/profile/:userId',
                 controller: 'UserProfileController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/user-profile.html',
+                templateUrl: static_path('views/users/user-profile.html'),
                 data: {
                     requireLogin: true
                 },
@@ -57,7 +56,7 @@
                 url: '/student-goals/:userId',
                 controller: 'StudentGoalController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/student-goal.html',
+                templateUrl: static_path('views/users/student-goal.html'),
                 data: {
                     requireLogin: true
                 },
@@ -66,7 +65,7 @@
                 url: '/student-objectives/:userId',
                 controller: 'StudentObjectiveController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/student-objective.html',
+                templateUrl: static_path('views/users/student-objective.html'),
                 data: {
                     requireLogin: true
                 },
@@ -75,7 +74,7 @@
                 url: '/student-practice/:userId',
                 controller: 'StudentPracticeController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/student-practice.html',
+                templateUrl: static_path('views/users/student-practice.html'),
                 data: {
                     requireLogin: true
                 },
@@ -84,7 +83,7 @@
                 url: '/student-wishlist/:userId',
                 controller: 'StudentWishListController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/student-wishlist.html',
+                templateUrl: static_path('views/users/student-wishlist.html'),
                 data: {
                     requireLogin: true
                 },
@@ -93,7 +92,16 @@
                 url: '/student-materials/:userId',
                 controller: 'StudentMaterialsController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/users/student-materials.html',
+                templateUrl: static_path('views/users/student-materials.html'),
+                data: {
+                    requireLogin: true
+                },
+            })
+            .state('app.forum', {
+                url: '/forum',
+                controller: 'ForumController',
+                controllerAs: 'vm',     
+                templateUrl: static_path('views/forum/forum.html'),
                 data: {
                     requireLogin: true
                 },
@@ -102,28 +110,11 @@
                 url: '/login',
                 controller: 'AuthenticationController',
                 controllerAs: 'vm',     
-                templateUrl: 'static/build/development/views/main/login.html',
+                templateUrl: static_path('views/main/login.html'),
                 data: {
                     requireLogin: false
                 },
             });
-            // //dashboard
-            // .state('app.dashboard', {
-            //     url: '/dashboard',
-            //     controller: 'StudentGoalController',
-            //     controllerAs: 'vm',
-            //     templateUrl: static_path('views/dashboard.html'),
-            //     resolve: {
-            //         plugins: ['$ocLazyLoad', function($ocLazyLoad) {
-            //             return $ocLazyLoad.load([
-            //                 static_path('scripts/vendor/datatables/datatables.bootstrap.min.css')
-            //             ]);
-            //         }]
-            //     },
-            //     data: {
-            //     requireLogin: true
-            //     },
-            // });
     }
 })();
 

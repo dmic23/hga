@@ -1,5 +1,5 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6">Student Wish List</h4>
@@ -59,8 +59,8 @@
 						<button type="button" class="btn btn-danger btn-link" ng-click="deleteWishItem(wish);"><i class="ti-trash"/></button>
 					</td>
 				</tr>
-				<tr ng-if="wishList.length < 1">
-					<td>No Wishes. Add one!</td>
+				<tr ng-if="wishLists.length < 1">
+					<td class="text-warning">No Wishes. Add one!</td>
 				</tr>
             </tbody>
 

@@ -1,13 +1,13 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6">Student Objectives</h4>
         <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-if="authAcct.is_staff" ng-click="open({})"><i class="ti-plus"/> Add Objective</button>
         <p class="category col-md-7">Here is a subtitle for objectives</p>
         <div class="col-md-7 padding-top-20">
-        	<p class="center-block">Objectives Complete : <span class="text-success">{{(objectives | filter: {objective_complete: 'true'}).length}}</span></p>
-        	<p class="center-block">Total Objectives : <span class="text-primary">{{objectives.length}}</span></p>
+        	<p class="center-block">Objectives Complete : <span class="text-success animated fadeIn">{{(objectives | filter: {objective_complete: 'true'}).length}}</span></p>
+        	<p class="center-block">Total Objectives : <span class="text-primary animated fadeIn">{{objectives.length}}</span></p>
         </div>
 		<form class="col-md-5">
 			<div class="form-group padding-10">
@@ -38,7 +38,7 @@
             </thead>
 
             <tbody>
-				<tr ng-repeat="objective in objectives | orderBy: sortType:sortReverse | filter:searchItem" name="studentObjectiveForm" ng-form novalidate>
+				<tr class="" ng-repeat="objective in objectives | orderBy: sortType:sortReverse | filter:searchItem" name="studentObjectiveForm" ng-form novalidate>
 					<td class="width-15">
 						<small>{{objective.objective_created | date:"MMM d, y"}}</small>
 					</td>
@@ -60,7 +60,7 @@
 					</td>
 				</tr>
 				<tr ng-if="objectives.length < 1">
-					<td>No Objectives. Add one!</td>
+					<td class="text-warning">No Objectives. Add one!</td>
 				</tr>
             </tbody>
 

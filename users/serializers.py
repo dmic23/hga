@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth import update_session_auth_hash
 from datetime import date
+from django.contrib.auth import update_session_auth_hash
+from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 from rest_framework import serializers, status
 # from rest_framework.renderers import JSONRenderer
@@ -60,8 +61,31 @@ class StudentMaterialSerializer(serializers.ModelSerializer):
         model = StudentMaterial
         fields = ('id', 'student', 'file', 'material_name', 'material_notes', 'material_added', 'material_added_by',)
 
+class SimpleUserSerializer(serializers.ModelSerializer):
+
+    recent_goal = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = User
+        fields = ('id', 'is_active', 'user_pic', 'first_name', 'last_name', 'recent_goal', 'play_level')
+
+    def get_recent_goal(self, obj):
+        goal = StudentGoal.objects.filter(goal_complete=False).order_by('goal_target_date')
+        return {'goal':goal[0].goal, 'goal_target_date':goal[0].goal_target_date}
+
+
+def send_create_email(user):
+    subject, from_email, to, bcc = 'Welcome to Hirsch Guitar Academy', 'hgatestacct@gmail.com', user.email, 'hgatestacct@gmail.com'
+    text_content = 'Hi %s! Welcome to Hirsch Guitar Academy  Login here:' %user.first_name
+    html_content = '<p>Hi %s!</hp><br/><p> Welcome to Hirsch Guitar Academy!</p><br/><p>Login here:</p>' %user.first_name
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [bcc])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
 class UserSerializer(serializers.ModelSerializer):
     play_level_display = serializers.CharField(source='get_play_level_display', required=False)
+    email = serializers.CharField(required=False, allow_blank=True)
     user_pic = serializers.CharField(required=False, allow_blank=True)
     student_goal = StudentGoalSerializer(many=True, required=False)
     student_log = StudentPracticeLogSerializer(many=True, required=False)
@@ -73,7 +97,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'user_created', 'user_updated', 'is_active', 'is_admin', 'is_staff', 'username', 'first_name', 'last_name', 'user_pic',
                 'location', 'play_level', 'play_level_display', 'email', 'student_goal', 'student_log', 'student_objective', 'student_wishlist', 'student_material',)
-        read_only_fields = ('id', 'user_created', 'is_active', 'is_admin', 'is_staff',)
+        read_only_fields = ('id', 'user_created', 'is_admin', 'is_staff',)
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        user.save()
+        send_create_email(user)
+        return user
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)

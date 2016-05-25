@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+# from os import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,11 +22,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'tr4ocp+b=@q)sl3i8ri9f(*n#yf#tk3*n-b+_-tw^9u^0bbiv3'
 
+# SECRET_KEY = environ['SECRET_KEY']
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['45.55.201.201']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+ADMINS = (
+    ('Chris Hirsch', 'hgatestacct@gmail.com'),
+)
 
 # Application definition
 
@@ -39,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework',
+    'storages',
+    'forum',
     'users'
 ]
 
@@ -66,6 +74,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.static',
+                'django.core.context_processors.media',
                 'django.template.context_processors.request',
             ],
         },
@@ -122,17 +132,13 @@ SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.User'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = '/static/build/development/'
-
-MEDIA_URL = '/static/build/development/media/uploads/'
-
-MEDIA_ROOT = 'static/build/development/media/uploads/'
+MEDIA_ROOT = 'media'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static/build/development'),
+    # os.path.join(BASE_DIR, 'static/build/development'),
+    os.path.join(BASE_DIR, 'static/build/production'),
 )
 
 STATICFILES_FINDERS = (
@@ -140,18 +146,14 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-UPLOAD_FILE_PATTERN = '%s_%s'
+UPLOAD_FILE_PATTERN = 'media/uploads/%s_%s'
 
 REST_FRAMEWORK = {
     'UPLOADED_FILES_USE_URL': False,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
     ),
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
@@ -159,3 +161,30 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.FileUploadParser',
     ),
 }
+
+try:
+   from local_settings import *
+except ImportError, e:
+   print "error message=++ %s" % e.message
+   pass
+
+if not DEBUG:
+
+    AWS_HEADERS = {
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'Cache-Control': 'max-age=94608000',
+    }
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
+# from .local_settings import AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID
+
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME 
+    MEDIA_URL = 'https://%s.%s/' % (AWS_STORAGE_BUCKET_NAME, 's3.amazonaws.com')
+
+
+
+
+

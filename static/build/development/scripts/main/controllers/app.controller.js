@@ -15,9 +15,7 @@
         function activate(){
             if(Main.isAuthAcct()){
                 var authAcct = Main.getAuthAcct();
-                console.log(authAcct.id);
                 Users.getUser(authAcct.id).then(function(response){
-                    console.log(response);
                     vm.currentUser = response;
                 });
             } else {
@@ -26,14 +24,16 @@
             
         }
 
+        $scope.$on("update_user_info", function(event, message){
+            vm.currentUser = message;
+        });
+        
         vm.logout = function(){
             Main.logout();
         }
 
         var mediaPath = media_path('');
-        console.log('media path', mediaPath);
         var staticPath = static_path('');
-        console.log('static path', staticPath);
 
         $scope.path = { 
             static_files: $sce.trustAsResourceUrl(staticPath),

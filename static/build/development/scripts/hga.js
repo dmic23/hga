@@ -4,16 +4,14 @@
     angular
         .module('hga', [
             'ngAnimate',
-            'ngStorage',
             'ngFileUpload',
             'ui.router',
             'ui.bootstrap',
-            'datatables',
             'hga.config',
             'hga.routes',
             'main',
             'users',
-            // 'forum'
+            'forum'
         ]);
 
     angular
@@ -41,7 +39,6 @@
 
     function runIsAuthAcct($rootScope, $state, Main) {
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
-            console.log(event,toState,toParams);
             var requireLogin = toState.data.requireLogin;
             var auth = Main.isAuthAcct();
 
