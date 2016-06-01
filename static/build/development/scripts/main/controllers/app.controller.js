@@ -14,8 +14,8 @@
 
         function activate(){
             if(Main.isAuthAcct()){
-                var authAcct = Main.getAuthAcct();
-                Users.getUser(authAcct.id).then(function(response){
+                vm.authAcct = Main.getAuthAcct();
+                Users.getUser(vm.authAcct.id).then(function(response){
                     vm.currentUser = response;
                 });
             } else {
@@ -25,7 +25,9 @@
         }
 
         $scope.$on("update_user_info", function(event, message){
-            vm.currentUser = message;
+            if(vm.authAcct.id == message.id){
+                vm.currentUser = message;
+            }
         });
         
         vm.logout = function(){
@@ -41,14 +43,14 @@
         };
 
         $scope.playLevelColor = {
-            'WHITE': 'bg-white',
-            'RED': 'bg-red',
-            'YELLOW': 'bg-yellow',
-            'GREEN': 'bg-green',
-            'BLUE': 'bg-blue',
-            'PURPLE': 'bg-purple',
-            'BROWN': 'bg-brown',
-            'BLACK': 'bg-black',
+            '1': 'bg-white',
+            '2': 'bg-red',
+            '3': 'bg-yellow',
+            '4': 'bg-green',
+            '5': 'bg-blue',
+            '6': 'bg-purple',
+            '7': 'bg-brown',
+            '8': 'bg-black',
         }
 
     }

@@ -1,10 +1,10 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6"><a class="" ui-sref="app.student-objective({'userId':userId})">Student Objectives</a></h4>
         <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})" ng-if="authAcct.is_staff"><i class="ti-plus"/> Add Objective</button>
-        <p class="category col-md-7">Here is a subtitle for objectives</p>
+        <p class="category col-md-7">Here are some things to work on that will help take your playing to the next level based on your goals.</p>
     </div>
 
     <div class="content table-responsive table-full-width">
@@ -16,7 +16,7 @@
             	<th>Complete</th>
             </thead>
             <tbody>
-				<tr ng-repeat="objective in filteredObjectives = (objectives | filter: objective_complete == 'false' | orderBy: 'objective_created' | limitTo : 3)" name="studentObjectiveForm"  ng-form novalidate>
+				<tr class="" ng-repeat="objective in filteredObjectives = (objectives | filter: objective_complete == 'false' | orderBy: 'objective_created' | limitTo : 3)" name="studentObjectiveForm"  ng-form novalidate>
 					<td class="width-30">
 						{{objective.objective | limitTo: 35}}<span ng-if="objective.objective.length > 35">...</span>
 					</td>

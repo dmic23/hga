@@ -10,16 +10,6 @@
     function UserProfileController($scope, $state, $stateParams, Main, Users, Upload){
         var vm = this;
 
-        vm.playLevelColor = {
-            'WHITE': 'bg-white',
-            'RED': 'bg-red',
-            'YELLOW': 'bg-yellow',
-            'GREEN': 'bg-green',
-            'BLUE': 'bg-blue',
-            'PURPLE': 'bg-purple',
-            'BROWN': 'bg-brown',
-            'BLACK': 'bg-black',
-        }
         activate();
 
         function activate(){
@@ -44,7 +34,6 @@
         }
 
         vm.updateProfile = function(user){
-
             Upload.upload({
                 url: 'api/v1/users/'+user.id+'/',
                 data: user,

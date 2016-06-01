@@ -8,7 +8,7 @@
 <div class="row animated fadeIn">
     <div class="col-lg-4 col-md-5">
         <div class="card card-user">
-            <div class="image" ng-class="vm.playLevelColor[vm.respUser.play_level]">
+            <div class="image" ng-class="playLevelColor[vm.respUser.play_level]">
             </div>
             <div class="content">
 				<div class="author">
@@ -23,7 +23,7 @@
 						<small class="text-primary">{{vm.respUser.location}}</small>
 					</p>
 					<p class="description center-block col-md-12">Play Level</p>
-					<div class="center-block col-md-12 height-20 border padding-10" ng-class="vm.playLevelColor[vm.respUser.play_level]"></div>
+					<div class="center-block col-md-12 height-20 border padding-10" ng-class="playLevelColor[vm.respUser.play_level]"></div>
 				</div>
             </div>
             <hr>
@@ -114,14 +114,14 @@
                             <div class="form-group">
                                 <label>Play Level</label>
                     			<select class="form-control border-input" name="play_level" ng-model="vm.user.play_level">
-									<option value="WHITE">White</option>
-									<option class="bg-red" value="RED">Red</option>
-									<option class="bg-yellow" value="YELLOW">Yellow</option>
-									<option value="GREEN">Green</option>
-									<option value="BLUE">Blue</option>
-									<option value="PURPLE">Purple</option>
-									<option value="BROWN">Brown</option>
-									<option value="BLACK">Black</option>
+									<option value="1">White</option>
+									<option value="2">Red</option>
+									<option value="3">Yellow</option>
+									<option value="4">Green</option>
+									<option value="5">Blue</option>
+									<option value="6">Purple</option>
+									<option value="7">Brown</option>
+									<option value="8">Black</option>
 								</select>
                             </div>
                         </div>

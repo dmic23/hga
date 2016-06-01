@@ -2,6 +2,7 @@
 <div class="modal-header">
 	<h3 class="modal-title">{{vm.modalTitle}}</h3>
 </div>
+
 <div class="modal-body row">
 
 	<form name="newMaterialForm" ng-submit="vm.submitMaterial(vm.newMaterial)" novalidate>
@@ -11,7 +12,13 @@
 		</div>
 		<div class="form-group col-md-6">
 			<label class="" for="material">File</label>
-			<div class="button form-control border-input" ngf-select ng-model="vm.newMaterial.file" name="file" ngf-pattern="'image/*,.pdf,.doc,.docx,.xls,.xlsx'" ngf-accept="'image/*,audio/*,video/*,application/pdf'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 300, height: 300}"><i class="ti-file"/> Select</div>
+			<div class="button form-control border-input img-select" 
+				ngf-select ng-model="vm.newMaterial.file" 
+				name="file" 
+				ngf-pattern="'image/*,audio/*,video/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'" ngf-accept="'image/*,audio/*,video/*,application/pdf'" 
+				ngf-max-size="20MB" 
+				ngf-min-height="100" 
+				ngf-resize="{width: 300, height: 300}"><i class="ti-file"/> <span ng-if="vm.newMaterial.file.$ngfName">{{vm.newMaterial.file.$ngfName}}</span><span ng-if="vm.newMaterial.file.name">{{vm.newMaterial.file.name}}</span><span ng-if="!vm.newMaterial.file.$ngfName || !vm.newMaterial.file.name"> Click to select</span></div>
 		</div>
 		<div class="form-group col-md-12">
 			<label for="material_notes">Material Notes</label>

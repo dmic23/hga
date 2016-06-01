@@ -28,7 +28,7 @@ SECRET_KEY = 'tr4ocp+b=@q)sl3i8ri9f(*n#yf#tk3*n-b+_-tw^9u^0bbiv3'
 DEBUG = False
 
 # ALLOWED_HOSTS = ['45.55.201.201']
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 ADMINS = (
     ('Chris Hirsch', 'hgatestacct@gmail.com'),
@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 
@@ -162,11 +162,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-try:
-   from local_settings import *
-except ImportError, e:
-   print "error message=++ %s" % e.message
-   pass
+# try:
+#    from local_settings import *
+# except ImportError, e:
+#    print "error message=++ %s" % e.message
+#    pass
 
 if not DEBUG:
 
@@ -176,8 +176,8 @@ if not DEBUG:
     }
 
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    
-# from .local_settings import AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID
+
+    from .local_settings import AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_S3_HOST
 
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'

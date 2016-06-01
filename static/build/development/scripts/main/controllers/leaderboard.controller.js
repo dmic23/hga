@@ -47,10 +47,32 @@
 
         function getAllSuccess(response){
             vm.allUsers = response;
-            vm.leaderBoard = [];
-            angular.forEach(vm.allUsers, function(v,k){
+            vm.leaderUsers = angular.copy(response);
+            vm.setLeaderboard(vm.leaderUsers);
+        }
+
+        vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
+
+        vm.setLeaderboard = function(users){
+            vm.tempLeaderBoard = [];
+            angular.forEach(users, function(v,k){
                 if(v.student_log.length){
-                    var sums = vm.getSum(v.student_log);
+                    v.student_log = _.filter(v.student_log, function(item){
+                        return moment(item.practice_date).isAfter(vm.dateRange);
+                    })
+                    if(v.student_log.length){
+                        var sums = vm.getSum(v.student_log);
+                    } else {
+                        var sums = {
+                            max_speed: 0,
+                            speed_total: 0,
+                            speed_avg: 0,                
+                            time_total: 0,
+                            time_avg: 0,
+                            last_practice: 'no practice',
+                        };
+                    }
+                    
                 } else {
                     var sums = {
                         max_speed: 0,
@@ -61,8 +83,49 @@
                         last_practice: 'no practice',
                     };
                 }
+
+                if(v.student_goal.length){
+                    v.student_goal = _.filter(v.student_goal, function(item){
+                        return moment(item.goal_complete_date).isAfter(vm.dateRange);
+                    })
+                    if(v.student_goal.length){
+                        var sg = _.where(v.student_goal, {goal_complete: true}).length;
+                    } else {
+                        var sg = 0;
+                    }
+                } else {
+                    var sg = 0;
+                }
+
+                if(v.student_objective.length){
+                    v.student_objective = _.filter(v.student_objective, function(item){
+                        return moment(item.objective_complete_date).isAfter(vm.dateRange);
+                    })
+                    if(v.student_objective.length){
+                        var so = _.where(v.student_objective, {objective_complete: true}).length;
+                    } else {
+                       var so = 0; 
+                    }
+                } else {
+                    var so = 0;
+                }
+
+                if(v.student_wishlist.length){
+                    v.student_wishlist = _.filter(v.student_wishlist, function(item){
+                        return moment(item.wish_item_complete_date).isAfter(vm.dateRange);
+                    })
+                    if(v.student_wishlist.length){
+                        var swl = _.where(v.student_wishlist, {wish_item_complete: true}).length;
+                    } else {
+                        var swl = 0;
+                    }
+                } else {
+                    var swl = 0;
+                }
+
                 var tempUser = {
                     id: v.id,
+                    is_active: v.is_active,
                     first_name: v.first_name,
                     last_name: v.last_name,
                     play_level: v.play_level,
@@ -73,12 +136,13 @@
                     practice_time_total: sums.time_total,
                     practice_count: v.student_log.length,
                     last_practice_date: sums.last_practice,
-                    goals_complete: v.student_goal.length,
-                    objectives_complete: v.student_objective.length,
-                    wishes_complete: v.student_wishlist.length,
-                }
-                vm.leaderBoard.push(tempUser);
+                    goals_complete: sg,
+                    objectives_complete: so,
+                    wishes_complete: swl,
+                };
+                vm.tempLeaderBoard.push(tempUser);
             });
+            vm.leaderBoard = vm.tempLeaderBoard;
         }
 
         vm.getSum = function(studentLog){
@@ -90,17 +154,14 @@
                 if(v.practice_time){
                     var time = parseInt(v.practice_time);
                     times.push(time);
-                } else {
-                    times.push(0);
-                }
+                } 
+
                 if(v.practice_speed){
                     var speed = parseInt(v.practice_speed);
                     if(speed > maxSpeed){
                         maxSpeed = speed;
                     }
                     speeds.push(speed);
-                } else {
-                    speeds.push(0);
                 }
 
                 if(v.practice_date){
@@ -114,11 +175,26 @@
             return {
                 max_speed: maxSpeed,
                 speed_total: sumSpeeds,
-                speed_avg: sumSpeeds / studentLog.length,                
+                speed_avg: sumSpeeds / speeds.length,                
                 time_total: sumTimes,
-                time_avg: sumTimes / studentLog.length,
+                time_avg: sumTimes / times.length,
                 last_practice: lastPrac,
             };       
+        }
+
+
+        vm.getRange = function(range){
+            vm.adjDate = moment().subtract(1, range);
+            vm.dateRange = vm.adjDate;
+            var rangeUsers = angular.copy(vm.allUsers);
+            vm.setLeaderboard(rangeUsers);
+
+        }
+
+        vm.resetLeaderboard = function(){
+            vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
+            var resetUsers = angular.copy(vm.allUsers);
+            vm.setLeaderboard(resetUsers);
         }
     }
 })();

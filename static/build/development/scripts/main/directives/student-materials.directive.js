@@ -80,7 +80,6 @@
 
                 scope.addMaterial = function(userId, material){
                     material['student'] = userId;
-                    console.log(material);
                     Upload.upload({
                         url: 'api/v1/student-materials/',
                         data: material,
@@ -91,7 +90,7 @@
                         console.log('Error status: ' + resp.status);
                     }, function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                     });
 
                 } 

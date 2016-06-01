@@ -4,7 +4,7 @@
 	<div class="content">
 	    <div class="container-fluid">
 
-	    	<div class="row">
+	    	<div class="row animated fadeIn">
 	    		<div class="card col-md-4 col-md-offset-4">
 					<div class="header text-center">
                         <div class="">
@@ -28,8 +28,11 @@
 							<div class="form-group">
 								<span class="text-danger" ng-show="vm.loginError">{{vm.loginError}}</span>
 							</div>
-							<button type="submit" class="btn btn-success btn-fill btn-wd margin-10" value="Login" ng-disabled='loginForm.$invalid'>Login</button> or 
-							<button type="button" class="btn btn-primary btn-fill btn-wd margin-10" value="Sign up" ng-click="isCollapsed = !isCollapsed">Sign up</button>
+							<div class="text-center">
+								<button type="submit" class="btn btn-success btn-fill btn-wd margin-tb-10" value="Login" ng-disabled='loginForm.$invalid'>Login</button> 
+								<p class="center-block">or</p> 
+								<button type="button" class="btn btn-primary btn-fill btn-wd margin-bottom-10" value="Sign up" ng-click="isCollapsed = !isCollapsed">Sign up</button>
+							</div>
 						</form>
 					</div>
 

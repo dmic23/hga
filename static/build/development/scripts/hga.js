@@ -5,6 +5,7 @@
         .module('hga', [
             'ngAnimate',
             'ngFileUpload',
+            'angularMoment',
             'ui.router',
             'ui.bootstrap',
             'hga.config',

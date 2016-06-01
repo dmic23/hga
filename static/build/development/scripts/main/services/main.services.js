@@ -45,7 +45,7 @@
         function register(newUser){
             return $http.post('api/v1/users/', newUser)
                 .then(generalCallbackSuccess)
-                .catch(generalCallbackSuccess);
+                .catch(generalCallbackError);
         }
 
         function setAuthAcct(acct) {

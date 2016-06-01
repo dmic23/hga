@@ -42,8 +42,9 @@ coverage.xml
 # Django stuff:
 *.log
 **/local_settings.py
-local_settings.py
+student_portal/local_settings.py
 **/email_info.py 
+student_portal/email_info.py 
 email_info.py 
 
 venv

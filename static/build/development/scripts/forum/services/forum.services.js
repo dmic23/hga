@@ -22,12 +22,10 @@
         return Forum;
 
         function generalCallbackSuccess(response){
-            console.log(response);
             return response.data;
         }
 
         function generalCallbackError(response){
-            console.log(response);
             return $q.reject('Error '+response.status+'');
         }
 

@@ -13,18 +13,25 @@
 
 		    <div class="header row">
 		        <h4 class="title col-md-6">Leaderboard</h4>
-		        <p class="category col-md-7">Here is a subtitle for leaderboard</p>
+		        <p class="category col-md-7">See how your progress compares with other students!</p>
 		        <div class="col-md-8 padding-top-20">
 		        	<!-- <p class="center-block">Speed Leader: <span class="text-success" ng-cloak>{{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].practice_speed_high}}</span><small> npm</small> - <small class="">{{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].first_name}} {{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].last_name}}<small></p> -->
 		        </div>
-				<form class="col-md-4">
-					<div class="form-group padding-10">
-						<div class="input-group">
-							<div class="input-group-addon border"><i class="fa fa-search"></i></div>
-							<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
-						</div>      
-					</div>
-				</form>
+		        <div class="col-md-4">
+					<form class="center-block">
+						<div class="form-group padding-10">
+							<div class="input-group">
+								<div class="input-group-addon border"><i class="fa fa-search"></i></div>
+								<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
+							</div>      
+						</div>
+					</form>
+					<div ng-click="sortType = '-practice_count';">
+						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.getRange('week')">current week</button>
+						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.getRange('month')">current month</button>
+						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.resetLeaderboard()">all</button>
+					</div>		        	
+		        </div>
 		    </div>
 
 		    <div class="content table-responsive table-full-width">
@@ -64,7 +71,7 @@
 		            </thead>
 
 		            <tbody>
-						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: sortType:sortReverse | filter:searchItem">
+						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: '-play_level' | orderBy: sortType:sortReverse | filter:searchItem" ng-hide="!leader.is_active && !vm.authAcct.is_staff" ng-class="{'bg-danger': !leader.is_active}">
 							<td class="width-5">{{$index + 1}}</td>
 							<td class="width-10">
 								<a ng-if="vm.authAcct.is_staff" ui-sref="app.dashboard({userId:leader.id})">{{leader.first_name}} {{leader.last_name}}</a>

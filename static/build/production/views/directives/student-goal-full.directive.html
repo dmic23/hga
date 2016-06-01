@@ -1,13 +1,13 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6">Student Goals</h4>
         <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-if="(goals | filter: goal_complete == 'false').length <= 2" ng-click="open({})"><i class="ti-plus"/> Add Goal</button>
-        <p class="category col-md-7">Here is a subtitle for goals</p>
+        <p class="category col-md-7">Set the goals you want to accomplish, and become the player you want to be!</p>
         <div class="col-md-7 padding-top-20">
-        	<p class="center-block">Goals Complete : <span class="text-success">{{(goals | filter: {goal_complete:'true'}).length}}</span></p>
-        	<p class="center-block">Total Goals : <span class="text-primary">{{goals.length}}</span></p>
+        	<p class="center-block">Goals Complete : <span class="text-success animated fadeIn">{{(goals | filter: {goal_complete:'true'}).length}}</span></p>
+        	<p class="center-block">Total Goals : <span class="text-primary animated fadeIn">{{goals.length}}</span></p>
         </div>
 		<form class="col-md-5">
 			<div class="form-group padding-10">
@@ -39,7 +39,7 @@
           		</th>
             </thead>
             <tbody>
-				<tr ng-repeat="goal in goals | orderBy: sortType:sortReverse | filter:searchItem" name="studentGoalForm" ng-form novalidate>
+				<tr class="" ng-repeat="goal in goals | orderBy: sortType:sortReverse | filter:searchItem" name="studentGoalForm" ng-form novalidate>
 					<td class="width-15">
 						<small>{{goal.goal_created | date:"MMM d, y"}}</small>
 					</td>

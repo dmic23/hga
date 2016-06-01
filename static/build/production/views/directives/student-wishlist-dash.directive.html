@@ -1,10 +1,10 @@
 
-<div class="card">
+<div class="card animated fadeIn">
 
     <div class="header row">
         <h4 class="title col-md-6"><a class="" ui-sref="app.student-wishlist({'userId':userId})">Wish List</a></h4>
         <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})"><i class="ti-plus"/> Add Wish</button>
-        <p class="category col-md-7">Here is a subtitle for wish list</p>
+        <p class="category col-md-7">This is where you design your dream set list. Put all the songs that you want to learn here to keep yourself motivated!</p>
     </div>
 
     <div class="content table-responsive table-full-width">
@@ -16,7 +16,7 @@
             	<th>Complete</th>
             </thead>
             <tbody>
-				<tr ng-repeat="wish in filteredWishLists = (wishLists | filter: wish_item_complete == 'false' | orderBy: 'wish_item_created' | limitTo : 3)" name="studentWishListForm"  ng-form novalidate>
+				<tr class="" ng-repeat="wish in filteredWishLists = (wishLists | filter: wish_item_complete == 'false' | orderBy: 'wish_item_created' | limitTo : 3)" name="studentWishListForm"  ng-form novalidate>
 					<td class="width-30">
 						{{wish.wish_item | limitTo: 35}}<span ng-if="wish.wish_item.length > 35">...</span>
 					</td>

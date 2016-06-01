@@ -49,7 +49,7 @@
 
             $.notify({
                 icon: "ti-check",
-                message: "Account has been created! Now please sign in!"
+                message: "Account has been created! Please sign in"
 
             },{
                 type: 'success',
@@ -71,7 +71,12 @@
         }
 
         function registerError(errMsg){
-            vm.registerError = errMsg.data.message;
+            console.log(errMsg);
+            if(errMsg.status === 500){
+                vm.registerError = "username or email in use"
+            } else {
+                vm.registerError = errMsg.data.message;
+            }
         }
 
         var mediaPath = media_path('');

@@ -30,7 +30,6 @@
         }
 
         function getAllCategoriesSuccess(response){
-            console.log(response);
             vm.categories = response;
         }
 
@@ -39,7 +38,7 @@
         }
 
         vm.setCategory = function(category){
-            console.log(category);
+            
             vm.discussionClass = "animate fadeOutDown"
             vm.category = category;
             vm.discussionClass = "animate fadeInDown"

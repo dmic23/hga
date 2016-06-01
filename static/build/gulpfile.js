@@ -31,12 +31,16 @@ bowerJs = [
 	'development/bower_components/underscore/underscore-min.js',
 	'development/bower_components/bootstrap/dist/js/bootstrap.min.js',
 	'development/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-	'development/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js'
+	'development/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js',
+	'bower_components/moment/moment.js',
+	'development/bower_components/angular-moment/angular-moment.min.js'
 ];
 
 cssSources = [
 	// 'development/css/lib/**/*.css',
-	'development/css/**/*.css'
+	'development/css/themify-icons.css',
+	'development/css/paper-dashboard.css',
+	'development/css/main.css'
 ];
 
 bowerCss = [

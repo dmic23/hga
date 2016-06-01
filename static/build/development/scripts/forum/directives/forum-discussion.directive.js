@@ -20,7 +20,6 @@
 
             },
             link: function(scope, elem, attrs){
-                console.log(scope);
 
                 scope.newMessage = {};
 
@@ -46,7 +45,6 @@
                 }
 
                 scope.addTopic = function(newTopic){
-                    console.log(newTopic);
                     newTopic['category_id'] = scope.category.id;
                     Forum.addNewTopic(newTopic)
                         .then(addTopicSuccess)
@@ -55,7 +53,6 @@
                 }
 
                 function addTopicSuccess(response){
-                    console.log(response);
                     scope.category.category_topic.push(response);
                     scope.getMessages(response.id);
 
@@ -73,7 +70,6 @@
                 }
 
                 function getAllMessagesSuccess(response){
-                    console.log(response);
                     scope.messages = response;
                     scope.messageClass = "animated fadeInRight";
                 }
@@ -88,21 +84,14 @@
                         topic_id: msgId
                     };
 
-                    console.log(msg);
-                    console.log(scope);
-                    // scope.newMessage = '';
                     Forum.addNewMessage(msg)
                         .then(addNewMessageSuccess)
                         .catch(addNewMessageError);
                 }
 
                 function addNewMessageSuccess(response){
-                    console.log(response);
-                    console.log(scope.messages);
-                    console.log(scope.newMessage);
-                    // scope.newMessage.message = '';
+                    
                     scope.newMessage = {};
-                    console.log(scope.newMessage);
                     scope.messages.topic_message.push(response);
                 }
 
