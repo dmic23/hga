@@ -58,7 +58,9 @@
             angular.forEach(users, function(v,k){
                 if(v.student_log.length){
                     v.student_log = _.filter(v.student_log, function(item){
-                        return moment(item.practice_date).isAfter(vm.dateRange);
+                        if(item.practice_date){
+                            return moment(item.practice_date).isAfter(vm.dateRange);
+                        }
                     })
                     if(v.student_log.length){
                         var sums = vm.getSum(v.student_log);
@@ -148,12 +150,29 @@
         vm.getSum = function(studentLog){
             var times = [];
             var speeds = [];
+            var avgDaily = [];
             var maxSpeed = 0;
             var lastPrac = '';
             angular.forEach(studentLog, function(v,k){
                 if(v.practice_time){
+                    var tempAvg = {};
                     var time = parseInt(v.practice_time);
                     times.push(time);
+
+                    if(avgDaily.length){
+                        var prac = _.findWhere(avgDaily, {date: v.practice_date});
+                        if(prac){
+                            prac.tot = parseInt(prac.tot) + time;
+                        } else {
+                            tempAvg.tot = time;
+                            tempAvg.date = v.practice_date;
+                            avgDaily.push(tempAvg);
+                        }
+                    } else {
+                        tempAvg.tot = time;
+                        tempAvg.date = v.practice_date;
+                        avgDaily.push(tempAvg);
+                    }
                 } 
 
                 if(v.practice_speed){
@@ -170,14 +189,31 @@
                     }
                 }
             });
-            var sumTimes = times.reduce(function(a, b) { return a + b; });
-            var sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
+            if(times.length){
+                var sumTimes = times.reduce(function(a, b) { return a + b; });
+            } else {
+                var sumTimes = 0;
+            }
+
+            if(speeds.length){
+                var sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
+            } else {
+                var sumSpeeds = 0;
+            }
+            
+            if(avgDaily.length){
+                var sumDaily = 0;
+                _.each(avgDaily, function(v,k){ sumDaily += v.tot; })
+            } else {
+                var sumDaily = 0;
+            }
+
             return {
                 max_speed: maxSpeed,
                 speed_total: sumSpeeds,
                 speed_avg: sumSpeeds / speeds.length,                
                 time_total: sumTimes,
-                time_avg: sumTimes / times.length,
+                time_avg: sumDaily / avgDaily.length,
                 last_practice: lastPrac,
             };       
         }

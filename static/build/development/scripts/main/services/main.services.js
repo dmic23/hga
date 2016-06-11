@@ -74,6 +74,7 @@
         function logoutSuccess(response) {
             localStorage.clear();
             $state.go('login');
+
         }
 
     }

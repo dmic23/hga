@@ -29,8 +29,9 @@
 
 </head>
 <body>
-	<div class="wrapper" ui-view></div>
-
+	{% block content %}
+		<div class="wrapper" ui-view></div>
+	{% endblock %}
 <script>
 	var staticUrl = '{{ STATIC_URL|escapejs }}';
 	var mediaUrl  = '{{ MEDIA_URL|escapejs }}';

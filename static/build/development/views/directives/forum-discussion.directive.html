@@ -45,7 +45,10 @@
 					</div>
 					<div class="col-md-9">
 						<small class="center-block padding-10 text-warning">{{message.message_created  | date:"MMM d, y ' at ' h:mm a"}}</small>
-						<p class="center-block padding-10">{{message.message}}</p>
+						<p class="center-block padding-10 message-content" ng-bind-html="message.message | linky:'_blank'"></p>
+						<ul>
+							<li class="center-block margin-tb-5 message-content" ng-repeat="file in message.file_message"><a href="{{path}}{{file.message_file}}" target="_blank">{{file.message_file}}</a></li>
+						</ul>
 					</div>
 				</li>
 				<li ng-if="messages.topic_message.length < 1">
@@ -53,14 +56,25 @@
 				</li>
 			</ul>
 			<div class="row" ng-if="messages.topic">
-				<form class="form-inine" name="messageForm" ng-submit="addMessage(newMessage.message, messages.id)">
-					<div class="form-group col-md-offset-2 col-md-7">
-						<input type="text" name="message" class="form-control border-input" ng-model="newMessage.message" placeholder="Add to the discussion!">
+				<div class="form-group col-md-offset-1 col-md-6">
+					<textarea name="message" msd-elastic class="form-control border-input" ng-model="newMessage.message" placeholder="Add to the discussion!" rows="1" ></textarea> 
+				</div>
+				<div class="form-group col-md-2">
+					<div class="btn btn-fill btn-info form-control border-input img-select" 
+						ngf-select ng-model="newMessage.message_file" 
+						name="file" 
+						ngf-pattern="'image/*,audio/*,video/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'" ngf-accept="'image/*,audio/*,video/*,application/pdf'" 
+						ngf-max-size="20MB" 
+						ngf-min-height="100" 
+						ngf-resize="{width: 300, height: 300}"
+						ngf-multiple="true"><i class="ti-file"/>
 					</div>
-					<div class="form-group col-md-3">
-						<button type="submit" class="btn btn-small btn-primary" ng-disabled="!newMessage.message.length">Submit</button>
-					</div>
-				</form>
+					<small class="center-block margin-tb-5" ng-repeat="file in newMessage.message_file"><span ng-if="file.$ngfName">{{file.$ngfName}}</span><span ng-if="file.name">{{file.name}}</span></small>
+
+				</div>
+				<div class="form-group col-md-3">
+					<button type="button" class="btn btn-primary" ng-disabled="!newMessage.message.length" ng-click="addMessage(newMessage, messages.id)">Submit</button>
+				</div>
 			</div>			
 		</div>
 		<div ng-if="category.category_topic.length === 0">

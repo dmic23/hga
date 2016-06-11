@@ -2,20 +2,24 @@
 <div class="card animated fadeIn">
 
     <div class="header row">
-        <h4 class="title col-md-6">Student Materials</h4>
-        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})"><i class="ti-plus"/> Add Material</button>
-        <p class="category col-md-7">Check this periodically to see if you have any materials to work on. These will be based on your goals, objectives, and wish list.</p>
+        <div class="col-md-6">
+            <h4 class="title center-block">Materials</h4>
+            <p class="category center-block">Check this periodically to see if you have any materials to work on. These will be based on your goals, objectives, and wish list.</p>
+        </div>
         <div class="col-md-7 padding-top-20">
         	<p class="center-block">Total Materials : <span class="text-success">{{materials.length}}</span></p>
         </div>
-		<form class="col-md-5">
-			<div class="form-group padding-10">
-				<div class="input-group">
-					<div class="input-group-addon border"><i class="fa fa-search"></i></div>
-					<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
-				</div>      
-			</div>
-		</form>
+        <div class="col-md-5">
+        	<button class="btn btn-sm btn-info center-block margin-10" ng-click="open({})"><i class="ti-plus"/> Add Material</button>
+			<form class="">
+				<div class="form-group padding-10">
+					<div class="input-group">
+						<div class="input-group-addon border"><i class="fa fa-search"></i></div>
+						<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
+					</div>      
+				</div>
+			</form>  	
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">

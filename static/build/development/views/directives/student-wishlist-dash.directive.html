@@ -2,9 +2,13 @@
 <div class="card animated fadeIn">
 
     <div class="header row">
-        <h4 class="title col-md-6"><a class="" ui-sref="app.student-wishlist({'userId':userId})">Wish List</a></h4>
-        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})"><i class="ti-plus"/> Add Wish</button>
-        <p class="category col-md-7">This is where you design your dream set list. Put all the songs that you want to learn here to keep yourself motivated!</p>
+    	<div class="col-md-6">
+    		<h4 class="title center-block"><a class="" ui-sref="app.student-wishlist({'userId':userId})">Wish List</a></h4>
+    		<p class="category center-block">This is where you design your dream set list. Put all the songs that you want to learn here to keep yourself motivated!</p>
+    	</div>
+        <div class="col-md-3">
+        	<button class="btn btn-sm btn-info margin-10" ng-click="open({})"><i class="ti-plus"/> Add Wish</button>
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">

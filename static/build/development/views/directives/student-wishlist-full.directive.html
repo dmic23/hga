@@ -2,21 +2,25 @@
 <div class="card animated fadeIn">
 
     <div class="header row">
-        <h4 class="title col-md-6">Student Wish List</h4>
-        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})"><i class="ti-plus"/> Add Wish</button>
-        <p class="category col-md-7">This is where you design your dream set list. Put all the songs that you want to learn here to keep yourself motivated!</p>
+    	<div class="col-md-6">
+    		<h4 class="title center-block">Wish List</h4>
+    		<p class="category center-block">This is where you design your dream set list. Put all the songs that you want to learn here to keep yourself motivated!</p>
+    	</div>
         <div class="col-md-7 padding-top-20">
         	<p class="center-block">Wishes Complete : <span class="text-success">{{(wishLists | filter: {wish_item_complete: 'true'}).length}}</span></p>
         	<p class="center-block">Total Wishes : <span class="text-primary">{{wishLists.length}}</span></p>
         </div>
-		<form class="col-md-5">
-			<div class="form-group padding-10">
-				<div class="input-group">
-					<div class="input-group-addon border"><i class="fa fa-search"></i></div>
-					<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
-				</div>      
-			</div>
-		</form>
+        <div class="col-md-5">
+        	<button class="btn btn-sm btn-info margin-10" ng-click="open({})"><i class="ti-plus"/> Add Wish</button>
+			<form class="">
+				<div class="form-group padding-10">
+					<div class="input-group">
+						<div class="input-group-addon border"><i class="fa fa-search"></i></div>
+						<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
+					</div>      
+				</div>
+			</form>  	
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">

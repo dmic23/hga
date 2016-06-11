@@ -26,13 +26,14 @@ bowerJs = [
 	'development/bower_components/jquery/dist/jquery.min.js',
 	'development/bower_components/angular/angular.js',
 	'development/bower_components/angular-animate/angular-animate.min.js',
+	'development/bower_components/angular-touch/angular-touch.min.js',
 	'development/bower_components/angular-ui-router/release/angular-ui-router.min.js',
 	'development/bower_components/ng-file-upload/ng-file-upload.min.js',
 	'development/bower_components/underscore/underscore-min.js',
 	'development/bower_components/bootstrap/dist/js/bootstrap.min.js',
 	'development/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
 	'development/bower_components/remarkable-bootstrap-notify/dist/bootstrap-notify.min.js',
-	'bower_components/moment/moment.js',
+	'development/bower_components/moment/moment.js',
 	'development/bower_components/angular-moment/angular-moment.min.js'
 ];
 

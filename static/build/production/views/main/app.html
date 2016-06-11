@@ -3,50 +3,50 @@
 
 	<div class="sidebar-wrapper">
         <div class="logo">
-            <a ui-sref="app.dashboard({userId:vm.currentUser.id})" class="simple-text">
+            <a ui-sref="app.dashboard({userId:vm.currentUser.id})" class="simple-text side-menu">
                 <img class="side-logo" ng-src="{{path.static_files}}images/hga_logo.png" alt="Hirsch Guitar Academy logo"/>
             </a>
         </div>
 
         <ul class="nav">
             <li ui-sref-active="active">
-                <a ui-sref="app.dashboard({userId:vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.dashboard({userId:vm.currentUser.id})">
                     <i class="ti-panel"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.profile({userId:vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.profile({userId:vm.currentUser.id})">
                     <i class="ti-user"></i>
                     <p>User Profile</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.student-objective({'userId':vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.student-objective({'userId':vm.currentUser.id})">
                     <i class="ti-view-list-alt"></i>
                     <p>Objectives</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.student-goal({'userId':vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.student-goal({'userId':vm.currentUser.id})">
                     <i class="ti-medall"></i>
                     <p>Goals</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.student-practice({'userId':vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.student-practice({'userId':vm.currentUser.id})">
                     <i class="ti-pencil-alt2"></i>
                     <p>Practice Log</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.student-wishlist({'userId':vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.student-wishlist({'userId':vm.currentUser.id})">
                     <i class="ti-map"></i>
                     <p>Wish List</p>
                 </a>
             </li>
             <li ui-sref-active="active">
-                <a ui-sref="app.student-materials({'userId':vm.currentUser.id})">
+                <a class="side-menu" ui-sref="app.student-materials({'userId':vm.currentUser.id})">
                     <i class="ti-files"></i>
                     <p>Materials</p>
                 </a>
@@ -70,13 +70,13 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
 					<li ui-sref-active="active">
-                        <a ui-sref="app.leaderboard({userId:vm.currentUser.id})">
+                        <a class="side-menu" ui-sref="app.leaderboard({userId:vm.currentUser.id})">
 							<i class="ti-stats-up"></i>
 							<p>Leaderboard</p>
                         </a>
                     </li>
                     <li ui-sref-active="active">
-                        <a ui-sref="app.forum" class="dropdown-toggle" data-toggle="dropdown">
+                        <a ui-sref="app.forum" class="dropdown-toggle side-menu" data-toggle="dropdown">
                             <i class="ti-comments"></i>
 							<p>Forum</p>
                         </a>
@@ -87,9 +87,9 @@
 							<p class=""> {{vm.currentUser.first_name}} {{vm.currentUser.last_name}}</p>
 							<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu side-menu">
 							<li><a ui-sref="app.profile({userId:vm.currentUser.id})">User Profile</a></li>
-							<li><a href="javascript:void(0)" ng-click="vm.logout()">Logout</a></li>
+							<li><a ui-sref="logout()" ui-sref-opts="{reload: true, notify: true}">Logout</a></li>
 						</ul>
                     </li>
                 </ul>

@@ -4,8 +4,11 @@
     angular
         .module('hga', [
             'ngAnimate',
+            'ngTouch',
+            'ngSanitize',
             'ngFileUpload',
             'angularMoment',
+            'monospaced.elastic',
             'ui.router',
             'ui.bootstrap',
             'hga.config',

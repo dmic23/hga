@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-# from os import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,12 +21,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'tr4ocp+b=@q)sl3i8ri9f(*n#yf#tk3*n-b+_-tw^9u^0bbiv3'
 
-# SECRET_KEY = environ['SECRET_KEY']
-# SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['45.55.201.201']
 ALLOWED_HOSTS = ['*']
 
 ADMINS = (
@@ -162,11 +158,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-# try:
-#    from local_settings import *
-# except ImportError, e:
-#    print "error message=++ %s" % e.message
-#    pass
+try:
+   from local_settings import *
+except ImportError, e:
+   print "error message=++ %s" % e.message
+   pass
 
 if not DEBUG:
 

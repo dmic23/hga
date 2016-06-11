@@ -114,6 +114,14 @@
                 data: {
                     requireLogin: false
                 },
+            })
+            .state('logout', {
+                url: '/logout',
+                controller: 'LogoutController',
+                controllerAs: 'vm',
+                data: {
+                    requireLogin: true
+                },
             });
     }
 })();

@@ -5,9 +5,9 @@
         .module('forum.directives')
         .directive('forumDiscussion', forumDiscussion);
 
-    forumDiscussion.$inject = ['$sce', 'Users', 'Forum', '$uibModal'];
+    forumDiscussion.$inject = ['$sce', 'Users', 'Forum', '$uibModal', 'Upload'];
 
-    function forumDiscussion($sce, Users, Forum, $uibModal) {
+    function forumDiscussion($sce, Users, Forum, $uibModal, Upload) {
 
         var directive = {
             restrict: 'EA',
@@ -80,13 +80,24 @@
 
                 scope.addMessage = function(newMessage, msgId){
                     var msg = {
-                        message: newMessage, 
-                        topic_id: msgId
+                        message: newMessage.message, 
+                        topic_id: msgId,
+                        message_file: newMessage.message_file
                     };
 
-                    Forum.addNewMessage(msg)
-                        .then(addNewMessageSuccess)
-                        .catch(addNewMessageError);
+                    Upload.upload({
+                        url: 'api/v1/forum-message/',
+                        data: msg,
+                    })
+                    .then(function (resp) {
+                        scope.newMessage = {};
+                        scope.messages.topic_message.push(resp.data);
+                    }, function (resp) {
+                        console.log('Error status: ' + resp.status);
+                    }, function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.message_file.name);
+                    });
                 }
 
                 function addNewMessageSuccess(response){

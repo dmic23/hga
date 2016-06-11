@@ -17,6 +17,9 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError('Users must have a valid username.')
 
+        # if not email:
+        #     raise ValueError('Users must have a valid email.')
+
         user = self.model(
             username=username,
             first_name=kwargs.get('first_name'), last_name=kwargs.get('last_name'),
@@ -26,10 +29,12 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, username, password, **kwargs):
-        user = self.create_user(username=username, password=password)
+    def create_superuser(self, username, email, password, **kwargs):
+        user = self.create_user(username=username, email=email, password=password)
         user.username = username
+        user.email = email
         user.is_admin = True
+        user.is_active = True
         user.save()
 
         return user
@@ -58,11 +63,12 @@ class User(AbstractBaseUser):
     user_updated = models.DateTimeField(auto_now=True)
     user_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='updated_user', null=True, blank=True, unique=False)
     location = models.CharField(max_length=50, null=True, blank=True, default='Ruston')
-    play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True, default='WHITE')
+    play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True, default='1')
 
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def __unicode__(self):
         return smart_unicode(self.username)

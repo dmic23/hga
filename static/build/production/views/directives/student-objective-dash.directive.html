@@ -2,9 +2,13 @@
 <div class="card animated fadeIn">
 
     <div class="header row">
-        <h4 class="title col-md-6"><a class="" ui-sref="app.student-objective({'userId':userId})">Student Objectives</a></h4>
-        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-click="open({})" ng-if="authAcct.is_staff"><i class="ti-plus"/> Add Objective</button>
-        <p class="category col-md-7">Here are some things to work on that will help take your playing to the next level based on your goals.</p>
+    	<div class="col-md-6">
+    		<h4 class="title center-block"><a class="" ui-sref="app.student-objective({'userId':userId})">Student Objectives</a></h4>
+    		<p class="category center-block">Here are some things to work on that will help take your playing to the next level based on your goals.</p>
+    	</div>
+        <div class="col-md-3">
+        	<button class="btn btn-sm btn-info margin-10" ng-click="open({})" ng-if="authAcct.is_staff"><i class="ti-plus"/> Add Objective</button>
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">

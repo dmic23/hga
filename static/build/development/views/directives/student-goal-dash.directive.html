@@ -2,9 +2,13 @@
 <div class="card animated fadeIn">
 
     <div class="header row">
-        <h4 class="title col-md-6"><a class="" ui-sref="app.student-goal({'userId':userId})">Student Goals</a></h4>
-        <button class="btn btn-sm btn-info pull-right col-md-3 margin-10" ng-if="(goals | filter: goal_complete == 'false').length <= 2" ng-click="open({})"><i class="ti-plus"/> Add Goal</button>
-        <p class="category col-md-7">Set the goals you want to accomplish, and become the player you want to be!</p>
+    	<div class="col-md-6">
+    		<h4 class="title center-block"><a class="" ui-sref="app.student-goal({'userId':userId})">Student Goals</a></h4>
+    		<p class="category center-block">Set the goals you want to accomplish, and become the player you want to be!</p>
+    	</div>
+        <div class="col-md-6">
+ 	       <button class="btn btn-sm btn-info margin-10" ng-if="(goals | filter: goal_complete == 'false').length <= 2" ng-click="open({})"><i class="ti-plus"/> Add Goal</button>
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">
