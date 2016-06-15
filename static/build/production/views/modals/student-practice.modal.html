@@ -37,7 +37,7 @@
 		<div class="form-group col-md-4">
 			<label for="goal_target_date">Practice Date</label>
 			<div class="input-group">
-				<input name="practice_date" type="text" class="form-control border-input" uib-datepicker-popup="MMM d, y" ng-model="vm.newPracticeLog.practice_date" is-open="vm.showPicker.opened" uib-datepicker-append-to-body="true" placeholder="{{newPracticeLog.practice_date | date:'MMM d, y'}}" >
+				<input name="practice_date" type="text" class="form-control border-input" uib-datepicker-popup="MMM d, y" ng-model="vm.newPracticeLog.practice_date" is-open="vm.showPicker.opened" uib-datepicker-append-to-body="true" placeholder="{{vm.newPracticeLog.practice_date | date:'MMM d, y'}}">
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default" ng-click="vm.openDate($event)"><i class="ti-calendar"></i></button>
 				</span>							
