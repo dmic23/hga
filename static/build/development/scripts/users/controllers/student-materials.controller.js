@@ -12,6 +12,8 @@
 
         activate();
 
+        // vm.fileProgress = '';
+
         function activate(){
             if(Main.isAuthAcct()){
                 vm.authAcct = Main.getAuthAcct();
@@ -40,6 +42,7 @@
 
         function getUserError(errMsg){
             console.log(errMsg);
+            Main.logout();
         }
     }
 })();

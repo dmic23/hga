@@ -5,10 +5,11 @@
         .module('forum.services')
         .factory('Forum', Forum);
 
-    Forum.$inject = ['$http', '$q', '$state'];
+    Forum.$inject = ['$http', '$q', '$state', '$cookies'];
 
-    function Forum($http, $q, $state) {
+    function Forum($http, $q, $state, $cookies) {
         var vm = this;
+        vm.acct = $cookies.getObject('authAcct');
 
         var Forum = {
             getAllTopics: getAllTopics,
@@ -30,6 +31,7 @@
         }
 
         function getAllTopics(){
+            
             return $http.get('api/v1/forum-topics/')
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);

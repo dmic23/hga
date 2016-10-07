@@ -40,6 +40,7 @@
 
         function getUserError(errMsg){
             console.log(errMsg);
+            Main.logout();
         }
     }
 })();

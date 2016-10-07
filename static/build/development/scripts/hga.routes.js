@@ -106,6 +106,15 @@
                     requireLogin: true
                 },
             })
+            .state('app.schedule', {
+                url: '/schedule',
+                controller: 'ScheduleController',
+                controllerAs: 'vm',     
+                templateUrl: static_path('views/schedule/schedule.html'),
+                data: {
+                    requireLogin: true
+                },
+            })
             .state('login', {
                 url: '/login',
                 controller: 'AuthenticationController',

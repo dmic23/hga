@@ -43,6 +43,7 @@
 
         function getUserError(errMsg){
             console.log(errMsg);
+            Main.logout();
         }
 
         function getAllSuccess(response){
@@ -224,8 +225,9 @@
             vm.dateRange = vm.adjDate;
             var rangeUsers = angular.copy(vm.allUsers);
             vm.setLeaderboard(rangeUsers);
-
         }
+
+        vm.getRange('month');
 
         vm.resetLeaderboard = function(){
             vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");

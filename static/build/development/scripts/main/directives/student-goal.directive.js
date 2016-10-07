@@ -5,9 +5,9 @@
         .module('main.directives')
         .directive('studentGoal', studentGoal);
 
-    studentGoal.$inject = ['$sce', 'Users', 'Main', '$uibModal', '$timeout'];
+    studentGoal.$inject = ['$sce', 'Users', 'Main', '$uibModal', '$timeout', '$cookies'];
 
-    function studentGoal($sce, Users, Main, $uibModal, $timeout) {
+    function studentGoal($sce, Users, Main, $uibModal, $timeout, $cookies) {
 
         var directive = {
             restrict: 'EA',
@@ -195,7 +195,7 @@
                                         });                                    
                                     }
                                     authAcctNot['notification'] = {'goal': true, 'goal_time': today};
-                                    localStorage.setItem('authAcct', JSON.stringify(authAcctNot));
+                                    $cookies.putObject('authAcct', authAcctNot);
                                 }
                                 
                             }

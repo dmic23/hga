@@ -6,16 +6,20 @@
             'ngAnimate',
             'ngTouch',
             'ngSanitize',
+            'ngCookies',
             'ngFileUpload',
             'angularMoment',
             'monospaced.elastic',
             'ui.router',
             'ui.bootstrap',
+            'ui.select',
+            'mwl.calendar',
             'hga.config',
             'hga.routes',
             'main',
             'users',
-            'forum'
+            'forum',
+            'schedule'
         ]);
 
     angular

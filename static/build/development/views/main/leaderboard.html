@@ -71,7 +71,7 @@
 		            </thead>
 
 		            <tbody>
-						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: '-play_level' | orderBy: sortType:sortReverse | filter:searchItem" ng-hide="!leader.is_active && !vm.authAcct.is_staff" ng-class="{'bg-danger': !leader.is_active}">
+						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: '-practice_time_total' | orderBy: sortType:sortReverse | filter:searchItem" ng-hide="!leader.is_active && !vm.authAcct.is_staff" ng-class="{'bg-danger': !leader.is_active}">
 							<td class="width-5">{{$index + 1}}</td>
 							<td class="width-10">
 								<a ng-if="vm.authAcct.is_staff" ui-sref="app.dashboard({userId:leader.id})">{{leader.first_name}} {{leader.last_name}}</a>

@@ -38,6 +38,9 @@
             </thead>
 
             <tbody>
+                <tr ng-if="fileProgress < 100">
+                    <td colspan="3" class="text-danger">Upload in progress: {{fileProgress}}%</td>
+                </tr>
 				<tr ng-repeat="material in materials | orderBy: sortType:sortReverse | filter:searchItem" name="studentWishListForm" ng-form novalidate>
 					<td class="width-20">
 						<small>{{material.material_added | date:"MMM d, y"}}</small>
@@ -54,7 +57,7 @@
 					</td>
 				</tr>
 				<tr class="" ng-if="materials.length < 1">
-					<td class="text-warning">No Materials. Add one!</td>
+					<td colspan="3" class="text-warning">No Materials. Add one!</td>
 				</tr>
             </tbody>
 

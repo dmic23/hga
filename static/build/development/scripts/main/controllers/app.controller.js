@@ -15,11 +15,16 @@
         function activate(){
             if(Main.isAuthAcct()){
                 vm.authAcct = Main.getAuthAcct();
+
                 Users.getUser(vm.authAcct.id).then(function(response){
                     vm.currentUser = response;
+                }).catch(function(errMsg){
+                    Main.logout();
                 });
+
             } else {
                 console.log("Could not get account");
+                // $state.go('login');
             }
             loadSidebar();
         }

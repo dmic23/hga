@@ -19,14 +19,17 @@
                 var authAcct = Main.getAuthAcct();
                 Users.getUser(authAcct.id).then(function(response){
                     vm.user = response;
+                }).catch(function(errMsg){
+                    Main.logout();
                 });
+                
+                Forum.getAllCategories()
+                    .then(getAllCategoriesSuccess)
+                    .catch(getAllCategoriesError);
             } else {
                 console.log("Could not get account");
             }
 
-            Forum.getAllCategories()
-                .then(getAllCategoriesSuccess)
-                .catch(getAllCategoriesError)
         }
 
         function getAllCategoriesSuccess(response){

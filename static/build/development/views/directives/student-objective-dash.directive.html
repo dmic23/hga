@@ -20,7 +20,7 @@
             	<th>Complete</th>
             </thead>
             <tbody>
-				<tr class="" ng-repeat="objective in filteredObjectives = (objectives | filter: objective_complete == 'false' | orderBy: 'objective_created' | limitTo : 3)" name="studentObjectiveForm"  ng-form novalidate>
+				<tr class="" ng-repeat="objective in filteredObjectives = (objectives | filter: objective_complete == 'false' | orderBy: 'objective_priority' | limitTo : 3)" name="studentObjectiveForm" ng-if="objective.objective_visible || authAcct.is_staff" ng-form novalidate>
 					<td class="width-30">
 						{{objective.objective | limitTo: 35}}<span ng-if="objective.objective.length > 35">...</span>
 					</td>
@@ -38,6 +38,7 @@
 					<td class="width-20" ng-if="authAcct.is_staff">
 						<button type="button" class="btn btn-warning btn-link" ng-click="open(objective)"><i class="ti-pencil"/></button>
 						<button type="button" class="btn btn-danger btn-link" ng-click="deleteObjective(objective);"><i class="ti-trash"/></button>
+						<span class="center-block"><small class="text-success" ng-show="objective.objective_visible">Visible</small><small class="text-danger" ng-hide="objective.objective_visible">Not Visible</small></span>
 					</td>
 				</tr>
 				<tr ng-if="filteredObjectives.length < 1">

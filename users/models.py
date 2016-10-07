@@ -11,6 +11,33 @@ def get_upload_file_name(instance, filename):
 
     return settings.UPLOAD_FILE_PATTERN % (str(time()).replace('.','_'), filename)
 
+class Location(models.Model):
+    name = models.CharField(max_length=50, null=True, blank=True)
+    addr1 = models.CharField(max_length=50, null=True, blank=True)
+    addr2 = models.CharField(max_length=50, null=True, blank=True)
+    city = models.CharField(max_length=50, null=True, blank=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
+    zip_code = models.CharField(max_length=20, null=True, blank=True)
+    phone_main = models.CharField(max_length=20, null=True, blank=True)
+    phone_other = models.CharField(max_length=20, null=True, blank=True)
+    notes = models.TextField(null=True, blank=True)
+    location_created = models.DateTimeField(auto_now_add=True)
+    location_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='location_created_user')
+
+    def __unicode__(self):
+        return smart_unicode(self.name)
+
+class StudentNote(models.Model):
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_note')
+    note = models.TextField()
+    note_created = models.DateTimeField(auto_now_add=True)
+    note_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='note_created_user')
+    note_updated = models.DateTimeField(auto_now=True)
+    note_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='note_updated_user', null=True, blank=True)
+
+    def __unicode__(self):
+        return smart_unicode(self.id)
+
 class UserManager(BaseUserManager):
 
     def create_user(self, username, password=None, **kwargs):
@@ -23,7 +50,7 @@ class UserManager(BaseUserManager):
         user = self.model(
             username=username,
             first_name=kwargs.get('first_name'), last_name=kwargs.get('last_name'),
-            email=kwargs.get('email'))
+            email=kwargs.get('email'), date_of_birth=kwargs.get('date_of_birth'))
         user.set_password(password)
         user.save()
 
@@ -62,8 +89,15 @@ class User(AbstractBaseUser):
     user_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='created_user', null=True, blank=True, unique=False)
     user_updated = models.DateTimeField(auto_now=True)
     user_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='updated_user', null=True, blank=True, unique=False)
-    location = models.CharField(max_length=50, null=True, blank=True, default='Ruston')
+    location = models.ForeignKey(Location, related_name='user_location', null=True, blank=True)
     play_level = models.CharField(max_length=20, choices=USER_RANK, null=True, blank=True, default='1')
+    date_of_birth = models.DateField(max_length=50, null=True, blank=True)
+    user_credit = models.CharField(max_length=4, null=True, blank=True, default=0)
+    recurring_credit = models.CharField(max_length=2, null=True, blank=True, default=0)
+    course_reminder = models.BooleanField(default=True)
+    practice_reminder = models.BooleanField(default=True)
+    user_update = models.BooleanField(default=True)
+
 
     objects = UserManager()
 
@@ -91,7 +125,7 @@ class User(AbstractBaseUser):
         return self.is_admin
 
     def has_module_perms(self, app_label):
-        return self.is_admin  
+        return self.is_admin 
 
 
 class StudentGoal(models.Model):
@@ -140,6 +174,8 @@ class StudentObjective(models.Model):
     objective_complete = models.BooleanField(default=False)
     objective_complete_date = models.DateTimeField(max_length=50, null=True, blank=True)
     objective_notes = models.TextField(null=True, blank=True)
+    objective_visible = models.BooleanField(default=False)
+    objective_priority = models.CharField(max_length=3, null=True, blank=True)
     objective_created = models.DateTimeField(auto_now_add=True)
     objective_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='objective_created_user')
     objective_updated = models.DateTimeField(auto_now=True)
@@ -165,10 +201,31 @@ class StudentWishList(models.Model):
 
 class StudentMaterial(models.Model):
 
-    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_material')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='student_material', null=True, blank=True)
+    student_group = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='group_student', blank=True)
     file = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
     material_name = models.CharField(max_length=50, null=True, blank=True)
     material_notes = models.TextField(null=True, blank=True)
     material_added = models.DateTimeField(auto_now_add=True)
-    material_added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='material_added_user')
+    material_added_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='material_added_user', null=True, blank=True)
+    material_updated = models.DateTimeField(auto_now=True)
+    material_updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='material_updated_user', null=True, blank=True)
 
+class StudentEmail(models.Model):
+    MAIL_TYPE = ( 
+        ('CRE', 'User Created'),
+        ('ACT', 'User Active'),
+        ('UPD', 'Account Updated'),
+        ('PRACT', 'User Practice Reminder'),
+        ('SCHED', 'Course Scheduled'),
+        ('CNCL', 'Course Cancelled'),
+        ('REMD', 'Course Scheduled Reminder')
+    )
+    mail_type = models.CharField(max_length=8, choices=MAIL_TYPE, null=True, blank=True)
+    from_email = models.EmailField(null=True, blank=True)
+    cc = models.EmailField(null=True, blank=True)
+    bcc = models.EmailField(null=True, blank=True)
+    subject = models.CharField(max_length=250, null=True, blank=True)
+    title = models.CharField(max_length=250, null=True, blank=True)
+    body = models.TextField(null=True, blank=True)
+    footer = models.TextField(null=True, blank=True)

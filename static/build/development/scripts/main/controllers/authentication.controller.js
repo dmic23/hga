@@ -5,10 +5,12 @@
         .module('main.controllers')
         .controller('AuthenticationController', AuthenticationController);
 
-    AuthenticationController.$inject = ['$scope', '$sce', '$state', 'Main', 'Users'];
+    AuthenticationController.$inject = ['$scope', '$sce', '$state', '$location', '$anchorScroll', 'Main', 'Users'];
 
-    function AuthenticationController($scope, $sce, $state, Main, Users){
+    function AuthenticationController($scope, $sce, $state, $location, $anchorScroll, Main, Users){
         var vm = this;
+
+        vm.dateReg = /^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))$/;
 
         activate();
 
@@ -18,6 +20,13 @@
                 $state.go('app.dashboard', {'userId': vm.authUser.id});
             }
 
+        }
+
+        vm.goToSignup = function(){
+
+            $('html, body').animate({
+                scrollTop: $('#signup').offset().top
+            }, 300);
         }
 
         vm.login = function(username, password){
@@ -32,11 +41,12 @@
         }
 
         function loginError(errMsg){
+            console.log(errMsg);
             vm.loginError = errMsg.data.message;
         }
 
         vm.register = function(newUser){
-            if(newUser.password===newUser.confirm_password){
+            if(newUser.password === newUser.confirm_password){
                 Main.register(newUser)
                     .then(registerSuccess)
                     .catch(registerError);
@@ -49,10 +59,10 @@
 
             $.notify({
                 icon: "ti-check",
-                message: "Account has been created! Please sign in"
+                message: "Account has been created! Pending activation from Hirsch Guitar Academy. You will receive an email upon activation."
 
             },{
-                type: 'success',
+                type: 'warning',
                 timer: 1000,
                 placement: {
                     from: 'top',

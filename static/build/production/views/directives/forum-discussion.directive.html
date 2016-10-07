@@ -64,10 +64,12 @@
 						ngf-select ng-model="newMessage.message_file" 
 						name="file" 
 						ngf-pattern="'image/*,audio/*,video/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'" ngf-accept="'image/*,audio/*,video/*,application/pdf'" 
-						ngf-max-size="20MB" 
+						ngf-max-size="100MB" 
 						ngf-min-height="100" 
 						ngf-resize="{width: 300, height: 300}"
-						ngf-multiple="true"><i class="ti-file"/>
+						ngf-multiple="true">
+						<i ng-hide="fileProgress < 100" class="ti-file"/>
+						<span ng-show="fileProgress < 100">{{fileProgress}}%</span>
 					</div>
 					<small class="center-block margin-tb-5" ng-repeat="file in newMessage.message_file"><span ng-if="file.$ngfName">{{file.$ngfName}}</span><span ng-if="file.name">{{file.name}}</span></small>
 

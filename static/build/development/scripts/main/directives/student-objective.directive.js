@@ -27,7 +27,7 @@
 
                     var modalInstance = $uibModal.open({
                         templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-objective.modal.html')),
-                        controller: function($scope, $uibModalInstance, $timeout){
+                        controller: function($scope, $uibModalInstance){
                             var vm = this;
                             if(objective.id){
                                 vm.modalTitle = "Update Objective";
@@ -65,6 +65,8 @@
                             objective: updObjective.objective,
                             objective_complete: updObjective.objective_complete,
                             objective_notes: updObjective.objective_notes,
+                            objective_priority: updObjective.objective_priority,
+                            objective_visible: updObjective.objective_visible
                         };
                     } else {
                         var tempObj = updObjective;

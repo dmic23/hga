@@ -5,14 +5,15 @@
         .module('users.services')
         .factory('Users', Users);
 
-    Users.$inject = ['$http', '$q', '$state'];
+    Users.$inject = ['$http', '$q', '$state', '$cookies'];
 
-    function Users($http, $q, $state) {
+    function Users($http, $q, $state, $cookies) {
         var vm = this;
 
         var Users = {
             getAll: getAll,
             getUser: getUser,
+            getLocations: getLocations,
             updateUserProfile: updateUserProfile,
             createStudentGoal: createStudentGoal,
             updateStudentGoal: updateStudentGoal,
@@ -29,6 +30,9 @@
             createStudentMaterial: createStudentMaterial,
             updateStudentMaterial: updateStudentMaterial,
             deleteStudentMaterial: deleteStudentMaterial,
+            createStudentNote: createStudentNote,
+            updateStudentNote: updateStudentNote,
+            deleteStudentNote: deleteStudentNote,
 
         };
 
@@ -43,111 +47,219 @@
         }
 
         function getAll(){
-            return $http.get('api/v1/users/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.get('api/v1/users/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function getUser(userId){
-            return $http.get('api/v1/users/'+userId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.get('api/v1/users/'+userId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function getLocations(){
+            var acct = $cookies.getObject('authAcct');
+            return $http.get('api/v1/locations/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateUserProfile(user){
-            return $http.put('api/v1/users/'+user.id+'/', user)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/users/'+user.id+'/', user, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);             
         }
 
         function createStudentGoal(goal){
-            return $http.post('api/v1/student-goals/', goal)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.post('api/v1/student-goals/', goal, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateStudentGoal(goalId, goal){
-            return $http.put('api/v1/student-goals/'+goalId+'/', goal)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/student-goals/'+goalId+'/', goal, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function deleteStudentGoal(goalId){
-            return $http.delete('api/v1/student-goals/'+goalId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.delete('api/v1/student-goals/'+goalId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function createStudentObjective(objective){
-            return $http.post('api/v1/student-objectives/', objective)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.post('api/v1/student-objectives/', objective, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateStudentObjective(objectiveId, objective){
-            return $http.put('api/v1/student-objectives/'+objectiveId+'/', objective)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/student-objectives/'+objectiveId+'/', objective, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function deleteStudentObjective(objectiveId){
-            return $http.delete('api/v1/student-objectives/'+objectiveId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.delete('api/v1/student-objectives/'+objectiveId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function createStudentPracticeLog(practiceLog){
-            return $http.post('api/v1/student-practice-logs/', practiceLog)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.post('api/v1/student-practice-logs/', practiceLog, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateStudentPracticeLog(practiceLog){
-            return $http.put('api/v1/student-practice-logs/'+practiceLog.id+'/', practiceLog)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/student-practice-logs/'+practiceLog.id+'/', practiceLog, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function deleteStudentPracticeLog(practiceLogId){
-            return $http.delete('api/v1/student-practice-logs/'+practiceLogId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.delete('api/v1/student-practice-logs/'+practiceLogId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function createStudentWishList(wishList){
-            return $http.post('api/v1/student-wish-list/', wishList)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.post('api/v1/student-wish-list/', wishList, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateStudentWishList(wishListId, wishList){
-            return $http.put('api/v1/student-wish-list/'+wishListId+'/', wishList)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/student-wish-list/'+wishListId+'/', wishList, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function deleteStudentWishList(wishListId){
-            return $http.delete('api/v1/student-wish-list/'+wishListId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.delete('api/v1/student-wish-list/'+wishListId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function createStudentMaterial(material){
-            return $http.post('api/v1/student-materials/', material)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.post('api/v1/student-materials/', material, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
 
         function updateStudentMaterial(materialId, material){
-            return $http.put('api/v1/student-materials/'+materialId+'/', material)
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.put('api/v1/student-materials/'+materialId+'/', material, {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
         }
 
         function deleteStudentMaterial(materialId){
-            return $http.delete('api/v1/student-materials/'+materialId+'/')
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.delete('api/v1/student-materials/'+materialId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError); 
+        }
+
+        function createStudentNote(newNote){
+            var acct = $cookies.getObject('authAcct');
+            return $http.post('api/v1/student-notes/', newNote, {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function updateStudentNote(noteId, note){
+            var acct = $cookies.getObject('authAcct');
+            return $http.put('api/v1/student-notes/'+noteId+'/', note, {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function deleteStudentNote(noteId){
+            var acct = $cookies.getObject('authAcct');
+            return $http.delete('api/v1/student-notes/'+noteId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
         }
 
     }

@@ -4,7 +4,8 @@
     angular
         .module('users', [
             'users.controllers',
-            'users.services'
+            'users.services',
+            'users.directives'
         ]);
 
     angular
@@ -12,5 +13,8 @@
 
     angular
         .module('users.services', []);
+
+    angular
+        .module('users.directives', []);
 
 })();

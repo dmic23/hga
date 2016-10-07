@@ -32,11 +32,11 @@
 							<div class="text-center">
 								<button type="submit" class="btn btn-success btn-fill btn-wd margin-tb-10" value="Login" ng-disabled='loginForm.$invalid'>Login</button> 
 								<p class="center-block">or</p> 
-								<button type="button" class="btn btn-primary btn-fill btn-wd margin-bottom-10" value="Sign up" ng-click="isCollapsed = !isCollapsed">Sign up</button>
+								<button type="button" class="btn btn-primary btn-fill btn-wd margin-bottom-10" value="Sign up" ng-click="isCollapsed = !isCollapsed; vm.goToSignup();">Sign up</button>
 							</div>
 						</form>
 					</div>
-
+					<div id="signup"></div>
 					<div class="content" uib-collapse="!isCollapsed">
 						<form class="" name="registerForm" ng-submit="vm.register(vm.newUser);" novalidate>
 							<div class="row">
@@ -62,7 +62,15 @@
 									<label for="last_name">Last Name</label>
 									<input type="text" class="form-control border-input" name="last_name" placeholder="enter your last name" ng-model="vm.newUser.last_name" required>
 									<span class="text-danger" ng-show="registerForm.last_name.$invalid&&registerForm.last_name.$touched">Required</span>
-								</div>								
+								</div>	
+								<div class="form-group">
+									<label for="last_name">Birthday</label>
+									<input type="text" class="form-control border-input" name="date_of_birth" placeholder="enter your birthday" ng-model="vm.newUser.date_of_birth" 
+									ng-pattern="vm.dateReg"
+ 									required>
+ 									<small>YYYY-MM-DD</small>
+									<span class="text-danger" ng-show="registerForm.date_of_birth.$invalid&&registerForm.date_of_birth.$touched">Required YYYY-MM-DD</span>
+								</div>						
 							</div>
 
 							<div class="row">

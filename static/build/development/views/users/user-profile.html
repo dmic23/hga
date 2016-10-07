@@ -20,30 +20,21 @@
 						<small class="text-primary">{{vm.respUser.user_created | date:'MMM d, y'}}</small>
 					</p>
 					<p class="description center-block col-md-12">Location <br/>
-						<small class="text-primary">{{vm.respUser.location}}</small>
+						<small class="text-primary">{{vm.respUser.location.name}}</small>
 					</p>
+                    <p class="description center-block col-md-12">Credits <br/>
+                        <small class="text-success">{{vm.respUser.user_credit}}</small>
+                    </p>
 					<p class="description center-block col-md-12">Play Level</p>
 					<div class="center-block col-md-12 height-20 border padding-10" ng-class="playLevelColor[vm.respUser.play_level]"></div>
 				</div>
             </div>
             <hr>
-            <div class="text-center">
-                <div class="row">
-<!--                     <div class="col-md-3 col-md-offset-1">
-                        <h5>12<br /><small>Files</small></h5>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>2GB<br /><small>Used</small></h5>
-                    </div>
-                    <div class="col-md-3">
-                        <h5>24,6$<br /><small>Spent</small></h5>
-                    </div> -->
-                </div>
-            </div>
         </div>
 
     </div>
     <div class="col-lg-8 col-md-7">
+
         <div class="card">
             <div class="header">
                 <h4 class="title">Profile</h4>
@@ -81,6 +72,17 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="text" class="form-control border-input" placeholder="Date of Birth YYYY-MM-DD" ng-model="vm.user.date_of_birth" name="date_of_birth"
+                                ng-pattern="vm.dateReg">
+                                <small>YYYY-MM-DD</small>
+                                <span class="text-danger" ng-show="userProfileForm.date_of_birth.$invalid&&userProfileForm.date_of_birth.$touched">Required YYYY-MM-DD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label for="email">Email</label>
                                 <input type="email" class="form-control border-input" placeholder="@email" ng-model="vm.user.email">
                             </div>
@@ -102,12 +104,13 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row" ng-if="vm.authAcct.is_staff">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Location</label>
-                                <input type="text" class="form-control border-input" placeholder="Location" ng-model="vm.user.location">
+                                <select class="form-control border-input" name="play_level" ng-options="location as location.name for location in vm.locations" ng-model="vm.user.location">
+                                    <option value="">{{vm.user.location.name}}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -123,6 +126,16 @@
 									<option value="7">Brown</option>
 									<option value="8">Black</option>
 								</select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="vm.authAcct.is_staff">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="">
+                                    <label>Credits</label>
+                                    <input type="text" class="form-control border-input" placeholder="Student Credits" ng-model="vm.user.user_credit">
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -143,6 +156,82 @@
                 </form>
             </div>
         </div>
+
+        <div class="card animated fadeIn" ng-if="!vm.authAcct.is_staff">
+            <div class="header row">
+                <div class="col-md-12">
+                    <h4 class="title center-block"><a class="" ui-sref="app.schedule()">Upcoming Class</a></h4>
+                </div>
+            </div>
+
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Class</th>
+                        <th>Class Date</th>
+                        <th>Class Start Time</th>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-success" ng-if="vm.user.next_course.course_name">
+                            <td class="width-40">
+                                {{vm.user.next_course.course_name | limitTo: 35}}<span ng-if="vm.user.next_course.course_title  > 35">...</span>
+                            </td>
+                            <td class="width-30">
+                                {{vm.user.next_course.course_date | date: "longDate"}}
+                            </td>
+                            <td class="width-30">
+                                {{vm.user.next_course.course_date | date: "shortTime"}}
+                            </td>
+                        </tr>
+                        <tr ng-if="!vm.user.next_course.course_name">
+                            <td colspan="3" class="text-warning text-center">No Scheduled Classes. Add one!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+
+        <div class="card animated fadeIn" ng-if="vm.authAcct.is_staff">
+            <div class="header row">
+                <div class="col-md-8">
+                    <h4 class="title center-block">Student Notes</h4>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-info" user="vm.user" user-note><i class="ti-plus"/> Add Note</button>
+                </div>
+            </div>
+
+            <div class="content table-responsive table-full-width">
+
+                <table class="table table-hover">
+                    <thead>
+                        <th>Date</th>
+                        <th>Notes</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <tr class="" ng-repeat="note in vm.user.student_note | orderBy: '-note_created'">
+                            <td class="width-20">
+                                {{note.note_created | date:'MMM d, y'}}
+                            </td>
+                            <td class="width-50">
+                                {{note.note | limitTo: 55}}<span class="text-warning"ng-if="note.note.length  > 55">... (click edit to view more)</span>
+                            </td>
+                            <td class="width-30">
+                                <button type="button" class="btn btn-warning btn-link" note="note" user="vm.user" user-note><i class="ti-pencil"/></button>
+                                <button type="button" class="btn btn-danger btn-link" ng-click="vm.deleteNote(note);"><i class="ti-trash"/></button>
+                            </td>
+                        </tr>
+                        <tr ng-if="vm.user.student_note.length < 1">
+                            <td colspan="3" class="text-warning text-center">No Notes. Add one!</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>            
+        </div>
+
     </div>
 
 

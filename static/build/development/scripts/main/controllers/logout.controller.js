@@ -5,9 +5,9 @@
         .module('main.controllers')
         .controller('LogoutController', LogoutController);
 
-    LogoutController.$inject = ['Main'];
+    LogoutController.$inject = ['$state', 'Main'];
 
-    function LogoutController(Main){
+    function LogoutController($state, Main){
         var vm = this;
 
         activate();
@@ -15,6 +15,8 @@
         function activate(){
             if(Main.isAuthAcct()){
                 Main.logout();
+            } else {
+                $state.go('login');
             }
 
         }

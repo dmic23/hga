@@ -5,9 +5,9 @@
         .module('forum.directives')
         .directive('forumDiscussion', forumDiscussion);
 
-    forumDiscussion.$inject = ['$sce', 'Users', 'Forum', '$uibModal', 'Upload'];
+    forumDiscussion.$inject = ['$sce', '$cookies', 'Users', 'Forum', '$uibModal', 'Upload'];
 
-    function forumDiscussion($sce, Users, Forum, $uibModal, Upload) {
+    function forumDiscussion($sce, $cookies, Users, Forum, $uibModal, Upload) {
 
         var directive = {
             restrict: 'EA',
@@ -22,6 +22,8 @@
             link: function(scope, elem, attrs){
 
                 scope.newMessage = {};
+
+                scope.authAcct = $cookies.getObject('authAcct');
 
                 scope.open = function(objective){
 
@@ -96,6 +98,7 @@
                         console.log('Error status: ' + resp.status);
                     }, function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        scope.fileProgress = progressPercentage;
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.data.message_file.name);
                     });
                 }
