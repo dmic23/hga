@@ -25,12 +25,15 @@
                             var vm = this;
 
                             vm.user = scope.user;
+                            vm.note = {};
+                            vm.note.note_label = [];
 
                             if(scope.note){
                                 vm.note = scope.note;
                             }
-
+                            
                             vm.closeModal = function (){
+                                vm.note = {};
                                 $uibModalInstance.dismiss('cancel');
                             };
 
@@ -60,12 +63,15 @@
                 };
 
                 scope.updateNote = function(note){
-                    var updNote = {
-                        note: note.note,
-                    }
-                    Users.updateStudentNote(note.id, updNote)
+                    // var updNote = {
+                    //     id:note.id,
+                    //     note: note.note,
+                    //     note_label:note.note_label
+                    // }
+                    // console.log(note);
+                    Users.updateStudentNote(note.id, note)
                         .then(function(response){
-                            var index = scope.user.student_note.indexOf(updNote);
+                            var index = scope.user.student_note.indexOf(note);
                             scope.user.student_note[index] = response;
                         })
                         .catch(postNoteError);

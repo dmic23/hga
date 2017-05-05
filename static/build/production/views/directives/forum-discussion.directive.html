@@ -28,7 +28,8 @@
 		<div ng-class="messageClass">
 			<h3 class="text-center text-danger">{{messages.topic}}</h3>
 			<ul>
-				<li ng-repeat="message in messages.topic_message" class="row border border-r-10 margin-10 main-bg-color">
+				<li ng-repeat="message in messages.topic_message | orderBy:
+				'message_created'" class="row border border-r-10 margin-10 main-bg-color">
 					<div class="col-md-3 padding-10">
 						<img ng-src="{{path}}{{message.message_user.user_pic}}" alt="{{message.message_user.first_name}} {{message.message_user.last_name}} profile" class="img-circle wh-30 border-white"/>
 						<small class="padding-10 text-center">{{message.message_user.first_name}} {{message.message_user.last_name}}</small>

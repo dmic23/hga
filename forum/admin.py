@@ -20,13 +20,13 @@ class TopicAdmin(admin.ModelAdmin):
 admin.site.register(Topic, TopicAdmin)
 
 class MessageFileInLine(admin.StackedInline):
-	model = MessageFile
-	extra = 0
+    model = MessageFile
+    extra = 0
 
 class MessageAdmin(admin.ModelAdmin):
 
-	inlines = [
-		MessageFileInLine,
-	]
+    inlines = [
+        MessageFileInLine,
+    ]
 
 admin.site.register(Message, MessageAdmin)

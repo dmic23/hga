@@ -32,7 +32,7 @@ def send_basic_email(user_id, mail_type):
     html_content = render_to_string(template, {'user': user, 'title': email.title, 'body': email.body, 'footer': email.footer})
     text_content = strip_tags(html_content)  
     
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc=cc)
     msg.attach_alternative(html_content, 'text/html')
 
     msg.send()
@@ -93,7 +93,7 @@ def send_practice_reminder():
         html_content = render_to_string(template, {'user': user, 'title': email.title, 'body': email.body, 'footer': email.footer})
         text_content = strip_tags(html_content)  
         
-        msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc=cc)
         msg.attach_alternative(html_content, 'text/html')
 
         msg.send()
@@ -122,7 +122,7 @@ def send_schedule_course_confirm(course_id, user_id):
     html_content = render_to_string(template, {'user': user, 'title': email.title, 'body': email.body, 'footer': email.footer, 'sched_course': sched_course})
     text_content = strip_tags(html_content)
     
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc=cc)
     msg.attach_alternative(html_content, 'text/html')
 
     msg.send()
@@ -155,7 +155,7 @@ def send_schedule_course_cancel(user_id, title, date, time):
     html_content = render_to_string(template, {'user': user, 'title': email.title, 'body': email.body, 'footer': email.footer, 'sched_course': sched_course})
     text_content = strip_tags(html_content)
     
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc=cc)
     msg.attach_alternative(html_content, 'text/html')
 
     msg.send()
@@ -187,7 +187,7 @@ def send_schedule_course_reminder():
                 html_content = render_to_string(template, {'user': user, 'title': email.title, 'body': email.body, 'footer': email.footer, 'sched_course': sched_course})
                 text_content = strip_tags(html_content)
                 
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc)
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to, bcc, cc=cc)
                 msg.attach_alternative(html_content, 'text/html')
 
                 msg.send()

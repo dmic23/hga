@@ -13,7 +13,10 @@
         var Users = {
             getAll: getAll,
             getUser: getUser,
+            getAllSimpleUsers: getAllSimpleUsers,
+            getUserLeaderBoard: getUserLeaderBoard, 
             getLocations: getLocations,
+            getAllLabels: getAllLabels,
             updateUserProfile: updateUserProfile,
             createStudentGoal: createStudentGoal,
             updateStudentGoal: updateStudentGoal,
@@ -65,10 +68,40 @@
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }
+        
+        function getAllSimpleUsers(){
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.get('api/v1/users-simple/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function getUserLeaderBoard(){
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.get('api/v1/users-leaderboard/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
 
         function getLocations(){
             var acct = $cookies.getObject('authAcct');
             return $http.get('api/v1/locations/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function getAllLabels(){
+            var acct = $cookies.getObject('authAcct');
+            // $http.defaults.headers.common['Authorization'] = 'JWT ' + acct.token;
+            return $http.get('api/v1/student-label/', {
                    'Authorization': 'JWT ' + acct.token
                 })
                 .then(generalCallbackSuccess)

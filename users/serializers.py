@@ -9,9 +9,15 @@ from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
 from schedule.models import CourseSchedule
-# from schedule.serializers import CourseScheduleSerializer
-from users.models import User, Location, StudentNote, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList, StudentMaterial
+from users.models import User, Location, StudentNote, StudentGoal, StudentPracticeLog, StudentObjective, StudentWishList, StudentMaterial, StudentMaterialUser, StudentLabel
 from users.tasks import send_basic_email
+
+class StudentLabelSerializer(serializers.ModelSerializer):
+    label_name = serializers.CharField(required=False)
+
+    class Meta:
+        model = StudentLabel
+        fields = ('id', 'label_name',)
 
 class StudentGoalSerializer(serializers.ModelSerializer):
     goal = serializers.CharField(required=False)
@@ -22,6 +28,13 @@ class StudentGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentGoal
         fields = ('id', 'student', 'goal', 'goal_target_date', 'goal_complete', 'goal_complete_date', 'goal_notes', 'goal_created',)
+
+class SimpleStudentGoalSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentGoal
+        fields = ('id', 'goal_target_date', 'goal_complete', 'goal_complete_date', 'goal_created',)
+
 
 class StudentPracticeLogSerializer(serializers.ModelSerializer):
     practice_category_display = serializers.SerializerMethodField(source='practice_category', required=False)
@@ -35,6 +48,18 @@ class StudentPracticeLogSerializer(serializers.ModelSerializer):
     def get_practice_category_display(self, obj):
         return obj.get_practice_category_display();
 
+class SimplePracticeLogSerializer(serializers.ModelSerializer):
+    practice_category_display = serializers.SerializerMethodField(source='practice_category', required=False)
+    practice_date = serializers.DateTimeField(format=None, input_formats=None, required=False)
+
+    class Meta:
+        model = StudentPracticeLog
+        fields = ('id', 'practice_category', 'practice_category_display', 'practice_item', 'practice_time', 'practice_speed', 'practice_date', 'practice_item_created',)
+
+    def get_practice_category_display(self, obj):
+        return obj.get_practice_category_display();
+
+
 class StudentObjectiveSerializer(serializers.ModelSerializer):
     objective = serializers.CharField(required=False)
     student = serializers.CharField(required=False)
@@ -44,6 +69,13 @@ class StudentObjectiveSerializer(serializers.ModelSerializer):
         model = StudentObjective
         fields = ('id', 'student', 'objective', 'objective_complete', 'objective_complete_date', 'objective_notes', 'objective_visible', 'objective_priority', 'objective_created',)
 
+class SimpleStudentObjectiveSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentObjective
+        fields = ('id', 'objective_complete', 'objective_complete_date', 'objective_visible', 'objective_priority', 'objective_created',)
+
+
 class StudentWishListSerializer(serializers.ModelSerializer):
     wish_item = serializers.CharField(required=False)
     student = serializers.CharField(required=False)
@@ -51,6 +83,12 @@ class StudentWishListSerializer(serializers.ModelSerializer):
     class Meta:
         model = StudentWishList
         fields = ('id', 'student', 'wish_item', 'wish_item_complete', 'wish_item_complete_date', 'wish_item_notes', 'wish_item_created',)
+
+class SimpleStudentWishListSerilizer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentWishList
+        fields = ('id', 'wish_item_complete', 'wish_item_complete_date', 'wish_item_created',)
 
 
 class SimpleUserSerializer(serializers.ModelSerializer):
@@ -73,30 +111,63 @@ class SimpleUserSerializer(serializers.ModelSerializer):
 
         return {'goal':goal, 'goal_target_date':goal_date}
 
+class StudentMaterialUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StudentMaterialUser
+        fields = ('id', 'student', 'material', 'student_added', 'student_added_by', 'student_updated', 'student_updated_by',)
 
 class StudentMaterialSerializer(serializers.ModelSerializer):
     student = serializers.CharField(required=False, read_only=True)
     student_group = SimpleUserSerializer(many=True, required=False, read_only=True)
+    student_material_item = StudentMaterialUserSerializer(many=True, required=False, read_only=True)
     file = serializers.CharField(required=False, allow_blank=True)
     material_added = serializers.DateTimeField(format=None, input_formats=None, required=False)
     material_added_by = SimpleUserSerializer(required=False)
     material_updated = serializers.DateTimeField(format=None, input_formats=None, required=False)
     material_updated_by = SimpleUserSerializer(required=False)
+    material_label = StudentLabelSerializer(required=False, many=True)
 
     class Meta:
         model = StudentMaterial
-        fields = ('id', 'student', 'student_group', 'file', 'material_name', 'material_notes', 'material_added', 'material_added_by', 'material_updated', 'material_updated_by',)
+        fields = ('id', 'student', 'student_group', 'student_material_item', 'file', 'material_name', 'material_notes', 'material_added', 'material_added_by', 'material_updated', 'material_updated_by', 'material_label',)
 
     def create(self, validated_data):
         group = None
+        labels = None
+
         if 'group' in validated_data:
             group = validated_data.pop('group')
+
+        if 'label' in validated_data:
+            labels = validated_data.pop('label')
+            mat_label = validated_data.pop('material_label')
+
         student_material = StudentMaterial.objects.create(**validated_data)
+        
         if group:
             for g in group:
-                student = User.objects.get(id=g)
-                student_material.student_group.add(student)
-                send_basic_email.delay(student.id, 'UPD')
+                try:
+                    student = User.objects.get(id=g)
+                    student_material.student_group.add(student)
+                    smu = StudentMaterialUser.objects.create(student=student, material=student_material, student_added_by=student_material.material_added_by)
+                    smu.save()
+                    send_basic_email.delay(student.id, 'UPD')
+                except:
+                    pass
+
+        if labels:
+            for key,val in labels.iteritems():
+                try:
+                    label, created = StudentLabel.objects.get_or_create(label_name=val['label_name'])
+                    if created:
+                        label.label_created_by = student_material.material_added_by
+                    label.save()
+                    student_material.material_label.add(label)
+                except ValueError, e:
+                    print "ERRR %s" %e
+                    pass
+
 
         send_basic_email.delay(student_material.student.id, 'UPD')
         student_material.save()
@@ -119,10 +190,30 @@ class StudentMaterialSerializer(serializers.ModelSerializer):
                     if student_id in upd_group:
                         student = User.objects.get(id=student_id)
                         instance.student_group.add(student)
+                        smu = StudentMaterialUser.objects.create(student=student, material=instance, student_updated_by=instance.material_updated_by)
+                        smu.save()
                         send_basic_email.delay(student.id, 'UPD')
                     else:
                         student = User.objects.get(id=student_id)
                         instance.student_group.remove(student)
+                        smu = StudentMaterialUser.objects.get(student=student, material=instance)
+                        smu.delete()
+
+        if 'label' in validated_data:
+            upd_labels = [v['label_name'] for v in validated_data.pop('label')]
+            group_labels = instance.material_label.all().values_list('label_name', flat=True)
+            out_labels = set(upd_labels) ^ set(group_labels)
+            in_labels = set(upd_labels) & set(group_labels)
+            if set(upd_labels) != set(group_labels):
+                for label_name in out_labels:
+                    if label_name in upd_labels:
+                        label, created = StudentLabel.objects.get_or_create(label_name=label_name)
+                        if created:
+                            label.save()
+                        instance.material_label.add(label)
+                    else:
+                        label = StudentLabel.objects.get(label_name=label_name)
+                        instance.material_label.remove(label)
 
         instance.save()
 
@@ -140,10 +231,64 @@ class StudentNoteSerializer(serializers.ModelSerializer):
     student = serializers.CharField(required=False)
     note = serializers.CharField(required=False)
     note_created_by = serializers.CharField(required=False)
+    note_label = StudentLabelSerializer(required=False, many=True)
 
     class Meta:
         model = StudentNote
-        fields = ('id', 'student', 'note', 'note_created', 'note_created_by', 'note_updated',)
+        fields = ('id', 'student', 'note', 'note_created', 'note_created_by', 'note_updated', 'note_label',)
+
+    def create(self, validated_data):
+        if 'note_label' in validated_data:
+            note_labels = validated_data.pop('note_label')
+
+        student_note = StudentNote.objects.create(**validated_data)
+
+        if note_labels:
+
+            for label in note_labels:
+                print "Create label == %s"%label
+                add_label, created = StudentLabel.objects.get_or_create(label_name=label['label_name'])
+                if created:
+                    add_label.save()
+                student_note.note_label.add(add_label)
+
+        return student_note
+
+    def update(self, instance, validated_data):
+        instance.note = validated_data.get('note', instance.note)
+        print "VAL DATA NOTE UPD === %s"%validated_data
+
+        if 'note_label' in validated_data:
+            upd_labels = [v['label_name'] for v in validated_data.pop('note_label')]
+            group_labels = instance.note_label.all().values_list('label_name', flat=True)
+            out_labels = set(upd_labels) ^ set(group_labels)
+            in_labels = set(upd_labels) & set(group_labels)
+            if set(upd_labels) != set(group_labels):
+                for label_name in out_labels:
+                    if label_name in upd_labels:
+                        label, created = StudentLabel.objects.get_or_create(label_name=label_name)
+                        if created:
+                            label.save()
+                        instance.note_label.add(label)
+                    else:
+                        label = StudentLabel.objects.get(label_name=label_name)
+                        instance.note_label.remove(label)
+        instance.save()
+
+        return instance
+
+
+class UserLeaderBoardSerializer(serializers.ModelSerializer):
+
+    play_level_display = serializers.CharField(source='get_play_level_display', required=False)
+    student_goal = SimpleStudentGoalSerializer(many=True, required=False)
+    student_log = SimplePracticeLogSerializer(many=True, required=False)
+    student_objective = SimpleStudentObjectiveSerializer(many=True, required=False)
+    student_wishlist = SimpleStudentWishListSerilizer(many=True, required=False)
+
+    class Meta:
+        model = User
+        fields = ('id', 'is_active', 'user_pic', 'first_name', 'last_name', 'email', 'play_level', 'play_level_display', 'student_goal', 'student_log', 'student_objective', 'student_wishlist',)
 
 
 class UserSerializer(serializers.ModelSerializer):

@@ -6,6 +6,7 @@
             'main.controllers',
             'main.services',
             'main.directives',
+            'main.filters',
         ]);
 
     angular
@@ -16,5 +17,8 @@
         
     angular
         .module('main.directives', []);
+
+    angular
+        .module('main.filters', []);
 
 })();

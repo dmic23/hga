@@ -54,7 +54,7 @@ class CourseScheduleViewSet(viewsets.ModelViewSet):
             user_id = self.request.data.pop('student_id')
             student = User.objects.get(id=user_id)
             recurring = self.request.data.pop('recurring')
-            serializer.save(course=course, student=student, user=self.request.user, recurring=recurring, schedule_created_by=self.request.user, **self.request.data)
+            serializer.save(course=course, student=student, user=self.request.user, recurring=recurring, **self.request.data)
 
 
 class RemoveCourseScheduleViewSet(viewsets.ModelViewSet):

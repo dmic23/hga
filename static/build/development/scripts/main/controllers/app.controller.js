@@ -10,22 +10,21 @@
     function AppController($scope, $sce, $state, Main, Users){
         var vm = this;
 
-        activate();
-
         function activate(){
-            if(Main.isAuthAcct()){
-                vm.authAcct = Main.getAuthAcct();
+            Main.isAuthAcct()
+                .then(function(response){
+                    vm.authAcct = Main.getAuthAcct();
 
-                Users.getUser(vm.authAcct.id).then(function(response){
-                    vm.currentUser = response;
-                }).catch(function(errMsg){
+                    Users.getUser(vm.authAcct.id).then(function(response){
+                        vm.currentUser = response;
+                    }).catch(function(errMsg){
+                        Main.logout();
+                    });
+                })
+                .catch(function(errMsg){
+                    console.log(errMsg);
                     Main.logout();
                 });
-
-            } else {
-                console.log("Could not get account");
-                // $state.go('login');
-            }
             loadSidebar();
         }
 
@@ -212,6 +211,8 @@
             };
 
         }
+
+        activate();
 
     }
 })();

@@ -9,6 +9,9 @@
         <div class="col-md-3">
         	<button class="btn btn-sm btn-info margin-10" ng-click="open({})"><i class="ti-plus"/> Add Practice</button>
         </div>
+        <div class="col-md-3">
+        	<button class="btn btn-sm btn-success margin-10" ng-click="timerVis =! timerVis"><i class="ti-time"/> Timer & Metronome</button>
+        </div>
     </div>
 
     <div class="content table-responsive table-full-width">
@@ -36,7 +39,7 @@
 					</td>
 				</tr>
 				<tr ng-if="practiceLogs.length < 1">
-					<td class="text-warning">No Practice. Add one!</td>
+					<td colspan="6" class="text-warning text-center">No Practice. Add one!</td>
 				</tr>
             </tbody>
         </table>

@@ -10,6 +10,8 @@
     function DashBoardController($scope, $state, $stateParams, Main, Users){
         var vm = this;
 
+        vm.timerVis = false;
+
         activate();
 
         function activate(){

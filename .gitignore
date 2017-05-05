@@ -42,10 +42,6 @@ coverage.xml
 # Django stuff:
 *.log
 **/local_settings.py
-message_u/local_settings.py
-**/email_info.py 
-message_u/email_info.py 
-email_info.py 
 
 venv
 staticfiles/

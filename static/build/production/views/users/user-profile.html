@@ -61,7 +61,23 @@
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label>Profile Picture</label>
-                                <div class="button form-control border-input text-info img-select" ngf-select="" ng-model="vm.user.user_pic" name="file" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100" ngf-resize="{width: 300, height: 300}"><i class="ti-file"/> <span ng-if="vm.user.user_pic.$ngfName">{{vm.user.user_pic.$ngfName}}</span><span ng-if="!vm.user.user_pic.$ngfName"> Click to select</span></div>
+                                <div class="btn btn-fill btn-info form-control border-input img-select" 
+                                    ngf-select 
+                                    ng-model="vm.user.user_pic"
+                                    name="file" 
+                                    ngf-pattern="'image/*'" 
+                                    ngf-accept="'image/*'" 
+                                    ngf-max-size="20MB" 
+                                    ngf-min-height="100" 
+                                    ngf-resize="{width: 300, height: 300}">
+                                    <i ng-hide="vm.fileProgress < 100" class="ti-file"/>
+                                    <span ng-show="vm.fileProgress < 100">{{vm.fileProgress}} %</span>
+                                </div>
+                                    <small class="center-block margin-tb-5">
+                                        <span ng-if="vm.user.user_pic.$ngfName">{{vm.user.user_pic.$ngfName}}</span>
+                                        <span ng-if="!vm.user.user_pic.$ngfName && vm.user.user_pic.name">{{vm.user.user_pic.name}}</span>
+                                        <span ng-if="!vm.user.user_pic.$ngfName && !vm.user.user_pic.name"><a href="{{vm.path}}{{vm.user.user_pic}}" target="_blank">{{vm.user.user_pic}}</a></span>
+                                    </small>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -138,6 +154,14 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="">
+                                    <label>Recurring Credits</label>
+                                    <input type="text" class="form-control border-input" placeholder="Recurring Credits" ng-model="vm.user.recurring_credit">
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-2">
                             <div class="form-group">
                             	<div class="">
@@ -196,6 +220,9 @@
             <div class="header row">
                 <div class="col-md-8">
                     <h4 class="title center-block">Student Notes</h4>
+                    <div class="margin-top-10">
+                        <student-label-display labels="vm.noteLabels" filter-labels=vm.filterLabels></student-label-display>  
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <button type="button" class="btn btn-info" user="vm.user" user-note><i class="ti-plus"/> Add Note</button>
@@ -211,14 +238,17 @@
                         <th></th>
                     </thead>
                     <tbody>
-                        <tr class="" ng-repeat="note in vm.user.student_note | orderBy: '-note_created'">
+                        <tr class="" ng-repeat="note in filtered = (vm.user.student_note | noteLabelFilter: vm.filterLabels) | orderBy: '-note_created'">
                             <td class="width-20">
                                 {{note.note_created | date:'MMM d, y'}}
                             </td>
                             <td class="width-50">
                                 {{note.note | limitTo: 55}}<span class="text-warning"ng-if="note.note.length  > 55">... (click edit to view more)</span>
                             </td>
-                            <td class="width-30">
+                            <td class="width=20">
+                                <span class="text-sm text-info center-block" ng-repeat="label in note.note_label">{{label.label_name}}</span>
+                            </td>
+                            <td class="width-10">
                                 <button type="button" class="btn btn-warning btn-link" note="note" user="vm.user" user-note><i class="ti-pencil"/></button>
                                 <button type="button" class="btn btn-danger btn-link" ng-click="vm.deleteNote(note);"><i class="ti-trash"/></button>
                             </td>

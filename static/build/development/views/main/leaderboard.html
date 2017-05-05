@@ -2,34 +2,50 @@
 <div class="row">
 	<div class="col-md-12 text-center">
 		<h2 class="title margin-tb-10 animated fadeIn">Student Leaderboard</h2>
-		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})" class="">{{vm.user.first_name}} {{vm.user.last_name}}</a></p>
+		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})" class="">{{vm.user.first_name}} {{vm.user.last_name}}</a>{{vm.user.id}}</p>
 	</div>
 </div>
 
 <div class="row animated fadeIn">
 	<div class="col-md-12">
-
-		<div class="card">
+		<student-leaderboard user-id="vm.user.id" play-level-color="playLevelColor" path='path' temp-type="full"></student-leaderboard>
+		<!-- <div class="card">
 
 		    <div class="header row">
 		        <h4 class="title col-md-6">Leaderboard</h4>
 		        <p class="category col-md-7">See how your progress compares with other students!</p>
 		        <div class="col-md-8 padding-top-20">
-		        	<!-- <p class="center-block">Speed Leader: <span class="text-success" ng-cloak>{{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].practice_speed_high}}</span><small> npm</small> - <small class="">{{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].first_name}} {{(vm.leaderBoard | orderBy: '-practice_speed_high')[0].last_name}}<small></p> -->
+					<div>
+						<small class="center-block margin-tb-10">Students</small>
+						<button class="btn btn-sm btn-success" ng-class="{active: vm.showInactive === true}" ng-click="vm.showInactive = true">Active</button>
+						<button class="btn btn-sm btn-danger" ng-click="vm.showInactive = false" ng-class="{active: vm.showInactive === false}">Inactive</button>
+						<button class="btn btn-sm btn-info" ng-class="{active: vm.showInactive === ''}" ng-click="vm.showInactive = ''">All</button>
+					</div>
+		        	<p class="center-block margin-top-10">Total Students: <span class="text-success" ng-cloak>{{filterData.length}}</span><small>
 		        </div>
-		        <div class="col-md-4">
+		        <div class="col-md-4" ng-if="!vm.loading">
 					<form class="center-block">
 						<div class="form-group padding-10">
 							<div class="input-group">
 								<div class="input-group-addon border"><i class="fa fa-search"></i></div>
-								<input type="text" class="form-control border-input" placeholder="Search" ng-model="searchItem">
+								<input type="text" class="form-control border-input" placeholder="Search" ng-model="vm.searchItem">
 							</div>      
 						</div>
 					</form>
+					<div class="form-group center-block margin-top-10">
+						<label>Students per page: </label>
+						<select class="border-input" ng-model="vm.viewby" ng-change="vm.setItemsPerPage(vm.viewby)">
+							<option value="10">10</option>
+							<option value="20">20</option>
+							<option value="30">30</option>
+							<option value="40">40</option>
+							<option value="50">50</option>
+						</select>
+					</div>	
 					<div ng-click="sortType = '-practice_time_total';">
-						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.getRange('week')">current week</button>
-						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.getRange('month')">current month</button>
-						<button type="buttom" class="btn btn-success btn-sm" ng-click="vm.resetLeaderboard()">all</button>
+						<button type="buttom" class="btn btn-success btn-sm" ng-class="{active: vm.rangeBy === 'week'}" ng-click="vm.getRange('week')">Current Week</button>
+						<button type="buttom" class="btn btn-success btn-sm" ng-class="{active: vm.rangeBy === 'month'}" ng-click="vm.getRange('month')">Current Month</button>
+						<button type="buttom" class="btn btn-success btn-sm" ng-class="{active: vm.rangeBy === 'all'}" ng-click="vm.getRange('all')">All</button>
 					</div>		        	
 		        </div>
 		    </div>
@@ -41,38 +57,38 @@
 		            <thead class="text-center">
 		            	<th></th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'first_name'; sortReverse = !sortReverse">Student <span ng-show="sortType == 'first_name' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'first_name' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'first_name'; sortReverse = !sortReverse">Student <span ng-show="sortType == 'first_name' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'first_name' && sortReverse" class="fa fa-caret-down"></span></a>
 		         
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'play_level'; sortReverse = !sortReverse">Play Level <span ng-show="sortType == 'play_level' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'play_level' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'play_level'; sortReverse = !sortReverse">Play Level <span ng-show="sortType == 'play_level' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'play_level' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_speed_high'; sortReverse = !sortReverse">High Speed <span ng-show="sortType == 'practice_speed_high' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'practice_speed_high' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_speed_high'; sortReverse = !sortReverse">High Speed <span ng-show="sortType == 'practice_speed_high' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'practice_speed_high' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_speed_avg'; sortReverse = !sortReverse">Avg Speed <span ng-show="sortType == 'practice_speed_avg' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'practice_speed_avg' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_speed_avg'; sortReverse = !sortReverse">Avg Speed <span ng-show="sortType == 'practice_speed_avg' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'practice_speed_avg' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_time_total'; sortReverse = !sortReverse">Total Practice Time <span ng-show="sortType == 'practice_time_total' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'practice_time_total' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_time_total'; sortReverse = !sortReverse">Total Practice Time <span ng-show="sortType == 'practice_time_total' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'practice_time_total' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_time_avg'; sortReverse = !sortReverse">Avg Daily Practice <span ng-show="sortType == 'practice_time_avg' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'practice_time_avg' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'practice_time_avg'; sortReverse = !sortReverse">Avg Daily Practice <span ng-show="sortType == 'practice_time_avg' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'practice_time_avg' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'goals_complete'; sortReverse = !sortReverse">Goals Complete <span ng-show="sortType == 'goals_complete' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'goals_complete' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'goals_complete'; sortReverse = !sortReverse">Goals Complete <span ng-show="sortType == 'goals_complete' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'goals_complete' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'objectives_complete'; sortReverse = !sortReverse">Objectives Complete <span ng-show="sortType == 'objectives_complete' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'objectives_complete' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'objectives_complete'; sortReverse = !sortReverse">Objectives Complete <span ng-show="sortType == 'objectives_complete' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'objectives_complete' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		                <th class="text-center">
-		                	<a href="javascript:void(0)" ng-click="sortType = 'wishes_complete'; sortReverse = !sortReverse">Wishes Complete <span ng-show="sortType == 'wishes_complete' && !sortReverse" class="fa fa-caret-down"></span><span ng-show="sortType == 'wishes_complete' && sortReverse" class="fa fa-caret-up"></span></a>
+		                	<a href="javascript:void(0)" ng-click="sortType = 'wishes_complete'; sortReverse = !sortReverse">Wishes Complete <span ng-show="sortType == 'wishes_complete' && !sortReverse" class="fa fa-caret-up"></span><span ng-show="sortType == 'wishes_complete' && sortReverse" class="fa fa-caret-down"></span></a>
 		          		</th>
 		            </thead>
 
 		            <tbody>
-						<tr class="text-center" ng-repeat="leader in vm.leaderBoard | orderBy: '-practice_time_total' | orderBy: sortType:sortReverse | filter:searchItem" ng-hide="!leader.is_active && !vm.authAcct.is_staff" ng-class="{'bg-danger': !leader.is_active}">
-							<td class="width-5">{{$index + 1}}</td>
+						<tr class="text-center" ng-repeat="leader in filterData = (vm.leaderBoard | filter : vm.searchItem | filter : {is_active: vm.showInactive}) | orderBy: '-practice_time_total' | orderBy: sortType:sortReverse | limitTo:vm.itemsPerPage:vm.itemsPerPage*(vm.currentPage-1)" ng-hide="!leader.is_active && !vm.authAcct.is_staff" ng-class="{'bg-danger': !leader.is_active}" ng-if="!vm.loading">
+							<td class="width-5">{{((vm.currentPage-1) *vm.itemsPerPage)+$index+1}}</td>
 							<td class="width-10">
 								<a ng-if="vm.authAcct.is_staff" ui-sref="app.dashboard({userId:leader.id})">{{leader.first_name}} {{leader.last_name}}</a>
 								<span ng-if="!vm.authAcct.is_staff">{{leader.first_name}} {{leader.last_name}}</span>
@@ -89,16 +105,22 @@
 							<td class="width-10">{{leader.objectives_complete}}</td>
 							<td class="width-10">{{leader.wishes_complete}}</td>
 						</tr>
-						<tr ng-if="practiceLogs.length < 1">
-							<td class="text-warning">No Leaders!</td>
+						<tr ng-if="!vm.loading && practiceLogs.length < 1">
+							<td colspan="9" class="text-warning text-center">No Leaders!</td>
+						</tr>
+						<tr ng-if="vm.loading">
+							<td class="text-center" colspan="9"><span class="text-lg"><i class="fa fa-refresh fa-spin text-danger"/> Loading Leaderboard...</span></td>
 						</tr>
 		            </tbody>
 
 		        </table>
-				
 		    </div>
-
-		</div>
+	        <div class="row" ng-if="!vm.loading">
+	        	<div class="col-md-12 text-center">
+					<ul uib-pagination total-items="filterData.length" ng-model="vm.currentPage" items-per-page="vm.itemsPerPage" max-size="vm.maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false"></ul>
+	        	</div>
+	        </div>
+		</div> -->
 
 	</div>
 </div>

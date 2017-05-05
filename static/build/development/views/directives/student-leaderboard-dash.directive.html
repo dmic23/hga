@@ -1,0 +1,32 @@
+<div class="card animated fadeIn">
+
+	<div class="header row">
+		<div class="col-md-12">
+			<h4 class="title center-block"><a ui-sref="app.leaderboard({userId:userId})">Leaderboard Rank</a></h4>
+		</div>
+	</div>
+
+	<div class="content table-responsive table-full-width">
+		<table class="table table-hover">
+			<thead>
+				<th>Rank</th>
+				<th>Student</th>
+				<th>Total Practice Time</th>
+			</thead>
+			<tbody ng-if="dashLeader">
+				<tr ng-repeat="student in dashLeader track by $index" ng-class="{'bg-success': student.id === userId}">
+					<td class="width-5 text-center">{{student.rank}}</td>
+					<td class="width-55">{{student.first_name}} {{student.last_name}}</td>
+					<td class="width-40 text-center">{{student.practice_time_total}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<p class="text-md padding-left-25"><a ui-sref="app.leaderboard({userId:userId})">See full leaderboard</a></p>	
+		</div>	
+	</div>
+
+</div>

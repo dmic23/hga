@@ -1,13 +1,13 @@
-(function () {
+(function(){
     'use strict';
 
     angular
         .module('main.directives')
         .directive('studentMaterials', studentMaterials);
 
-    studentMaterials.$inject = ['$sce', '$cookies', 'Users', '$uibModal', 'Upload'];
+    studentMaterials.$inject = ['$sce', '$cookies', 'Users', '$uibModal', 'Upload', '$timeout'];
 
-    function studentMaterials($sce, $cookies, Users, $uibModal, Upload) {
+    function studentMaterials($sce, $cookies, Users, $uibModal, Upload, $timeout) {
 
         var directive = {
             restrict: 'EA',
@@ -25,11 +25,31 @@
 
                 scope.authAcct = $cookies.getObject('authAcct');
 
+                scope.materialLabelsAll = [];
+                scope.filterLabels = [];
+
+                function sortDateAndLabels(materials){
+                    angular.forEach(materials, function(v,k){
+                        var matDate = _.findWhere(v.student_material_item, {student: scope.userId});
+                        if(matDate && !scope.authAcct.is_admin){
+                            v.material_added = matDate.student_added;
+                        };
+
+                        if(v.material_label.length){
+                            angular.forEach(v.material_label, function(val,key){
+                                if(scope.materialLabelsAll.indexOf(val)==-1){
+                                    scope.materialLabelsAll.push(val);
+                                };
+                            });
+                        };
+                    });
+                };
+
                 scope.open = function(material){
 
                     var modalInstance = $uibModal.open({
                         templateUrl: $sce.trustAsResourceUrl(static_path('views/modals/student-materials.modal.html')),
-                        controller: function($scope, $uibModalInstance, $timeout){
+                        controller: function($scope, $uibModalInstance){
                             var vm = this;
                             vm.path = scope.path;
                             vm.authAcct = scope.authAcct;
@@ -42,16 +62,16 @@
                                 if(material.student_group.length){
                                     vm.hasGroup = true;
                                     scope.hasGroup = vm.hasGroup;
-                                }   
+                                };   
                             } else {
                                 vm.modalTitle = "Add Material";
-                                vm.newMaterial = {};                                 
-                            }
+                                vm.newMaterial = {};
+                                vm.newMaterial['material_label'] = [];                                 
+                            };
 
                             if(scope.authAcct.is_staff){
-                                Users.getAll()
+                                Users.getAllSimpleUsers()
                                     .then(function(response){
-                                        console.log(response);
                                         vm.allUsers = response;
                                     });
                             }
@@ -63,7 +83,11 @@
                             vm.submitMaterial = function(newMaterial){
                                 if(newMaterial.student_group){
                                     var group = true;
-                                    newMaterial['group_student'] = _.clone(newMaterial.student_group);
+                                    if(newMaterial.student_group.length > 1 && newMaterial.student_group[0].email){
+                                        newMaterial['group_student'] = _.pluck(_.clone(newMaterial.student_group), 'id');
+                                    } else {
+                                        newMaterial['group_student'] = _.clone(newMaterial.student_group);
+                                    }        
                                     newMaterial = _.omit(newMaterial, 'student_group');
                                 }
 
@@ -83,7 +107,7 @@
                         controllerAs: 'vm',
                         size: 'lg',
                     });
-                }
+                };
 
                 scope.updateMaterial = function(updMaterial){
                     var omittedMat = _.omit(updMaterial, 'material_added_by', 'material_updated_by', 'student');
@@ -94,38 +118,36 @@
                         data: newMaterial,
                         method: 'PUT',
                     })
-                    .then(function (resp) {
+                    .then(function(resp){
                         var index = scope.materials.indexOf(updMaterial);
                         scope.materials[index] = resp.data;
-                    }, function (resp) {
+                    }, function(resp){
                         console.log('Error status: ' + resp.status);
-                    }, function (evt) {
+                    }, function(evt){
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         scope.fileProgress = progressPercentage;
-                        // console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                     });
-                }
+                };
 
                 scope.addMaterial = function(material){
                     Upload.upload({
                         url: 'api/v1/student-materials/',
                         data: material,
                     })
-                    .then(function (resp) {
+                    .then(function(resp){
                         scope.materials.push(resp.data);
-                    }, function (resp) {
+                    }, function(resp){
                         console.log('Error status: ' + resp.status);
-                    }, function (evt) {
+                    }, function(evt){
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         scope.fileProgress = progressPercentage;
                         console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
                     });
 
-                } 
+                }; 
 
                 scope.deleteMaterial = function(material){
                     var materialId = material.id;
-                    console.log(material);
                     scope.mat = material; 
                     if(material.student_group.length > 1 && !scope.authAcct.is_staff){
                         var delMaterial = _.clone(material);
@@ -139,13 +161,20 @@
                             .catch(function(errorMsg){
                                 console.log(errorMsg);
                             });
-                    }
-                }
+                    };
+                };
 
                 function deleteStudentMaterialSuccess(response){
                     var index = scope.materials.indexOf(scope.mat);
                     scope.materials.splice(index, 1); 
-                }
+                };
+
+                scope.$watch('materials', function(newData, oldData) {
+                    if(newData){
+                        sortDateAndLabels(scope.materials);
+                    };
+                }, true);
+
             },
             templateUrl: function(elem,attrs) {
                 return $sce.trustAsResourceUrl(static_path('views/directives/student-materials-'+attrs.tempType+'.directive.html'));

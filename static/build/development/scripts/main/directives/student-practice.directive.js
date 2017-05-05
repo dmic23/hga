@@ -15,6 +15,7 @@
                 tempType: '=',
                 userId: '=',
                 practiceLogs: '=',
+                timerVis: '=',
             },
             link: function(scope, elem, attrs){
                 
@@ -108,7 +109,7 @@
                         var times = [];
                         var speeds = [];
                         scope.maxSpeed = 0;
-                        if(scope.practiceLogs.length){
+                        if(scope.practiceLogs&&scope.practiceLogs.length){
                             angular.forEach(scope.practiceLogs, function(v,k){
                                 if(v.practice_time){
                                     var time = parseInt(v.practice_time);

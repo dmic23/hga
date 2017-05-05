@@ -26,6 +26,10 @@ ul {
 	margin: 0 5px;
 }
 
+.margin-r-5 {
+	margin-right: 5px;
+}
+
 .margin-10 {
 	margin: 10px;
 }
@@ -98,8 +102,16 @@ ul {
 	width: 50%;
 }
 
+.width-55 {
+	width: 55%;
+}
+
 .width-60 {
 	width: 60%;
+}
+
+.width-80 {
+	width: 80%;
 }
 
 .width-100 {
@@ -160,13 +172,25 @@ ul {
 }
 
 .main-bg-color {
-	background-color: #f4f3ef;
+	background-color: #e7e8e8;
 	background-image: linear-gradient(to bottom, transparent 0%, rgba(112, 112, 112, 0) 60%, rgba(186, 186, 186, 0.15) 100%);
 	min-height: 100%;
 }
 
 .text-white {
 	color: #FFF;
+}
+
+.text-sm {
+	font-size: .8em;
+}
+
+.text-md {
+	font-size: 1em;
+}
+
+.text-lg {
+	font-size: 1.2em;
 }
 
 .border {
@@ -255,4 +279,74 @@ li .btn-long {
 	-moz-box-shadow: 3px 3px 10px 3px rgba(143,143,143,0.75);
 	box-shadow: 3px 3px 10px 3px rgba(143,143,143,0.75);
 }
+
+/* paper-dashboard overrides */
+.main-panel {
+	background-color: #e7e8e8;
+}
+
+.navbar-default {
+	background-color: #e7e8e8;
+}
+
+a {
+    color: #2d60bf;
+}
+
+a:hover, a:focus {
+    color: #679afb;
+}
+
+.text-info, .text-info:hover {
+	color: #2d60bf;
+}
+
+.sidebar .nav li.active > a:after,
+.off-canvas-sidebar .nav li.active > a:after {
+	border-right: 17px solid #e7e8e8;
+}
+
+.navbar .navbar-nav > li > a.btn-info.btn-fill, .btn-info.btn-fill {
+	background-color: #2d60bf;
+}
+
+.navbar .navbar-nav > li > a.btn-info.btn-fill:hover, 
+.navbar .navbar-nav > li > a.btn-info.btn-fill:focus, 
+.navbar .navbar-nav > li > a.btn-info.btn-fill:active, 
+.navbar .navbar-nav > li > a.btn-info.btn-fill.active, 
+.open > .navbar .navbar-nav > li > a.btn-info.btn-fill.dropdown-toggle, 
+.btn-info.btn-fill:hover, .btn-info.btn-fill:focus, .btn-info.btn-fill:active, 
+.btn-info.btn-fill.active, .open > .btn-info.btn-fill.dropdown-toggle {
+	background-color: #679afb;
+	border-color: #679afb;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:not(.btn):hover,
+.navbar-default .navbar-nav > .active > a:not(.btn):focus,
+.navbar-default .navbar-nav > li > a:not(.btn):hover,
+.navbar-default .navbar-nav > li > a:not(.btn):focus {
+	color: #2d60bf;
+}
+
+.navbar .navbar-nav > li > a.btn-info, .btn-info {
+	border-color: #2d60bf;
+	color: #2d60bf;
+}
+
+.navbar .navbar-nav > li > a.btn-info:hover, 
+.navbar .navbar-nav > li > a.btn-info:focus, 
+.navbar .navbar-nav > li > a.btn-info:active, 
+.navbar .navbar-nav > li > a.btn-info.active, 
+.open > .navbar .navbar-nav > li > a.btn-info.dropdown-toggle, 
+.btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, 
+.open > .btn-info.dropdown-toggle {
+	background-color: #679afb;
+	border-color: #679afb;
+}
+
+.table > thead > tr > th {
+  font-size: 1.25em;
+}
+
 

@@ -1,5 +1,5 @@
 (function () {
-    'use static';
+    'use strict';
 
     angular
         .module('main.controllers')
@@ -10,7 +10,9 @@
     function LeaderBoardController($scope, $state, $stateParams, Main, Users){
         var vm = this;
 
-        activate();
+        // vm.loading = true;
+        
+        // vm.showInactive = '';
 
         function activate(){
             if(Main.isAuthAcct()){
@@ -22,9 +24,6 @@
                     $state.transitionTo('app.leaderboard', {userId: vm.dashId}, { notify: false });
                 }
                 getUser(vm.dashId);
-                Users.getAll()
-                    .then(getAllSuccess)
-                    .catch(getUserError);
             } else {
                 $state.go('login');
             }
@@ -44,195 +43,239 @@
         function getUserError(errMsg){
             console.log(errMsg);
             Main.logout();
-        }
+        }        
 
-        function getAllSuccess(response){
-            vm.allUsers = response;
-            vm.leaderUsers = angular.copy(response);
-            vm.setLeaderboard(vm.leaderUsers);
-        }
+        activate();
+        // function getAllSuccess(response){
+        //     vm.allUsers = response;
+        //     getUser(vm.dashId, vm.allUsers);
+        //     vm.leaderUsers = angular.copy(response);
+        //     vm.setLeaderboard(vm.leaderUsers);
+        //     pageSetup(vm.allUsers);
+        //     vm.loading = false;
+        // }
 
-        vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
+        // function getAllError(errMsg){
+        //     console.log(errMsg);
+        // }
 
-        vm.setLeaderboard = function(users){
-            vm.tempLeaderBoard = [];
-            angular.forEach(users, function(v,k){
-                if(v.student_log.length){
-                    v.student_log = _.filter(v.student_log, function(item){
-                        if(item.practice_date){
-                            return moment(item.practice_date).isAfter(vm.dateRange);
-                        }
-                    })
-                    if(v.student_log.length){
-                        var sums = vm.getSum(v.student_log);
-                    } else {
-                        var sums = {
-                            max_speed: 0,
-                            speed_total: 0,
-                            speed_avg: 0,                
-                            time_total: 0,
-                            time_avg: 0,
-                            last_practice: 'no practice',
-                        };
-                    }
+        // function pageSetup(users){
+        //     vm.viewby = '10';
+        //     vm.totalItems = users.length;
+        //     vm.currentPage = 1;
+        //     vm.itemsPerPage = vm.viewby;
+        //     vm.maxSize = 5;
+        // }
+
+        // vm.setPage = function(pageNo){
+        //     vm.currentPage = pageNo;    
+        // }
+
+        // vm.setItemsPerPage = function(num){
+        //     vm.itemsPerPage = num;
+        //     vm.currentPage = 1;
+        // }
+
+        // vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
+
+        // // function setPagingData(page) {
+        // //     var pagedData = allCandidates.slice(
+        // //         (page - 1) * $scope.itemsPerPage,
+        // //         page * $scope.itemsPerPage
+        // //     );
+        // //     $scope.aCandidates = pagedData;
+        // // }
+
+        // vm.setLeaderboard = function(users){
+        //     vm.tempLeaderBoard = [];
+        //     angular.forEach(users, function(v,k){
+        //         if(v.student_log.length){
+        //             v.student_log = _.filter(v.student_log, function(item){
+        //                 if(item.practice_date){
+        //                     return moment(item.practice_date).isAfter(vm.dateRange);
+        //                 }
+        //             })
+        //             if(v.student_log.length){
+        //                 var sums = vm.getSum(v.student_log);
+        //             } else {
+        //                 var sums = {
+        //                     max_speed: 0,
+        //                     speed_total: 0,
+        //                     speed_avg: 0,                
+        //                     time_total: 0,
+        //                     time_avg: 0,
+        //                     last_practice: 'no practice',
+        //                 };
+        //             }
                     
-                } else {
-                    var sums = {
-                        max_speed: 0,
-                        speed_total: 0,
-                        speed_avg: 0,                
-                        time_total: 0,
-                        time_avg: 0,
-                        last_practice: 'no practice',
-                    };
-                }
+        //         } else {
+        //             var sums = {
+        //                 max_speed: 0,
+        //                 speed_total: 0,
+        //                 speed_avg: 0,                
+        //                 time_total: 0,
+        //                 time_avg: 0,
+        //                 last_practice: 'no practice',
+        //             };
+        //         }
 
-                if(v.student_goal.length){
-                    v.student_goal = _.filter(v.student_goal, function(item){
-                        return moment(item.goal_complete_date).isAfter(vm.dateRange);
-                    })
-                    if(v.student_goal.length){
-                        var sg = _.where(v.student_goal, {goal_complete: true}).length;
-                    } else {
-                        var sg = 0;
-                    }
-                } else {
-                    var sg = 0;
-                }
+        //         if(v.student_goal.length){
+        //             v.student_goal = _.filter(v.student_goal, function(item){
+        //                 return moment(item.goal_complete_date).isAfter(vm.dateRange);
+        //             })
+        //             if(v.student_goal.length){
+        //                 var sg = _.where(v.student_goal, {goal_complete: true}).length;
+        //             } else {
+        //                 var sg = 0;
+        //             }
+        //         } else {
+        //             var sg = 0;
+        //         }
 
-                if(v.student_objective.length){
-                    v.student_objective = _.filter(v.student_objective, function(item){
-                        return moment(item.objective_complete_date).isAfter(vm.dateRange);
-                    })
-                    if(v.student_objective.length){
-                        var so = _.where(v.student_objective, {objective_complete: true}).length;
-                    } else {
-                       var so = 0; 
-                    }
-                } else {
-                    var so = 0;
-                }
+        //         if(v.student_objective.length){
+        //             v.student_objective = _.filter(v.student_objective, function(item){
+        //                 return moment(item.objective_complete_date).isAfter(vm.dateRange);
+        //             })
+        //             if(v.student_objective.length){
+        //                 var so = _.where(v.student_objective, {objective_complete: true}).length;
+        //             } else {
+        //                var so = 0; 
+        //             }
+        //         } else {
+        //             var so = 0;
+        //         }
 
-                if(v.student_wishlist.length){
-                    v.student_wishlist = _.filter(v.student_wishlist, function(item){
-                        return moment(item.wish_item_complete_date).isAfter(vm.dateRange);
-                    })
-                    if(v.student_wishlist.length){
-                        var swl = _.where(v.student_wishlist, {wish_item_complete: true}).length;
-                    } else {
-                        var swl = 0;
-                    }
-                } else {
-                    var swl = 0;
-                }
+        //         if(v.student_wishlist.length){
+        //             v.student_wishlist = _.filter(v.student_wishlist, function(item){
+        //                 return moment(item.wish_item_complete_date).isAfter(vm.dateRange);
+        //             })
+        //             if(v.student_wishlist.length){
+        //                 var swl = _.where(v.student_wishlist, {wish_item_complete: true}).length;
+        //             } else {
+        //                 var swl = 0;
+        //             }
+        //         } else {
+        //             var swl = 0;
+        //         }
 
-                var tempUser = {
-                    id: v.id,
-                    is_active: v.is_active,
-                    first_name: v.first_name,
-                    last_name: v.last_name,
-                    play_level: v.play_level,
-                    practice_speed_high: sums.max_speed,
-                    practice_speed_avg: sums.speed_avg,
-                    practice_speed_total: sums.speed_total,
-                    practice_time_avg: sums.time_avg,
-                    practice_time_total: sums.time_total,
-                    practice_count: v.student_log.length,
-                    last_practice_date: sums.last_practice,
-                    goals_complete: sg,
-                    objectives_complete: so,
-                    wishes_complete: swl,
-                };
-                vm.tempLeaderBoard.push(tempUser);
-            });
-            vm.leaderBoard = vm.tempLeaderBoard;
-        }
+        //         var tempUser = {
+        //             id: v.id,
+        //             is_active: v.is_active,
+        //             first_name: v.first_name,
+        //             last_name: v.last_name,
+        //             play_level: v.play_level,
+        //             practice_speed_high: sums.max_speed,
+        //             practice_speed_avg: sums.speed_avg,
+        //             practice_speed_total: sums.speed_total,
+        //             practice_time_avg: sums.time_avg,
+        //             practice_time_total: sums.time_total,
+        //             practice_count: v.student_log.length,
+        //             last_practice_date: sums.last_practice,
+        //             goals_complete: sg,
+        //             objectives_complete: so,
+        //             wishes_complete: swl,
+        //         };
+        //         vm.tempLeaderBoard.push(tempUser);
+        //     });
+        //     console.log(vm.leaderBoard);
+        //     vm.leaderBoard = _.sortBy(vm.tempLeaderBoard, 'practice_time_total');
+        //     console.log(vm.leaderBoard);
+        // }
 
-        vm.getSum = function(studentLog){
-            var times = [];
-            var speeds = [];
-            var avgDaily = [];
-            var maxSpeed = 0;
-            var lastPrac = '';
-            angular.forEach(studentLog, function(v,k){
-                if(v.practice_time){
-                    var tempAvg = {};
-                    var time = parseInt(v.practice_time);
-                    times.push(time);
+        // vm.getSum = function(studentLog){
+        //     var times = [];
+        //     var speeds = [];
+        //     var avgDaily = [];
+        //     var maxSpeed = 0;
+        //     var lastPrac = '';
+        //     angular.forEach(studentLog, function(v,k){
+        //         if(v.practice_time){
+        //             var tempAvg = {};
+        //             var time = parseInt(v.practice_time);
+        //             times.push(time);
 
-                    if(avgDaily.length){
-                        var prac = _.findWhere(avgDaily, {date: v.practice_date});
-                        if(prac){
-                            prac.tot = parseInt(prac.tot) + time;
-                        } else {
-                            tempAvg.tot = time;
-                            tempAvg.date = v.practice_date;
-                            avgDaily.push(tempAvg);
-                        }
-                    } else {
-                        tempAvg.tot = time;
-                        tempAvg.date = v.practice_date;
-                        avgDaily.push(tempAvg);
-                    }
-                } 
+        //             if(avgDaily.length){
+        //                 var prac = _.findWhere(avgDaily, {date: v.practice_date});
+        //                 if(prac){
+        //                     prac.tot = parseInt(prac.tot) + time;
+        //                 } else {
+        //                     tempAvg.tot = time;
+        //                     tempAvg.date = v.practice_date;
+        //                     avgDaily.push(tempAvg);
+        //                 }
+        //             } else {
+        //                 tempAvg.tot = time;
+        //                 tempAvg.date = v.practice_date;
+        //                 avgDaily.push(tempAvg);
+        //             }
+        //         } 
 
-                if(v.practice_speed){
-                    var speed = parseInt(v.practice_speed);
-                    if(speed > maxSpeed){
-                        maxSpeed = speed;
-                    }
-                    speeds.push(speed);
-                }
+        //         if(v.practice_speed){
+        //             var speed = parseInt(v.practice_speed);
+        //             if(speed > maxSpeed){
+        //                 maxSpeed = speed;
+        //             }
+        //             speeds.push(speed);
+        //         }
 
-                if(v.practice_date){
-                    if(v.practice_date > lastPrac){
-                        lastPrac = v.practice_date;
-                    }
-                }
-            });
-            if(times.length){
-                var sumTimes = times.reduce(function(a, b) { return a + b; });
-            } else {
-                var sumTimes = 0;
-            }
+        //         if(v.practice_date){
+        //             if(v.practice_date > lastPrac){
+        //                 lastPrac = v.practice_date;
+        //             }
+        //         }
+        //     });
+        //     if(times.length){
+        //         var sumTimes = times.reduce(function(a, b) { return a + b; });
+        //     } else {
+        //         var sumTimes = 0;
+        //     }
 
-            if(speeds.length){
-                var sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
-            } else {
-                var sumSpeeds = 0;
-            }
+        //     if(speeds.length){
+        //         var sumSpeeds = speeds.reduce(function(a, b) { return a + b; });
+        //     } else {
+        //         var sumSpeeds = 0;
+        //     }
             
-            if(avgDaily.length){
-                var sumDaily = 0;
-                _.each(avgDaily, function(v,k){ sumDaily += v.tot; })
-            } else {
-                var sumDaily = 0;
-            }
+        //     if(avgDaily.length){
+        //         var sumDaily = 0;
+        //         _.each(avgDaily, function(v,k){ sumDaily += v.tot; })
+        //     } else {
+        //         var sumDaily = 0;
+        //     }
 
-            return {
-                max_speed: maxSpeed,
-                speed_total: sumSpeeds,
-                speed_avg: sumSpeeds / speeds.length,                
-                time_total: sumTimes,
-                time_avg: sumDaily / avgDaily.length,
-                last_practice: lastPrac,
-            };       
-        }
+        //     return {
+        //         max_speed: maxSpeed,
+        //         speed_total: sumSpeeds,
+        //         speed_avg: sumSpeeds / speeds.length,                
+        //         time_total: sumTimes,
+        //         time_avg: sumDaily / avgDaily.length,
+        //         last_practice: lastPrac,
+        //     };       
+        // }
 
+        // vm.resetLeaderboard = function(){
+        //     vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
+        //     var resetUsers = angular.copy(vm.allUsers);
+        //     vm.setLeaderboard(resetUsers);
+        // }
 
-        vm.getRange = function(range){
-            vm.adjDate = moment().subtract(1, range);
-            vm.dateRange = vm.adjDate;
-            var rangeUsers = angular.copy(vm.allUsers);
-            vm.setLeaderboard(rangeUsers);
-        }
+        // vm.getRange = function(range){
+        //     vm.rangeBy = range;
+        //     if(vm.rangeBy === 'all'){
+        //         vm.resetLeaderboard();
+        //     } else {
+        //         vm.adjDate = moment().subtract(1, range);
+        //         vm.dateRange = vm.adjDate;
+        //         var rangeUsers = angular.copy(vm.allUsers);
+        //         vm.setLeaderboard(rangeUsers);
+        //     }
+        // }
 
-        vm.getRange('month');
+        // activate();
 
-        vm.resetLeaderboard = function(){
-            vm.dateRange = moment("12-25-1995", "MM-DD-YYYY");
-            var resetUsers = angular.copy(vm.allUsers);
-            vm.setLeaderboard(resetUsers);
-        }
+        // vm.getRange('all');
+
+        // vm.displayItems = vm.leaderBoard.slice(0, vm.itemsPerPage);
+
     }
 })();

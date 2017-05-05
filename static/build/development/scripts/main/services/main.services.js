@@ -115,6 +115,7 @@
         }
 
         function logout() {
+            $cookies.remove('authAcct');
             return $http.post('api/v1/auth/logout/')
                 .then(logoutSuccess)
                 .catch(generalCallbackError);

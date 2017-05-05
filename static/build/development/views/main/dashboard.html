@@ -1,7 +1,11 @@
 
 
 <div class="row">
-	<div class="col-md-4 col-md-offset-4 text-center">
+	<div class="col-md-4">
+		<student-leaderboard user-id="vm.user.id" play-level-color="playLevelColor" path='path' temp-type="dash"></student-leaderboard>
+	</div>
+
+	<div class="col-md-4 text-center">
 		<h2 class="title margin-tb-10 animated fadeIn">Student Dashboard</h2>
 		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})">{{vm.user.first_name}} {{vm.user.last_name}}</a></p>
 	</div>
@@ -59,8 +63,14 @@
 </div>
 
 <div class="row">
+	<div class="col-md-12" ng-show="vm.timerVis">
+		<stop-watch path="path"></stop-watch>
+	</div>
+</div>
+
+<div class="row">
 	<div class="col-md-12">
-		<student-practice-log user-id="vm.user.id" practice-logs="vm.user.student_log" temp-type="dash"></student-practice-log>
+		<student-practice-log user-id="vm.user.id" practice-logs="vm.user.student_log" temp-type="dash" timer-vis="vm.timerVis"></student-practice-log>
 	</div>
 </div>
 

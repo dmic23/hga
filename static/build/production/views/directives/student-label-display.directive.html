@@ -1,0 +1,7 @@
+
+<ui-select class="form-control border-input" multiple on-select="addLabel($item)" on-remove="removeLabel($item)" ng-model="filterLabels" theme="bootstrap" sortable="true" style="width: 300px;" title="Select a label">
+	<ui-select-match placeholder="Filter by label...">{{$item.label_name}}</ui-select-match>
+	<ui-select-choices repeat="label in allLabels | filter:$select.search track by $index">
+	{{label.label_name}}
+	</ui-select-choices>
+</ui-select>
