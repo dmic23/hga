@@ -83,7 +83,7 @@
                             vm.submitMaterial = function(newMaterial){
                                 if(newMaterial.student_group){
                                     var group = true;
-                                    if(newMaterial.student_group.length > 1 && newMaterial.student_group[0].email){
+                                    if(newMaterial.student_group.length >= 1 && newMaterial.student_group[0].email){
                                         newMaterial['group_student'] = _.pluck(_.clone(newMaterial.student_group), 'id');
                                     } else {
                                         newMaterial['group_student'] = _.clone(newMaterial.student_group);

@@ -2,13 +2,13 @@
 <div class="row">
 	<div class="col-md-12 text-center">
 		<h2 class="title margin-tb-10 animated fadeIn">Student Leaderboard</h2>
-		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})" class="">{{vm.user.first_name}} {{vm.user.last_name}}</a>{{vm.user.id}}</p>
+		<p class="category margin-tb-20 animated bounceInDown">for <a ui-sref="app.profile({userId:vm.user.id})" class="">{{vm.user.first_name}} {{vm.user.last_name}}</a></p>
 	</div>
 </div>
 
 <div class="row animated fadeIn">
 	<div class="col-md-12">
-		<student-leaderboard user-id="vm.user.id" play-level-color="playLevelColor" path='path' temp-type="full"></student-leaderboard>
+		<student-leaderboard user-id="vm.user.id" play-level-color="playLevelColor" auth-acct="vm.authAcct" path='path' temp-type="full"></student-leaderboard>
 		<!-- <div class="card">
 
 		    <div class="header row">

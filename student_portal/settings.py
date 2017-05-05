@@ -175,11 +175,11 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
-try:
-   from local_settings import *
-except ImportError, e:
-    print "error message=++ %s" % e.message
-    pass
+# try:
+#    from local_settings import *
+# except ImportError, e:
+#     print "error message=++ %s" % e.message
+#     pass
 
 if not DEBUG:
 

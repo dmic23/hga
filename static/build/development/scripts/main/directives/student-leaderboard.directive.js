@@ -15,7 +15,8 @@
                 tempType: '=',
                 userId: '=',
                 playLevelColor: '=',
-                path: '='
+                path: '=',
+                authAcct: '='
             },
             link: function(scope, elem, attrs){
 
