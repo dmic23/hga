@@ -82,13 +82,11 @@
         }
 
         function setAuthAcct(user, authToken) {
-            // localStorage.setItem('authAcct', JSON.stringify({'id':acct.id, 'is_staff':acct.is_admin, 'notification':''}));
             $cookies.putObject('authAcct', {'id':user.id, 'is_staff':user.is_admin, 'is_admin':user.is_admin, 'notification':'', 'token': authToken.token});
             return true;
         }
 
         function getAuthAcct(){
-            // return JSON.parse(localStorage.getItem('authAcct'));
             return $cookies.getObject('authAcct');
         }
 

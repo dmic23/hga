@@ -2,11 +2,11 @@
 
 	<div class="header row">
 		<div class="col-md-12">
-			<h4 class="title center-block"><a ui-sref="app.leaderboard({userId:userId})">Leaderboard Rank</a></h4>
+			<h4 class="title text-lg"><a ui-sref="app.leaderboard({userId:userId})">All Time Student Practice Ranking</a></h4>
 		</div>
 	</div>
 
-	<div class="content table-responsive table-full-width">
+	<div class="content table-responsive table-full-width leader-dash">
 		<table class="table table-hover">
 			<thead>
 				<th>Rank</th>
@@ -14,7 +14,7 @@
 				<th>Total Practice Time</th>
 			</thead>
 			<tbody ng-if="dashLeader">
-				<tr ng-repeat="student in dashLeader track by $index" ng-class="{'bg-success': student.id === userId}">
+				<tr ng-repeat="student in dashLeader track by $index" ng-class="{'bg-success': student.id === userId, 'text-md-lg': student.id === userId}">
 					<td class="width-5 text-center">{{student.rank}}</td>
 					<td class="width-55">{{student.first_name}} {{student.last_name}}</td>
 					<td class="width-40 text-center">{{student.practice_time_total}}</td>

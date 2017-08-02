@@ -11,7 +11,7 @@
 
 	<div class="col-md-12 form-group" ng-if="vm.authAcct.is_staff">
 		<label class="" for="student_group">Select Students</label>
-		<ui-select class="form-control border-input" multiple ng-model="vm.newMaterial.student_group" theme="bootstrap" sortable="true" close-on-select="false" style="width: 800px;">
+		<ui-select class="form-control border-input" multiple ng-model="vm.newMaterial.student_group" theme="bootstrap" sortable="true" close-on-select="false" style="width: 90%;">
 			<ui-select-match placeholder=" Select students...">{{$item.first_name}} {{$item.last_name}}&lt;{{$item.email}}&gt;</ui-select-match>
 			<ui-select-choices repeat="person.id as person in vm.allUsers | propsFilter:  {first_name: $select.search, last_name: $select.search, email: $select.search}">
 				<div>

@@ -8,6 +8,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
 var gzip = require('gulp-gzip');
+var cachebust = require('gulp-cache-bust');
 
 var jsSources,
 	bowerJs,
@@ -98,28 +99,43 @@ gulp.task('bowerStyles', function() {
 
 gulp.task('gzipJs', ['scripts', 'bowerScripts'], function() {
     return gulp.src(['production/js/main.min.js', 'production/js/bower.min.js'])
+    .pipe(cachebust({
+        type: 'timestamp'
+    }))    
     .pipe(gzip({ append: true }))
     .pipe(gulp.dest(outputDir + 'js'));
 });
 
 gulp.task('gzipCss', ['styles', 'bowerStyles'], function() {
     return gulp.src(['production/css/main.min.css', 'production/css/bower.min.css'])
+    .pipe(cachebust({
+        type: 'timestamp'
+    }))    
     .pipe(gzip({ append: true }))
     .pipe(gulp.dest(outputDir + 'css'));
 });
 
 gulp.task('views', function() {
 	gulp.src('development/views/**/*.*')
+	    .pipe(cachebust({
+	        type: 'timestamp'
+	    }))  
 		.pipe(gulp.dest(outputDir + 'views'));
 });
 
 gulp.task('fonts', function() {
 	gulp.src('development/fonts/**/*.*')
+	    // .pipe(cachebust({
+	    //     type: 'timestamp'
+	    // }))  
 		.pipe(gulp.dest(outputDir + 'fonts'));
 });
 
 gulp.task('images', function() {
 	gulp.src('development/images/**/*.*')
+	    // .pipe(cachebust({
+	    //     type: 'timestamp'
+	    // }))  
 		.pipe(gulp.dest(outputDir + 'images'));
 });
 // Build runs

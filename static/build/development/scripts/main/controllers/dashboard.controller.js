@@ -38,6 +38,7 @@
 
         function getUserSuccess(response){
             vm.user = response;
+            console.log(vm.user);
         }
 
         function getUserError(errMsg){

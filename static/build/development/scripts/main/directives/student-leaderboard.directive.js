@@ -177,7 +177,6 @@
                             scope.leaderBoard[dashIndex-1]['rank'] = dashIndex
                             scope.leaderBoard[dashIndex]['rank'] = dashIndex+1
                             scope.dashLeader = [scope.leaderBoard[dashIndex-2], scope.leaderBoard[dashIndex-1], scope.leaderBoard[dashIndex]];
-
                         } else {
                             scope.leaderBoard[dashIndex-1]['rank'] = dashIndex;
                             scope.leaderBoard[dashIndex]['rank'] = dashIndex+1

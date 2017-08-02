@@ -1,5 +1,5 @@
 
-<div class="row" ng-if="vm.authAcct.is_staff">
+<div class="row">
     <div class="col-md-3">
         <p>Back to <a ui-sref="app.dashboard({userId:vm.user.id})">Dashboard</a></p>
     </div>
@@ -97,7 +97,7 @@
 									<th class="sched-table-width bg-warning" ng-repeat="day in vm.week | orderBy: 'date'"><small class="center-block">{{day.date | date:"EEEE"}}</small><small class="center-block">{{day.date | date:"MMMM d, y"}}</small></th>
 								</thead>
 								<tbody>
-									<tr class="well" uib-collapse="vm.isCollapsed" ng-if="vm.availCourses.length">
+									<tr class="well animated" uib-collapse="vm.isCollapsed" ng-if="vm.availCourses.length" ng-class="{'fadeIn': !vm.isCollapsed, 'fadeOut': vm.isCollapsed}">
 										<td class="sched-table-width">
 											<div class="border center-block padding-5 margin-tb-5 bg-info border-r-5 avail-class" ng-repeat="course in vm.availCourses | orderBy: 'start'" ng-if="course.day === vm.week[0].day && vm.isDay(course.start)" ng-click="vm.open({'date':vm.week[0].date, 'courseStart':course.start, 'courseEnd': course.end}, course.course, vm.user, {'courseType':'new'});">
 												<span class="center-block table-time border-bottom padding-tb-5">{{course.start | date: 'h:mm a' }} - {{course.end | date: 'h:mm a' }}</span>

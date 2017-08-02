@@ -133,6 +133,7 @@
                     Upload.upload({
                         url: 'api/v1/student-materials/',
                         data: material,
+                        method: 'POST'
                     })
                     .then(function(resp){
                         scope.materials.push(resp.data);

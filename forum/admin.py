@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from django.contrib import admin
-from forum.models import Category, Topic, Message, MessageFile
+from forum.models import Category, Topic, ForumMessage, MessageFile
 
 class CategoryAdmin(admin.ModelAdmin):
 
@@ -23,10 +24,10 @@ class MessageFileInLine(admin.StackedInline):
     model = MessageFile
     extra = 0
 
-class MessageAdmin(admin.ModelAdmin):
+class ForumMessageAdmin(admin.ModelAdmin):
 
     inlines = [
         MessageFileInLine,
     ]
 
-admin.site.register(Message, MessageAdmin)
+admin.site.register(ForumMessage, ForumMessageAdmin)

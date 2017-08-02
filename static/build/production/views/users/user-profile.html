@@ -35,6 +35,41 @@
     </div>
     <div class="col-lg-8 col-md-7">
 
+        <div class="card animated fadeIn">
+            <div class="header row">
+                <div class="col-md-12">
+                    <h4 class="title center-block"><a class="" ui-sref="app.schedule()">Upcoming Class</a></h4>
+                </div>
+            </div>
+
+            <div class="content table-responsive table-full-width">
+                <table class="table table-hover">
+                    <thead>
+                        <th>Class</th>
+                        <th>Class Date</th>
+                        <th>Class Start Time</th>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-success" ng-if="vm.user.next_course.course_name">
+                            <td class="width-40">
+                                {{vm.user.next_course.course_name | limitTo: 35}}<span ng-if="vm.user.next_course.course_title  > 35">...</span>
+                            </td>
+                            <td class="width-30">
+                                {{vm.user.next_course.course_date | date: "longDate"}}
+                            </td>
+                            <td class="width-30">
+                                {{vm.user.next_course.course_date | date: "shortTime"}}
+                            </td>
+                        </tr>
+                        <tr ng-if="!vm.user.next_course.course_name">
+                            <td colspan="3" class="text-warning text-center">No Scheduled Classes. Add one!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+
         <div class="card">
             <div class="header">
                 <h4 class="title">Profile</h4>
@@ -76,7 +111,7 @@
                                     <small class="center-block margin-tb-5">
                                         <span ng-if="vm.user.user_pic.$ngfName">{{vm.user.user_pic.$ngfName}}</span>
                                         <span ng-if="!vm.user.user_pic.$ngfName && vm.user.user_pic.name">{{vm.user.user_pic.name}}</span>
-                                        <span ng-if="!vm.user.user_pic.$ngfName && !vm.user.user_pic.name"><a href="{{vm.path}}{{vm.user.user_pic}}" target="_blank">{{vm.user.user_pic}}</a></span>
+                                        <span ng-if="!vm.user.user_pic.$ngfName && !vm.user.user_pic.name"><a href="{{path.media}}{{vm.user.user_pic}}" target="_blank">{{vm.user.user_pic}}</a></span>
                                     </small>
                             </div>
                         </div>
@@ -179,41 +214,6 @@
                     <div class="clearfix"></div>
                 </form>
             </div>
-        </div>
-
-        <div class="card animated fadeIn" ng-if="!vm.authAcct.is_staff">
-            <div class="header row">
-                <div class="col-md-12">
-                    <h4 class="title center-block"><a class="" ui-sref="app.schedule()">Upcoming Class</a></h4>
-                </div>
-            </div>
-
-            <div class="content table-responsive table-full-width">
-                <table class="table table-hover">
-                    <thead>
-                        <th>Class</th>
-                        <th>Class Date</th>
-                        <th>Class Start Time</th>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-success" ng-if="vm.user.next_course.course_name">
-                            <td class="width-40">
-                                {{vm.user.next_course.course_name | limitTo: 35}}<span ng-if="vm.user.next_course.course_title  > 35">...</span>
-                            </td>
-                            <td class="width-30">
-                                {{vm.user.next_course.course_date | date: "longDate"}}
-                            </td>
-                            <td class="width-30">
-                                {{vm.user.next_course.course_date | date: "shortTime"}}
-                            </td>
-                        </tr>
-                        <tr ng-if="!vm.user.next_course.course_name">
-                            <td colspan="3" class="text-warning text-center">No Scheduled Classes. Add one!</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
         </div>
 
         <div class="card animated fadeIn" ng-if="vm.authAcct.is_staff">

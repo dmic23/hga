@@ -36,6 +36,10 @@
             createStudentNote: createStudentNote,
             updateStudentNote: updateStudentNote,
             deleteStudentNote: deleteStudentNote,
+            createStudentFeedback: createStudentFeedback,
+            updateStudentFeedback: updateStudentFeedback,
+            deleteStudentFeedback: deleteStudentFeedback,
+            deleteStudentFeedbackMaterial: deleteStudentFeedbackMaterial,
 
         };
 
@@ -289,6 +293,42 @@
         function deleteStudentNote(noteId){
             var acct = $cookies.getObject('authAcct');
             return $http.delete('api/v1/student-notes/'+noteId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function createStudentFeedback(newFeedback){
+            var acct = $cookies.getObject('authAcct');
+            return $http.post('api/v1/student-feedback/', newFeedback, {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function updateStudentFeedback(feedbackId, feedback){
+            var acct = $cookies.getObject('authAcct');
+            return $http.put('api/v1/student-feedback/'+feedbackId+'/', feedback, {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function deleteStudentFeedback(feedbackId){
+            var acct = $cookies.getObject('authAcct');
+            return $http.delete('api/v1/student-feedback/'+feedbackId+'/', {
+                   'Authorization': 'JWT ' + acct.token
+                })
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function deleteStudentFeedbackMaterial(materialId){
+            var acct = $cookies.getObject('authAcct');
+            return $http.delete('api/v1/student-feedback-material/'+materialId+'/', {
                    'Authorization': 'JWT ' + acct.token
                 })
                 .then(generalCallbackSuccess)

@@ -30,7 +30,10 @@
         }
 
         vm.login = function(username, password){
-
+            if(vm.loginError){
+                vm.loginError = '';
+            };
+            
             Main.login(username, password)
                 .then(loginSuccess)
                 .catch(loginError);

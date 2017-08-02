@@ -23,7 +23,6 @@ class CourseViewSet(viewsets.ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
 
     def list(self, request, id=None):
-        courses = []
         if self.request.user.is_admin:
             queryset = Course.objects.filter(course_active=True).exclude(course_recurring_end_date__lt=timezone.now())
         else:
@@ -43,7 +42,15 @@ class CourseScheduleViewSet(viewsets.ModelViewSet):
         if not self.request.user.is_admin:
             queryset = CourseSchedule.objects.filter(student=self.request.user).exclude(schedule_date__lt=timezone.now())   
         else:
-            queryset = CourseSchedule.objects.all()
+            student_id = self.request.query_params.get('student-id', None)
+            print "Student ID 1 = {}".format(student_id)
+            if student_id:
+                print "Student ID 2 = {}".format(student_id)
+                student = User.objects.get(id=student_id)
+                queryset = CourseSchedule.objects.filter(student=student)
+            else:
+                print "No Student ID = {}".format(student_id)
+                queryset = CourseSchedule.objects.all()
         serializer = CourseScheduleSerializer(queryset, many=True)
         return Response(serializer.data)
 

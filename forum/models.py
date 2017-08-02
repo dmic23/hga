@@ -26,7 +26,7 @@ class Topic(models.Model):
     def __unicode__(self):
         return smart_unicode(self.topic)
 
-class Message(models.Model):
+class ForumMessage(models.Model):
     message_topic = models.ForeignKey(Topic, related_name='topic_message')
     message_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_message')
     message = models.TextField(null=True, blank=True)
@@ -37,7 +37,7 @@ class Message(models.Model):
         return smart_unicode(self.message)
 
 class MessageFile(models.Model):
-    message = models.ForeignKey(Message, related_name='file_message')
+    message = models.ForeignKey(ForumMessage, related_name='file_message')
     message_file = models.FileField(upload_to=get_upload_file_name, null=True, blank=True)
     message_file_created = models.DateTimeField(auto_now_add=True)
     message_file_created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='file_user')

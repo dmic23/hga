@@ -1,5 +1,5 @@
 
-<ui-select class="form-control border-input" multiple tagging="createLabel" tagging-label="(create new label)" on-select="addLabel($item)" on-remove="removeLabel($item)" ng-model="itemLabel" theme="bootstrap" sortable="true" style="width: 300px;" title="Select a label">
+<ui-select class="form-control border-input" multiple tagging="createLabel" tagging-label="(create new label)" on-select="addLabel($item)" on-remove="removeLabel($item)" ng-model="itemLabel" theme="bootstrap" sortable="true" style="width: 100%;" title="Select a label">
 	<ui-select-match placeholder="Add label...">{{$item.label_name}}</ui-select-match>
 	<ui-select-choices repeat="label in allLabels | filter:$select.search">
 	{{label.label_name}}

@@ -1,9 +1,14 @@
+      
 html, body {
 	height: 100%;
 }
 
 ul {
     list-style-type: none;
+}
+
+.display-block {
+	display: block;
 }
 
 .margin-5 {
@@ -44,6 +49,10 @@ ul {
 
 .margin-tb-10 {
 	margin: 10px 0;
+}
+
+.margin-lr-10 {
+	margin: 0 10px;
 }
 
 .margin-tb-20 {
@@ -159,6 +168,14 @@ ul {
 	background-color: rgba(0,0,225,0.8);
 }
 
+.bg-lt-blue {
+	background-color: rgba(189, 218, 245, 0.6);
+}
+
+/*.bg-lt-blue {
+	background-color: rgba(126, 147, 167,0.6);
+}*/
+
 .bg-purple {
 	background-color: rgba(60, 17, 84, 0.8);
 }
@@ -189,11 +206,20 @@ ul {
 	font-size: 1em;
 }
 
+.text-md-lg {
+	font-size: 1.1em;
+}
+
 .text-lg {
 	font-size: 1.2em;
 }
 
 .border {
+	border: 1px solid #CCC5B9;
+}
+
+.border-form {
+	border-radius: 5px;
 	border: 1px solid #CCC5B9;
 }
 
@@ -215,6 +241,10 @@ ul {
 
 .italic {
 	font-style: italic;
+}
+
+.pointer:hover {
+	cursor: pointer;
 }
 
 .uib-datepicker-popup.dropdown-menu {
@@ -345,8 +375,61 @@ a:hover, a:focus {
 	border-color: #679afb;
 }
 
-.table > thead > tr > th {
+/*.table > thead > tr > th {
   font-size: 1.25em;
+}*/
+
+.leader-dash {
+	font-size: .9em;
+	padding: 0px 15px !important;
 }
+
+
+--------_______---------_______-------______-------_____-----
+
+.sidebar-nav li a {
+    color: #737373;
+}
+
+.sidebar-nav li a:hover {
+    color: rgba(126, 147, 167);
+    background: rgba(255,255,255,0.2);
+}
+
+.navbar-toggle {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.sidebar-wrapper {
+	border-right: 1px solid #CCC5B9;
+	-webkit-box-shadow: -2px 0px 2px 0px rgba(143,143,143,0.75));
+	-moz-box-shadow: -2px 0px 2px 0px rgba(143,143,143,0.75));
+	box-shadow: -2px 0px 2px 0px rgba(143,143,143,0.75));
+}
+
+.navbar .navbar-brand {
+	margin: 0;
+	padding: 7px 15px;
+}
+
+.navbar .navbar-nav > li > a {
+	margin: 0;
+}
+
+@media (min-width: 992px) {
+  .navbar {
+    min-height: 60px;
+  }
+}
+
+li.active > a {
+	color: #EB5E28;
+}
+
+.sidebar-nav li a:hover {
+	color: #AFA89D;
+}
+
 
 

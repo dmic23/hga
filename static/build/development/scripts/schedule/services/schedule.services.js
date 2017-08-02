@@ -15,6 +15,7 @@
         var Schedule = {
             getAllCourses: getAllCourses,
             getSchedule: getSchedule,
+            getStudentCourseSchedule:getStudentCourseSchedule,
             addCourse: addCourse,
             removeCourse: removeCourse,
 
@@ -38,6 +39,12 @@
 
         function getSchedule(){
             return $http.get('api/v1/course-schedule/')
+                .then(generalCallbackSuccess)
+                .catch(generalCallbackError);
+        }
+
+        function getStudentCourseSchedule(studentId){
+            return $http.get('api/v1/course-schedule?student-id='+studentId+'')
                 .then(generalCallbackSuccess)
                 .catch(generalCallbackError);
         }

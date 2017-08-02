@@ -6,8 +6,8 @@ from rest_framework import permissions, status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from forum.models import Category, Topic, Message
-from forum.serializers import CategorySerializer, TopicSerializer, MessageSerializer
+from forum.models import Category, Topic, ForumMessage
+from forum.serializers import CategorySerializer, TopicSerializer, ForumMessageSerializer
 from users.models import User
 
 
@@ -34,10 +34,10 @@ class TopicViewSet(viewsets.ModelViewSet):
             serializer.save(topic_category=cat, topic_created_by=user, **self.request.data)
 
 
-class MessageViewSet(viewsets.ModelViewSet):
+class ForumMessageViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
+    queryset = ForumMessage.objects.all()
+    serializer_class = ForumMessageSerializer
     permission_classes = (IsAuthenticated,)
     authentication_classes = (JSONWebTokenAuthentication,)
 

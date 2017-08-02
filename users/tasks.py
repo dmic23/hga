@@ -197,7 +197,7 @@ def send_schedule_course_reminder():
 def update_recurring_credits():
     students = User.objects.filter(is_active=True)
     for student in students:
-        student.user_credit = int(student.recurring_credit)
+        student.user_credit = int(student.user_credit) + int(student.recurring_credit)
         student.save()
 
 

@@ -1,0 +1,99 @@
+
+<div class="modal-header">
+	<h3 class="modal-title">
+		Feedback for {{vm.userNameFull}} {{vm.user.last_name}}
+	</h3>
+</div>
+
+<div class="modal-body">
+	<div class="row" ng-if="vm.authAcct.is_staff && vm.feedBack.id">
+		<div class="col-md-3 col-md-offset-9">
+			<button type="button" class="btn btn-warning btn-link" ng-click="vm.edit = !vm.edit" uib-tooltip="Edit Feedback"><i class="ti-pencil"/></button>
+			<button type="button" class="btn btn-danger btn-link" ng-click="vm.deleteFeedback(vm.feedBack);" uib-tooltip="Delete Feedback"><i class="ti-trash"/></button>
+		</div>
+	</div>
+	<div class="row" ng-if="vm.authAcct.is_staff && (vm.edit || !vm.feedBack.id)">
+		<form novalidate>
+			<div class="form-group col-md-6">
+				<label for="date">Class</label>
+				<ui-select class="border-form" ng-model="vm.feedBack.feedback_course.id" theme="bootstrap" sortable="true" style="width: 100%;">
+					<ui-select-match placeholder=" Select class...">{{$select.selected.course.course_title}} 
+					{{$select.selected.schedule_date +'T'+$select.selected.schedule_start_time | date: "short" }}
+					</ui-select-match>
+					<ui-select-choices repeat="studentCourse.id as studentCourse in vm.studentCourses | orderBy: '-schedule_date' | filter: $select.search ">
+						<div>
+							<div ng-bind-html="studentCourse.course.course_title | highlight: $select.search"></div>
+							<small>
+							{{studentCourse.schedule_date+"T"+studentCourse.schedule_start_time | date: "short"}}
+							</small>
+						</div>
+					</ui-select-choices>
+				</ui-select>
+			</div>
+			<div class="form-group col-md-10">
+				<label class="" for="feedBack">Feedback Notes</label>
+				<textarea name="feedBack" class="form-control border-input" placeholder="Add student feedBack here" rows="3" ng-model="vm.feedBack.feedback_text" msd-elastic></textarea>
+			</div>
+			<div class="form-group col-md-4">
+				<label class="" for="feedBack">Feedback Materials</label>
+				<div class="btn btn-fill btn-info form-control border-input img-select" 
+					ngf-select ng-model="vm.feedBack.material_feedback" 
+					name="file"
+					ngf-pattern="'image/*,audio/*,video/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'" ngf-accept="'image/*,audio/*,video/*,application/pdf'" 
+					ngf-max-size="100MB" 
+					ngf-min-height="100" 
+					ngf-resize="{width: 300, height: 300}"
+					ngf-multiple="true">
+					<i ng-hide="vm.fileProgress < 100" class="ti-file"/>
+					<span ng-show="vm.fileProgress < 100">{{vm.fileProgress}}%</span>
+				</div>
+				<div class="row" ng-if="vm.feedBack.material_feedback.length" ng-repeat="file in vm.feedBack.material_feedback track by $index">
+					<div class="col-md-8">
+						<small class="center-block margin-tb-5">
+							<span ng-if="file.$ngfName">{{file.$ngfName}}</span>
+							<span ng-if="file.name && !file.$ngfName">{{file.name}}</span>
+							<span ng-if="!file.name || !file.$ngfName && file.feedback_material">{{file.feedback_material}}</span>
+						</small>
+					</div>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-danger btn-link" ng-click="vm.removeFeedbackMaterial(file);"><i class="ti-trash"/></button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12 margin-tb-10 text-center">
+				<button class="btn btn-danger margin-10" type="button" ng-click="vm.closeModal()">Cancel</button>
+				<button class="btn btn-primary margin-10" type="submit" ng-click="vm.submitFeedBack(vm.feedBack)">
+					<span ng-if="!vm.feedBack.id">Submit</span>
+					<span ng-if="vm.feedBack.id">Update</span>
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div class="row" ng-if="!vm.edit">
+		<div class="form-group col-md-6">
+			<label>Date</label>
+			<p class="">
+				{{vm.feedBack.feedback_created | date: "longDate"}}
+			</p>
+		</div>
+		<div class="form-group col-md-6" ng-if="vm.feedBack.feedback_course.id" >
+			<label>Class</label>
+			<p class="">
+				{{vm.feedBack.feedback_course.course_title}}
+			</p>
+			<small>{{vm.feedBack.feedback_course.schedule_date+"T"+vm.feedBack.feedback_course.schedule_start_time | date: "short"}}</small>
+		</div>
+		<div class="col-md-10">
+			<label>Feedback</label>
+			<p class="center-block padding-10 message-content" ng-bind-html="vm.feedBack.feedback_text | linky:'_blank'"></p>
+		</div>
+		<div class="col-md-4" ng-if="vm.feedBack.material_feedback.length">
+			<label>Feedback Materials</label>
+			<a href="{{vm.path}}{{material.feedback_material}}" class="center-block text-sm" target="_blank" ng-repeat="material in vm.feedBack.material_feedback">{{material.feedback_material}}</a>
+		</div>
+		<div class="col-md-12">
+			<button class="btn btn-danger margin-10" type="button" ng-click="vm.closeModal()">Close</button>
+		</div>
+	</div>
+</div>
