@@ -22,7 +22,7 @@
                 vm.needCredit = true;
             } else {
                 vm.needCredit = false;
-            };
+            }
 
             vm.newClass = {
                 course_id: course.id,
@@ -35,7 +35,7 @@
 
             if(vm.courseType == 'sched' && _.contains(vm.schedType.scheduledCourse.schedule_recurring_user, vm.user.id)){
                 vm.newClass.recurring = true;
-            };
+            }
         
         };
 		
@@ -47,7 +47,7 @@
             } else {
                 return time;
             }
-        };
+        }
 
 		vm.addClass = function(){
             if(vm.courseType == 'sched'){

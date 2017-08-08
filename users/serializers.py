@@ -303,7 +303,6 @@ class StudentFeedbackSerializer(serializers.ModelSerializer):
         ordering = ['-feedback_created']
 
     def get_feedback_course(self, obj):
-        print "OBJ = {}".format(obj)
         if obj.feedback_course:
             return {'id': obj.feedback_course.id, 
                 'course_title': obj.feedback_course.course.course_title,
@@ -314,10 +313,7 @@ class StudentFeedbackSerializer(serializers.ModelSerializer):
             return {}
 
     def create(self, validated_data):
-        print "VAL DATA = {}".format(validated_data)
         files = validated_data.pop('files')
-        # material_feedback = validated_data.pop('material_feedback')
-        # feedback_material = validated_data.pop('feedbackmaterial')
 
         student_feedback = StudentFeedback.objects.create(**validated_data)
         student_feedback.save()

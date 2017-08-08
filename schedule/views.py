@@ -43,24 +43,26 @@ class CourseScheduleViewSet(viewsets.ModelViewSet):
             queryset = CourseSchedule.objects.filter(student=self.request.user).exclude(schedule_date__lt=timezone.now())   
         else:
             student_id = self.request.query_params.get('student-id', None)
-            print "Student ID 1 = {}".format(student_id)
             if student_id:
-                print "Student ID 2 = {}".format(student_id)
                 student = User.objects.get(id=student_id)
                 queryset = CourseSchedule.objects.filter(student=student)
             else:
-                print "No Student ID = {}".format(student_id)
                 queryset = CourseSchedule.objects.all()
         serializer = CourseScheduleSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            course_id = self.request.data.pop('course_id')
-            course = Course.objects.get(id=course_id)
             user_id = self.request.data.pop('student_id')
             student = User.objects.get(id=user_id)
+            course_id = self.request.data.pop('course_id')
+            course = Course.objects.get(id=course_id)
             recurring = self.request.data.pop('recurring')
+            if int(student.user_credit) < int(course.course_credit):
+                return Response({
+                    'status': 'Bad request',
+                    'message': 'Insufficient Credit'
+                }, status=status.HTTP_400_BAD_REQUEST)    
             serializer.save(course=course, student=student, user=self.request.user, recurring=recurring, **self.request.data)
 
 
@@ -80,20 +82,20 @@ class RemoveCourseScheduleViewSet(viewsets.ModelViewSet):
             recurring = self.request.data.pop('recurring')
             instance = serializer.save()
             if student in instance.student.all():
-                title = str(instance.course.course_title)
-                date = str(instance.schedule_date)
+                title_str = str(instance.course.course_title)
+                date = instance.schedule_date
+                date_str = str(date)
                 time = instance.schedule_start_time.strftime("%I:%M %p") 
-                send_schedule_course_cancel.apply_async((student.id, title, date, time))
+                send_schedule_course_cancel.apply_async((student.id, title_str, date_str, time))
                 instance.student.remove(student)
-                start_date = datetime.datetime.combine(instance.schedule_date, instance.schedule_start_time)
+                start_date = datetime.datetime.combine(date, instance.schedule_start_time)
                 if start_date > datetime.datetime.now() + datetime.timedelta(hours=24):
                     student.user_credit = int(student.user_credit) + int(instance.course.course_credit)
                     student.save()
                 if not recurring:
                     instance.schedule_recurring_user.remove(student)
                 else:
-                    today = datetime.date.today()
-                    next_scheduled_date = today + datetime.timedelta(days=7)
+                    next_scheduled_date = date + datetime.timedelta(days=7)
                     recurring_course, created = CourseSchedule.objects.get_or_create(course=instance.course, schedule_date=next_scheduled_date, schedule_start_time=instance.schedule_start_time, schedule_end_time=instance.schedule_end_time, schedule_created_by=self.request.user)
                     recurring_course.student.add(student)
                     recurring_course.schedule_recurring_user.add(student)

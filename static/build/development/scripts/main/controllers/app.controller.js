@@ -56,9 +56,7 @@
         }
 
         vm.toggleSidebar = function(){
-            console.log(vm.sidebarToggled);
             vm.sidebarToggled = vm.sidebarToggled ? false : true;
-            console.log(vm.sidebarToggled);
         };
 
         // function loadSidebar(){
