@@ -1,0 +1,37 @@
+<div class="row" ng-if="authAcct.is_staff">
+	<div class="col-md-12">
+		<button type="button" class="btn btn-sm btn-info pull-right margin-lr-10" ng-click="open()"><i class="ti-plus"/> Add Feedback</button>
+	</div>
+</div>
+
+<div class="content table-responsive table-full-width">
+    <table class="table table-hover">
+        <thead>
+        	<th class="text-sm">Date</th>
+            <th class="text-sm">Class</th>
+        	<th class="text-sm">Notes</th>
+        </thead>
+        <tbody>
+			<tr class="pointer" ng-repeat="feedback in studentFeedbackAll | orderBy: '-feedback_created' | limitTo:pageSet.itemsPerPage:pageSet.itemsPerPage*(pageSet.currentPage-1)" ng-click="open(feedback)">
+				<td class="width-20">
+					{{feedback.feedback_created | date: "longDate"}}
+				</td>
+				<td class="width-20">
+					{{feedback.feedback_course.course_title}}
+				</td>
+				<td class="width-60">
+					{{feedback.feedback_text | limitTo: 80}}<span ng-if="feedback.feedback_text.length > 80">...</span>
+				</td>
+			</tr>
+			<tr ng-if="studentFeedbackAll < 1">
+				<td colspan="3" class="text-warning text-center">No Feedback. Add one!</td>
+			</tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row" ng-if="studentFeedbackAll.length">
+	<div class="col-md-12 text-center">
+		<ul uib-pagination total-items="studentFeedbackAll.length" ng-model="pageSet.currentPage" items-per-page="pageSet.itemsPerPage" max-size="pageSet.maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false"></ul>
+	</div>
+</div>

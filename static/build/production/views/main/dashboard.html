@@ -14,13 +14,51 @@
 		
 		<div class="card animated fadeIn">
 
-		    <div class="header row">
+<!-- 		    <div class="header row">
 		    	<div class="col-md-12">
 		    		<h4 class="title center-block"><a class="" ui-sref="app.schedule()">Upcoming Class</a></h4>
 		    	</div>
-		    </div>
+		    </div> -->
 
-		    <div class="content table-responsive table-full-width">
+			<uib-tabset active="activeJustified" justified="true">
+				<uib-tab index="0" heading="Upcoming Class">
+				    <div class="content table-responsive table-full-width">
+				        <table class="table table-hover">
+				            <thead>
+				                <th>Class</th>
+				            	<th>Class Date</th>
+				            	<th>Class Start Time</th>
+				            </thead>
+				            <tbody class="pointer" ui-sref="app.schedule()">
+								<tr class="bg-success" ng-if="vm.user.next_course.course_name">
+									<td class="width-40">
+										{{vm.user.next_course.course_name | limitTo: 35}}<span ng-if="vm.user.next_course.course_title  > 35">...</span>
+									</td>
+									<td class="width-30">
+										{{vm.user.next_course.course_date | date: "longDate"}}
+									</td>
+									<td class="width-30">
+										{{vm.user.next_course.course_date | date: "shortTime"}}
+									</td>
+								</tr>
+								<tr ng-if="!vm.user.next_course.course_name">
+									<td colspan="3" class="text-warning text-center">No Scheduled Classes. Add one!</td>
+								</tr>
+				            </tbody>
+				        </table>
+				    </div>
+				    <div class="row">
+						<div class="col-md-12">
+							<p class="text-md padding-left-25"><a ui-sref="app.schedule()">View full schedule</a></p>	
+						</div>	
+					</div>
+				</uib-tab>
+				<uib-tab index="1" heading="Class Feedback">
+					<student-feedback user-id="vm.user.id" user-name-full="vm.user.first_name+' '+vm.user.last_name" student-feedback-all="vm.user.student_feedback" auth-acct="vm.authAcct" temp-type="dash" path="path"></student-feedback>
+				</uib-tab>
+			</uib-tabset>
+
+<!-- 		    <div class="content table-responsive table-full-width">
 
 		        <table class="table table-hover">
 		            <thead>
@@ -46,7 +84,7 @@
 		            </tbody>
 		        </table>
 
-		    </div>
+		    </div> -->
 		    
 		</div>
 

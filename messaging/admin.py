@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from messaging.models import Message, MessageMaterial, MessageReply, StudentFeedback
+from messaging.models import MessageGroup, MessageMaterial, Message, StudentFeedback
 
 class MessageMaterialInline(admin.TabularInline):
     model = MessageMaterial
     extra = 0
 
-class MessageReplyInline(admin.TabularInline):
-    model = MessageReply
+class MessageInline(admin.TabularInline):
+    model = Message
     extra = 0
 
 class MessageAdmin(admin.ModelAdmin):
@@ -17,7 +17,6 @@ class MessageAdmin(admin.ModelAdmin):
 
     inlines = [
         MessageMaterialInline,
-        MessageReplyInline
     ]
 
     list_display = ('message_created', 'message_created_by',)
@@ -26,13 +25,28 @@ class MessageAdmin(admin.ModelAdmin):
 
 admin.site.register(Message, MessageAdmin)
 
-class StudentFeedbackAdmin(admin.ModelAdmin):
+class MessageGroupAdmin(admin.ModelAdmin):
 
     class Meta:
-        model = StudentFeedback
+        model = MessageGroup
 
-    list_display = ('message_created', 'message_created_by', 'course',)
-    list_filter = ('message_created', 'message_created_by', 'course',)
-    ordering = ('-message_created',)
+    inlines = [
+        MessageInline,
+    ]
 
-admin.site.register(StudentFeedback, StudentFeedbackAdmin)
+    list_display = ('message_group_created', 'message_group_created_by',)
+    list_filter = ('message_group_created', 'message_group_created_by',)
+    ordering = ('-message_group_created',)
+
+admin.site.register(MessageGroup, MessageGroupAdmin)
+
+# class StudentFeedbackAdmin(admin.ModelAdmin):
+
+#     class Meta:
+#         model = StudentFeedback
+
+#     list_display = ('message_created', 'message_created_by', 'course',)
+#     list_filter = ('message_created', 'message_created_by', 'course',)
+#     ordering = ('-message_created',)
+
+# admin.site.register(StudentFeedback, StudentFeedbackAdmin)

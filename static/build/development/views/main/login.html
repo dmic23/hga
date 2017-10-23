@@ -26,6 +26,9 @@
 								<span class="text-danger" ng-show="loginForm.password.$invalid&&loginForm.password.$touched">Required</span>
 							</div>
 							<div class="form-group">
+								<div ng-if="vm.verify">
+									<i class="fa fa-spinner fa-spin text-info" aria-hidden="true"></i>
+								</div>
 								<span class="text-danger center-block animated" ng-show="vm.loginError" ng-class="{'fadeIn': vm.loginError, 'fadeOut': !vm.loginError}">{{vm.loginError}}</span>
 								<a href="/password_reset/">Forgot Password?</a>
 							</div>

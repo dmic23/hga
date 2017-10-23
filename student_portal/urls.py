@@ -7,7 +7,7 @@ from rest_framework import routers
 from rest_framework_jwt.views import obtain_jwt_token,refresh_jwt_token, verify_jwt_token
 from student_portal.views import IndexView
 from forum.views import CategoryViewSet, TopicViewSet, ForumMessageViewSet
-from messaging.views import MessageViewSet
+from messaging.views import MessageGroupViewSet
 from schedule.views import CourseViewSet, CourseScheduleViewSet, RemoveCourseScheduleViewSet
 from users.views import LoginView, LogoutView, UserViewSet, LocationViewSet, StudentNoteViewSet, StudentGoalsViewSet, StudentPracticeLogViewSet, StudentObjectiveViewSet, StudentWishListViewSet, StudentMaterialsViewSet, SimpleUserViewSet, UserLeaderBoardViewSet, StudentLabelViewSet, StudentFeedbackViewSet, StudentFeedbackMaterialViewSet
 
@@ -28,7 +28,7 @@ router.register(r'student-label', StudentLabelViewSet)
 router.register(r'forum-category', CategoryViewSet)
 router.register(r'forum-topics', TopicViewSet)
 router.register(r'forum-message', ForumMessageViewSet)
-router.register(r'messages', MessageViewSet)
+router.register(r'messages', MessageGroupViewSet)
 router.register(r'courses', CourseViewSet)
 router.register(r'course-schedule', CourseScheduleViewSet)
 router.register(r'course-schedule-remove', RemoveCourseScheduleViewSet)

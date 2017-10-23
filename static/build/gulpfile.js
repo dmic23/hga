@@ -51,6 +51,7 @@ cssSources = [
 	'development/css/paper-dashboard.css',
 	'development/css/metronome.css',
 	'development/css/themify-icons.css',
+	'development/css/sidebar.css',
 	'development/css/main.css'
 ];
 

@@ -10,6 +10,8 @@
     function AuthenticationController($scope, $sce, $state, $location, $anchorScroll, Main, Users){
         var vm = this;
 
+        vm.verify = false;
+
         vm.dateReg = /^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))$/;
 
         activate();
@@ -30,6 +32,9 @@
         }
 
         vm.login = function(username, password){
+
+            vm.verify = true;
+
             if(vm.loginError){
                 vm.loginError = '';
             };
@@ -40,10 +45,12 @@
         }
 
         function loginSuccess(response){
+            vm.verify = false;
             $state.go('app.dashboard', {'userId': response.id});
         }
 
         function loginError(errMsg){
+            vm.verify = false;
             console.log(errMsg);
             vm.loginError = errMsg.data.message;
         }
